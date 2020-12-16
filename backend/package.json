@@ -1,0 +1,27 @@
+{
+  "name": "shopmate-backend",
+  "version": "0.1.0",
+  "description": "backend for the shopmate store",
+  "main": "src.index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/aaronreynoza/shopmate.git"
+  },
+  "keywords": [
+    "shopmate",
+    "angular",
+    "nodejs",
+    "typescript",
+    "store",
+    "kubernetes"
+  ],
+  "author": "Aaron Reynoza",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aaronreynoza/shopmate/issues"
+  },
+  "homepage": "https://github.com/aaronreynoza/shopmate#readme"
+}
