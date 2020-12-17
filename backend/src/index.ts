@@ -1,13 +1,10 @@
 import config from './config';
-import db from './db';
 import server from './server';
-import { createLogger } from './utils/logger';
+import * as logger from './utils/logger';
 
 async function init() {
-  createLogger();
-
-  await db.connect(config.mysql);
-  await server(config.http);
+  logger.create();
+  await server(config);
 }
 
 init();

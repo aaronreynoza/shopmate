@@ -2,7 +2,7 @@ import bunyan from 'bunyan';
 
 let instance: bunyan;
 
-const createLogger = () => {
+const create = () => {
   instance = bunyan.createLogger({ name: 'Shopmate-System-API' });
 
   return instance;
@@ -11,6 +11,6 @@ const createLogger = () => {
 const getInstance = () => instance;
 
 export {
-  createLogger,
+  create,
   getInstance,
 };

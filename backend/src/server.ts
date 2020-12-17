@@ -1,67 +1,45 @@
 import bodyParser from 'body-parser';
 import bunyanMiddleware from 'bunyan-middleware';
-import express from 'express';
+import express, { Express } from 'express';
 import nocache from 'nocache';
-import statusCodes from 'http-status-codes';
-import logger from './utils/logger';
-const routes = require('./routes');
-const swagger = require('./swagger');
+// import Database from './data/cachedDatabase';
+// import Handlers from './handlers';
 
-function mountMiddlewares(serverInstance, config) {
+import * as logger from './utils/logger';
+import routesInstance from './routes';
+import { ConfigType } from './utils/types';
+
+function mountMiddlewares(serverInstance: Express) {
   serverInstance.use(bunyanMiddleware({ logger: logger.getInstance() }));
   serverInstance.use(bodyParser.json());
 
-  swagger.init(config.swagger);
-  serverInstance.use('/api/docs', swagger.getRouter());
-
-  const swaggerMiddleware = swaggerExpressMiddleware(swagger.getSpec(), serverInstance);
-  serverInstance.use(
-    swaggerMiddleware.metadata(),
-    swaggerMiddleware.CORS(),
-    swaggerMiddleware.parseRequest(),
-    swaggerMiddleware.validateRequest()
-  );
-
   serverInstance.use(nocache());
 
-  serverInstance.use((err, req, res, next) => {
-    delete err.stack;
+  // serverInstance.use((err: any, req, res: any) => {
+  //   // eslint-disable-next-line no-param-reassign
+  //   delete err.stack;
 
-    res.status(err.status || statusCodes.StatusCodes.INTERNAL_SERVER_ERROR).json(err);
-  });
+  //   res.status(err.status || statusCodes.INTERNAL_SERVER_ERROR).json(err);
+  // });
 }
 
-function mountRoutes(serverInstance) {
+function mountRoutes(serverInstance: Express) {
   const router = express.Router();
 
-  routes.mount(router);
-  serverInstance.use('/api', router);
+  routesInstance(router);
+  serverInstance.use('/api/v1', router);
 }
 
-/**
- * Creates the HTTP server abstraction for communicating with the REST API and
- * listens for incoming requests.
- *
- * @function create
- * @param {Object} config Configuration object with structure:
- *
- *  {
- *    host: <String> The target HTTP host to use.
- *    port: <Number> The target HTTP port to use.
- *    swagger: <Object> The configuration for the Swagger spec definition.
- *  }
- * @returns {Object}
- */
-async function start(config) {
+async function start(config: ConfigType) {
   const log = logger.getInstance();
   const instance = express();
 
-  mountMiddlewares(instance, config);
+  mountMiddlewares(instance);
   mountRoutes(instance);
 
-  await instance.listen(config.port);
+  instance.listen(config.http.PORT);
 
-  log.info(`Server running and listening at port ${config.port}`);
+  log.info(`Server running and listening at port ${config.http.PORT}`);
 
   return instance;
 }
