@@ -4,7 +4,9 @@
   "description": "backend for the shopmate store",
   "main": "src/index.ts",
   "scripts": {
-    "start": "nodemon",
+    "start": "npm run build && node build/index.js | bunyan -o short",
+    "start:dev": "nodemon | bunyan -o short",
+    "build": "rimraf ./build && tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

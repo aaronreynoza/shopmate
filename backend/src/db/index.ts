@@ -1,6 +1,8 @@
 import Knex from 'knex';
 import { ConnectionType } from '../utils/types';
+import * as logger from '../utils/logger';
 
+const log = logger.getInstance();
 /**
  * Abstracts operations against the database
  */
@@ -61,17 +63,16 @@ class Database {
   //    *
   //    * @returns {promise} - all enabled transfer rules
   //    */
-  // async getTransferRules() {
-  //   try {
-  //     const rows = await this.queryBuilder('transferRules')
-  //       .where('enabled', true)
-  //       .select();
-  //     return rows.map((r) => JSON.parse(r.rule));
-  //   } catch (err) {
-  //     this.writeLog(`Error in getTransferRules: ${getStackOrInspect(err)}`);
-  //     throw ErrorHandler.Factory.reformatFSPIOPError(err);
-  //   }
-  // }
+  async insertCategory(name: string, description: string) {
+    try {
+      return this.queryBuilder('Categoria').insert([
+          { nombre_categoria: name, descripcion_categoria: description },
+        ]);
+    } catch (err) {
+      log.error({ message: `Error while inserting Category: ${err}` });
+      throw Error(err);
+    }
+  }
 
   // /**
   //    * Gets the id of the specified transaction initiator type

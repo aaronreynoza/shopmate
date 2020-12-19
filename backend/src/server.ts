@@ -17,8 +17,8 @@ const initDb = (config: ConnectionType) => {
 };
 
 function mountMiddlewares(serverInstance: Express) {
-  serverInstance.use(bunyanMiddleware({ logger: Logger.getInstance() }));
   serverInstance.use(bodyParser.json());
+  serverInstance.use(bunyanMiddleware({ logger: Logger.getInstance() }));
 
   serverInstance.use(nocache());
 }
