@@ -1,0 +1,144 @@
+<header>
+    <!-- TOP HEADER -->
+    <div id="top-header">
+        <div class="container">
+            <ul class="header-links pull-left">
+                <li><a href="#"><i class="fa fa-phone"></i> +503 7651 4152</a></li>
+                <li><a href="#"><i class="fa fa-envelope-o"></i>soporte@shopmate.com</a></li>
+                <!-- <li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li> -->
+            </ul>
+            <ul class="header-links pull-right">
+                <li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
+                <ng-container *ngIf="currentUser">
+                    <li><a (click)="navigateToPath('profile')"><i class="fa fa-user-o"></i>Hola, {{currentUser.name}}</a></li>
+                    <li><a (click)="logOut()"><i class="fa fa-close"></i>cerrar sesion</a></li>
+                </ng-container>
+                <ng-container *ngIf="!currentUser">
+                    <li><a (click)="navigateToPath('login')"><i class="fa fa-user-o"></i> Iniciar Sesion</a></li>
+                </ng-container>
+            </ul>
+        </div>
+    </div>
+    <!-- /TOP HEADER -->
+
+    <!-- MAIN HEADER -->
+    <div id="header">
+        <!-- container -->
+        <div class="container">
+            <!-- row -->
+            <div class="row">
+                <!-- LOGO -->
+                <div class="col-md-3">
+                    <div class="header-logo">
+                        <a href="#" class="logo">
+                            <!-- <img src="assets/img/logo.png" alt=""> -->
+                            <p style="color: white; font-size: 30px;" (click)="navigateToPath('')">
+                                SHOPMATE
+                            </p>
+                        </a>
+                    </div>
+                </div>
+                <!-- /LOGO -->
+
+                <!-- SEARCH BAR -->
+                <div class="col-md-6">
+                    <div class="header-search">
+                        <form>
+                            <select class="input-select">
+                                <option value="1">All Categories</option>
+                                <ng-container *ngFor="let item of categories">
+                                    <option value="0">{{item.name}}</option>
+                                </ng-container>
+                            </select>
+                            <input class="input" placeholder="Laptop">
+                            <button class="search-btn">Buscar</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- /SEARCH BAR -->
+
+                <!-- ACCOUNT -->
+                <div class="col-md-3 clearfix">
+                    <div class="header-ctn">
+                        <!-- Wishlist -->
+                        <div>
+                            <a href="#">
+                                <i class="fa fa-heart-o"></i>
+                                <span>Wishlist</span>
+                                <div class="qty" *ngIf="wishList.count > 0">{{wishList.count}}</div>
+                            </a>
+                        </div>
+                        <!-- /Wishlist -->
+
+                        <!-- Cart -->
+                        <div class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                <i class="fa fa-shopping-cart"></i>
+                                <span>Carrito</span>
+                                <div class="qty" *ngIf="cartList.count > 0">{{cartList.count}}</div>
+                            </a>
+                            <div class="cart-dropdown">
+                                <div class="cart-list">
+                                    <ng-container *ngFor="let item of cartList.products">
+
+                                        <div class="product-widget">
+                                            <div class="product-img">
+                                            <img src="{{item.image}}" alt="">
+                                        </div>
+                                        <div class="product-body">
+                                            <h3 class="product-name"><a href="#">{{item.name}}</a></h3>
+                                            <h4 class="product-price"><span class="qty">1x</span>$ {{item.price}}</h4>
+                                        </div>
+                                        <button class="delete"><i class="fa fa-close"></i></button>
+                                    </div>
+                                </ng-container>
+
+                                
+                                </div>
+                                <div class="cart-summary">
+                                    <small>{{cartList.count}} Item(s) selected</small>
+                                    <h5>SUBTOTAL: $ {{subtotal(cartList)}}</h5>
+                                </div>
+                                <div class="cart-btns">
+                                    <a href="#">View Cart</a>
+                                    <a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Cart -->
+
+                        <!-- Menu Toogle -->
+                        <div class="menu-toggle">
+                            <a href="#">
+                                <i class="fa fa-bars"></i>
+                                <span>Menu</span>
+                            </a>
+                        </div>
+                        <!-- /Menu Toogle -->
+                    </div>
+                </div>
+                <!-- /ACCOUNT -->
+
+                <div class="col-md-12">
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle btnCategories" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                          Categories
+                          <span class="caret pull-right rowDown"></span>
+                        </button>
+                        <ul class="dropdown-menu ulDrop" aria-labelledby="dropdownMenu1">
+                            <ng-container *ngFor="let item of categories">
+                                <li><a href="#">{{item.name}}</a></li>
+                            </ng-container>
+                        </ul>
+                      </div>  
+                    
+                    
+                </div>
+                
+            </div>
+            <!-- row -->
+        </div>
+        <!-- container -->
+    </div>
+    <!-- /MAIN HEADER -->
+</header>
