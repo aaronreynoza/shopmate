@@ -5,37 +5,37 @@ import nocache from 'nocache';
 // import Database from './data/cachedDatabase';
 // import Handlers from './handlers';
 
-import * as logger from './utils/logger';
+import * as Logger from './utils/logger';
+import Database from './db';
 import routesInstance from './routes';
-import { ConfigType } from './utils/types';
+import { ConfigType, ConnectionType } from './utils/types';
+
+const initDb = (config: ConnectionType) => {
+  // try open a db connection pool
+  const database = new Database(config);
+  return database.connect();
+};
 
 function mountMiddlewares(serverInstance: Express) {
-  serverInstance.use(bunyanMiddleware({ logger: logger.getInstance() }));
+  serverInstance.use(bunyanMiddleware({ logger: Logger.getInstance() }));
   serverInstance.use(bodyParser.json());
 
   serverInstance.use(nocache());
-
-  // serverInstance.use((err: any, req, res: any) => {
-  //   // eslint-disable-next-line no-param-reassign
-  //   delete err.stack;
-
-  //   res.status(err.status || statusCodes.INTERNAL_SERVER_ERROR).json(err);
-  // });
 }
 
-function mountRoutes(serverInstance: Express) {
+function mountRoutes(serverInstance: Express, database: Database) {
   const router = express.Router();
 
-  routesInstance(router);
+  routesInstance(router, database);
   serverInstance.use('/api/v1', router);
 }
 
 async function start(config: ConfigType) {
-  const log = logger.getInstance();
+  const log = Logger.getInstance();
   const instance = express();
-
+  const database = await initDb(config.database.connection);
   mountMiddlewares(instance);
-  mountRoutes(instance);
+  mountRoutes(instance, database);
 
   instance.listen(config.http.PORT);
 

@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
-module.exports = (router: Router) => {
+// eslint-disable-next-line import/prefer-default-export
+export const handler = (router: Router, routesContext: any) => {
   router.post('/products', async (req, res) => {
     // const ProductModel = db.getModel('Product');
     // const product = new ProductModel(req.body);
@@ -12,5 +13,9 @@ module.exports = (router: Router) => {
     // });
   });
 
-  router.get('/products', async (req, res, next) => res.status(200).send('hola mundo'));
+  router.get('/products', async (req, res) => {
+    const x = await routesContext.isConnected();
+    console.log(x)
+    res.status(200).send('hola mundo');
+  });
 };

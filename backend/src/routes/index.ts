@@ -2,15 +2,16 @@
 import fs from 'fs';
 import path from 'path';
 import { Router } from 'express';
+import Database from '../db';
 
-const routes = async (router: Router) => {
+const routes = async (router: Router, database: Database) => {
   const apiRoutesPath = path.resolve(__dirname, 'api');
   const files = await fs.promises.readdir(apiRoutesPath);
+
   files.forEach((fileName) => {
     // eslint-disable-next-line import/no-dynamic-require
-    const route = require(path.resolve(apiRoutesPath, fileName));
-
-    route(router);
+    const { handler } = require(path.resolve(apiRoutesPath, fileName));
+    handler(...[router, database]);
   });
 };
 
