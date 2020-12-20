@@ -1,18 +1,27 @@
 import Knex from 'knex';
 import { ConnectionType } from '../utils/types';
-import * as logger from '../utils/logger';
+import * as Logger from '../utils/logger';
+import { renamedProduct, renameCategory } from '../utils/dataChanges';
 
-const log = logger.getInstance();
 /**
  * Abstracts operations against the database
  */
 class Database {
   config: any;
 
+  renameCategory: any;
+
+  renamedProduct: any;
+
   queryBuilder: any;
+
+  log: any;
 
   constructor(config: ConnectionType) {
     this.config = config;
+    this.renamedProduct = renamedProduct;
+    this.renameCategory = renameCategory;
+    this.log = Logger.getInstance();
   }
 
   /**
@@ -24,21 +33,6 @@ class Database {
     this.queryBuilder = Knex({ client: 'mysql2', connection: this.config });
 
     return this;
-  }
-
-  /**
-     * async utility for getting a transaction object from knex
-     *
-     * @returns {undefined}
-     */
-  async newTransaction() {
-    return new Promise((resolve, reject) => {
-      try {
-        return this.queryBuilder.transaction((txn: any) => resolve(txn));
-      } catch (err) {
-        return reject(err);
-      }
-    });
   }
 
   /**
@@ -58,131 +52,133 @@ class Database {
     }
   }
 
-  // /**
-  //    * Gets the set of enabled transfer rules
-  //    *
-  //    * @returns {promise} - all enabled transfer rules
-  //    */
-  async insertCategory(name: string, description: string) {
+  async insertCategory(name: string, description: string, icon: string, state: string) {
     try {
       return this.queryBuilder('Categoria').insert([
-          { nombre_categoria: name, descripcion_categoria: description },
-        ]);
+        {
+          nombre_categoria: name,
+          descripcion_categoria: description,
+          icon,
+          estado: state,
+        },
+      ]);
     } catch (err) {
-      log.error({ message: `Error while inserting Category: ${err}` });
+      this.log.error({ message: `Error while inserting Category: ${err}` });
       throw Error(err);
     }
   }
 
-  // /**
-  //    * Gets the id of the specified transaction initiator type
-  //    *
-  //    * @returns {promise} - id of the transactionInitiatorType
-  //    */
-  // async getInitiatorType(initiatorType) {
-  //   try {
-  //     const rows = await this.queryBuilder('transactionInitiatorType')
-  //       .where('name', initiatorType)
-  //       .select();
+  async getCategories() {
+    try {
+      const categories = await this.queryBuilder('Categoria').select();
+      const renamed = categories.map((category: any) => this.renameCategory(category));
+      return renamed;
+    } catch (err) {
+      this.log.error({ message: `Error while getting Categories: ${err}` });
+      throw Error(err);
+    }
+  }
 
-  //     if ((!rows) || rows.length < 1) {
-  //       // initiatorType does not exist, this is an error
-  //       throw ErrorHandler.Factory.createFSPIOPError(ErrorHandler.Enums.FSPIOPErrorCodes.VALIDATION_ERROR, `Unsupported initiatorType '${initiatorType}'`);
-  //     }
-  //     return rows[0].transactionInitiatorTypeId;
-  //   } catch (err) {
-  //     this.writeLog(`Error in getInitiatorType: ${getStackOrInspect(err)}`);
-  //     throw ErrorHandler.Factory.reformatFSPIOPError(err);
-  //   }
-  // }
+  async getCategory(category: string) {
+    try {
+      const categories = await this.queryBuilder('Categoria')
+        .where('nombre_categoria', category).select();
+      return this.renameCategory(categories[0]);
+    } catch (err) {
+      this.log.error({ message: `Error while getting Categories: ${err}` });
+      throw Error(err);
+    }
+  }
 
-  // /**
-  //    * Gets the id of the specified transaction initiator
-  //    *
-  //    * @returns {promise} - id of the transactionInitiator
-  //    */
-  // async getInitiator(initiator) {
-  //   try {
-  //     const rows = await this.queryBuilder('transactionInitiator')
-  //       .where('name', initiator)
-  //       .select();
+  async insertProvider(name: string, phone: string, email: string) {
+    try {
+      return this.queryBuilder('Proveedor').insert([
+        {
+          Nombre_Prov: name,
+          Telefono_Prov: phone,
+          Email_Prov: email,
+        },
+      ]);
+    } catch (err) {
+      this.log.error({ message: `Error while inserting Provider: ${err}` });
+      throw Error(err);
+    }
+  }
 
-  //     if ((!rows) || rows.length < 1) {
-  //       // initiator does not exist, this is an error
-  //       throw ErrorHandler.Factory.createFSPIOPError(ErrorHandler.Enums.FSPIOPErrorCodes.VALIDATION_ERROR, `Unsupported initiator '${initiator}'`);
-  //     }
-  //     return rows[0].transactionInitiatorId;
-  //   } catch (err) {
-  //     this.writeLog(`Error in getInitiator: ${getStackOrInspect(err)}`);
-  //     throw ErrorHandler.Factory.reformatFSPIOPError(err);
-  //   }
-  // }
+  async getProviders() {
+    try {
+      return this.queryBuilder('Proveedor').select();
+    } catch (err) {
+      this.log.error({ message: `Error while getting Providers: ${err}` });
+      throw Error(err);
+    }
+  }
 
-  // /**
-  //    * Gets the id of the specified transaction scenario
-  //    *
-  //    * @returns {promise} - id of the transactionScenario
-  //    */
-  // async getScenario(scenario) {
-  //   try {
-  //     const rows = await this.queryBuilder('transactionScenario')
-  //       .where('name', scenario)
-  //       .select();
+  async getProvider(provider: string) {
+    try {
+      const categories = await this.queryBuilder('Proveedor')
+        .where('Nombre_Prov', provider).select();
+      return categories[0];
+    } catch (err) {
+      this.log.error({ message: `Error while getting Provider: ${err}` });
+      throw Error(err);
+    }
+  }
 
-  //     if ((!rows) || rows.length < 1) {
-  //       // scenario does not exist, this is an error
-  //       throw new Error(`Unsupported transaction scenario '${scenario}'`);
-  //     }
-  //     return rows[0].transactionScenarioId;
-  //   } catch (err) {
-  //     this.writeLog(`Error in getScenario: ${getStackOrInspect(err)}`);
-  //     throw ErrorHandler.Factory.reformatFSPIOPError(err);
-  //   }
-  // }
+  async insertProduct(
+    name: string,
+    price: number,
+    description: string,
+    product_image: string,
+    product_discount: number,
+    stock_available: number,
+    category: string,
+    providerName: string,
+  ) {
+    try {
+      // the database creator doesn't know what CamelCase is. I hate you so much, Jesus.
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      const { id_categoria } = await this.getCategory(category);
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      const { Id_Proveedor } = await this.getProvider(providerName);
+      return this.queryBuilder('Producto').insert([
+        {
+          nombre_prod: name,
+          precio_venta: price,
+          descripcion: description,
+          imagen: product_image,
+          descuento: product_discount,
+          cantidad: stock_available,
+          fk_id_categoria: id_categoria,
+          fk_Id_Proveedor: Id_Proveedor,
+        },
+      ]);
+    } catch (err) {
+      throw Error(err);
+    }
+  }
 
-  // /**
-  //    * Gets the id of the specified transaction sub-scenario
-  //    *
-  //    * @returns {promise} - id of the transactionSubScenario
-  //    */
-  // async getSubScenario(subScenario) {
-  //   try {
-  //     const rows = await this.queryBuilder('transactionSubScenario')
-  //       .where('name', subScenario)
-  //       .select();
+  async getProducts() {
+    try {
+      const productsArray = this.queryBuilder('Producto').select();
+      return productsArray;
+    } catch (err) {
+      this.log.error({ message: `Error while getting Products: ${err}` });
+      throw Error(err);
+    }
+  }
 
-  //     if ((!rows) || rows.length < 1) {
-  //       // sub-scenario does not exist, this is an error
-  //       throw ErrorHandler.Factory.createFSPIOPError(ErrorHandler.Enums.FSPIOPErrorCodes.VALIDATION_ERROR, `Unsupported transaction sub-scenario '${subScenario}'`);
-  //     }
-  //     return rows[0].transactionSubScenarioId;
-  //   } catch (err) {
-  //     this.writeLog(`Error in getSubScenario: ${getStackOrInspect(err)}`);
-  //     throw ErrorHandler.Factory.reformatFSPIOPError(err);
-  //   }
-  // }
-
-  // /**
-  //    * Gets the id of the specified amount type
-  //    *
-  //    * @returns {promise} - id of the amountType
-  //    */
-  // async getAmountType(amountType: any) {
-  //   try {
-  //     const rows = await this.queryBuilder('amountType')
-  //       .where('name', amountType)
-  //       .select();
-
-  //     if ((!rows) || rows.length < 1) {
-  //       // amount type does not exist, this is an error
-  //       throw ErrorHandler.Factory.createFSPIOPError(ErrorHandler.Enums.FSPIOPErrorCodes.VALIDATION_ERROR, `Unsupported amount type '${amountType}'`);
-  //     }
-  //     return rows[0].amountTypeId;
-  //   } catch (err) {
-  //     this.writeLog(`Error in getAmountType: ${getStackOrInspect(err)}`);
-  //     throw ErrorHandler.Factory.reformatFSPIOPError(err);
-  //   }
-  // }
+  async getProduct(product: string) {
+    try {
+      const products = await this.queryBuilder('Producto')
+        .where('nombre_prod', product).select();
+      const renamedProd = this.renamedProduct(products[0]);
+      return renamedProd;
+    } catch (err) {
+      this.log.error({ message: `Error while getting Product: ${err}` });
+      throw Error(err);
+    }
+  }
 }
 
 export default Database;
