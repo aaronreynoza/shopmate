@@ -2,8 +2,7 @@ import bodyParser from 'body-parser';
 import bunyanMiddleware from 'bunyan-middleware';
 import express, { Express } from 'express';
 import nocache from 'nocache';
-// import Database from './data/cachedDatabase';
-// import Handlers from './handlers';
+import cors from 'cors';
 
 import * as Logger from './utils/logger';
 import Database from './db';
@@ -18,6 +17,7 @@ const initDb = (config: ConnectionType) => {
 
 function mountMiddlewares(serverInstance: Express) {
   serverInstance.use(bodyParser.json());
+  serverInstance.use(cors({ origin: '*' }));
   serverInstance.use(bunyanMiddleware({ logger: Logger.getInstance() }));
 
   serverInstance.use(nocache());
