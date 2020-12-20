@@ -13,13 +13,15 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoginComponent } from './components/login/login.component';
 import { RegiterComponent } from './components/regiter/regiter.component';
+import { ProductComponent } from './components/product/product.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     LoginComponent,
-    RegiterComponent
+    RegiterComponent,
+    ProductComponent 
   ],
   imports: [
     BrowserModule,

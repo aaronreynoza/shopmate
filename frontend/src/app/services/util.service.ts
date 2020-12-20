@@ -14,11 +14,15 @@ export class UtilService {
     count: 0,
     products: [],
   };
+  public itemCartList: wishList = {
+    count: 0,
+    products: [],
+  };
   private statusSource = new BehaviorSubject({ isLoggedIn: false });
   public statusSubscriber = this.statusSource.asObservable();
   private wishListSource = new BehaviorSubject(this.itemWishList);
   public wishListSubscriber = this.wishListSource.asObservable();
-  private cartListSource = new BehaviorSubject(this.itemWishList);
+  private cartListSource = new BehaviorSubject(this.itemCartList);
   public cartListSubscriber = this.cartListSource.asObservable();
   constructor() {}
   addToWishList(item: wishList) {
@@ -27,7 +31,13 @@ export class UtilService {
   }
   addToCart(item: wishList) {
     localStorage.setItem('cartList',JSON.stringify(item))
-    this.wishListSource.next(item);
+    this.cartListSource.next(item);
+  }
+  getWishList() {
+    return  JSON.parse(localStorage.getItem('wishList'))
+  }
+  getCart() {
+   return  JSON.parse(localStorage.getItem('cartList'))
   }
 
   isLoggedIn(status: boolean) {

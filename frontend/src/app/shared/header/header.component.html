@@ -75,7 +75,7 @@
                             <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                 <i class="fa fa-shopping-cart"></i>
                                 <span>Carrito</span>
-                                <div class="qty" *ngIf="cartList.count > 0">{{cartList.count}}</div>
+                                <div class="qty" *ngIf="cartList.products.length > 0">{{cartList.products.length}}</div>
                             </a>
                             <div class="cart-dropdown">
                                 <div class="cart-list">
@@ -96,7 +96,7 @@
                                 
                                 </div>
                                 <div class="cart-summary">
-                                    <small>{{cartList.count}} Item(s) selected</small>
+                                    <small>{{cartList.products.length}} Item(s) selected</small>
                                     <h5>SUBTOTAL: $ {{subtotal(cartList)}}</h5>
                                 </div>
                                 <div class="cart-btns">
