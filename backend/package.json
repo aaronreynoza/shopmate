@@ -25,6 +25,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/cookie-session": "^2.0.42",
+    "@types/cors": "^2.8.9",
     "@types/express": "^4.17.9",
     "@types/morgan": "^1.9.2",
     "@types/node": "^14.14.6",
@@ -43,6 +44,7 @@
     "bunyan": "^1.8.14",
     "bunyan-middleware": "^1.0.1",
     "cookie-session": "^1.4.0",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "http-status-codes": "^2.1.4",
