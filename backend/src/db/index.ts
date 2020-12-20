@@ -83,7 +83,8 @@ class Database {
     try {
       const categories = await this.queryBuilder('Categoria')
         .where('nombre_categoria', category).select();
-      return this.renameCategory(categories[0]);
+        const newCategory = this.renameCategory(categories[0]);
+      return newCategory;
     } catch (err) {
       this.log.error({ message: `Error while getting Categories: ${err}` });
       throw Error(err);
@@ -138,7 +139,7 @@ class Database {
     try {
       // the database creator doesn't know what CamelCase is. I hate you so much, Jesus.
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      const { id_categoria } = await this.getCategory(category);
+      const categoryData = await this.getCategory(category);
       // eslint-disable-next-line @typescript-eslint/naming-convention
       const { Id_Proveedor } = await this.getProvider(providerName);
       return this.queryBuilder('Producto').insert([
@@ -149,7 +150,7 @@ class Database {
           imagen: product_image,
           descuento: product_discount,
           cantidad: stock_available,
-          fk_id_categoria: id_categoria,
+          fk_id_categoria: categoryData.category_id,
           fk_Id_Proveedor: Id_Proveedor,
         },
       ]);
