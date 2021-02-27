@@ -205,11 +205,11 @@ class Database {
         .where({
           'producto.nombre_prod': keyword,
         }).select(
-          'id_producto',
-          'nombre_prod',
-          'precio_venta', 
-	        'nombre_categoria', 
-          'especificaciones' 
+            'id_producto',
+            'nombre_prod',
+            'precio_venta', 
+	          'nombre_categoria', 
+            'especificaciones' 
         );
       return prodArray;
     }catch(err){
@@ -226,11 +226,11 @@ class Database {
         .andWhere('precio_venta','<',priceMax)
         .andWhere('precio_venta','>',priceMin)
         .select(
-          'id_producto',
-          'nombre_prod',
-          'precio_venta', 
-	        'nombre_categoria', 
-          'especificaciones' 
+            'id_producto',
+            'nombre_prod',
+            'precio_venta', 
+	          'nombre_categoria', 
+            'especificaciones' 
         );
       return prodArray;
     }catch(err){

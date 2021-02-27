@@ -33,4 +33,5 @@ interface Filter{
   price_min:number,
   price_max:number,
 }
+
 export { ConfigType, DatabaseType, ConnectionType , Filter};
