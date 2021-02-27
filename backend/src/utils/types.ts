@@ -29,5 +29,9 @@ interface ConnectionType {
   password: string,
   database: string,
 }
+interface Filter{
+  price_min:number,
+  price_max:number,
+}
 
-export { ConfigType, DatabaseType, ConnectionType };
+export { ConfigType, DatabaseType, ConnectionType , Filter};
