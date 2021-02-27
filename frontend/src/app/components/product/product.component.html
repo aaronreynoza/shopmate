@@ -1,0 +1,23 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <img src="assets/img/product01.png" style="width: 100%;" alt="">
+        </div>
+        <div class="col-sm-6" style="padding: 60px;">
+            <h1>{{product.name}}</h1>
+            <p>Cantidad Disponible {{product.stock_available}}</p>
+            <p>Categoria Laptops</p>
+            <h4>$ {{product.price}}</h4>
+            <p>{{product.description}}</p>
+            <div class="product-btns">
+                <button class="btn add-to-wishlist" (click)="addToWishList(product)"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+                <!-- <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button> -->
+                <!-- <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button> -->
+            </div>
+            <br>
+        <div class="add-to-cart">
+            <button class="btn add-to-cart-btn" type="button" (click)="addToCart(product)"><i class="fa fa-shopping-cart"></i> add to cart</button>
+        </div>
+        </div>
+    </div>
+</div>

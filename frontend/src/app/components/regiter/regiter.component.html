@@ -1,0 +1,64 @@
+<div class="container">
+  <div class="row d-none">
+    <div class="col-md-12" style="padding: 20px">
+      <div
+        style="
+          background-color: none;
+          width: 500px;
+          height: 200px;
+          margin: 0 auto;
+          background: rgba(21, 22, 29, 0.9);
+          border-radius: 15px;
+          height: auto;
+          padding: 25px;
+          color: #ccc;
+        "
+      >
+        <form
+          [formGroup]="registerForm"
+          (ngSubmit)="onSubmit(registerForm.value)"
+        >
+          <div class="form-group">
+            <label for="">Nombre Completo</label>
+            <input class="form-control" type="text" formControlName="name" />
+          </div>
+          <div class="form-group">
+            <label for="">Email</label>
+            <input class="form-control" type="email" formControlName="email" />
+          </div>
+          <div class="form-group">
+            <label for="">Password</label>
+            <input
+              class="form-control"
+              type="password"
+              formControlName="password"
+            />
+          </div>
+          <div class="form-group">
+            <label for="">Direccion</label>
+            <input class="form-control" type="text" formControlName="address" />
+          </div>
+          <div class="form-group">
+            <label for="">Telefono</label>
+            <input class="form-control" type="text" formControlName="phone" />
+          </div>
+          <div class="form-group">
+            <label for="">Fecha de nacimiento</label>
+            <input
+              class="form-control"
+              type="date"
+              formControlName="date_of_birth"
+            />
+          </div>
+
+          <button
+            class="btn btn-success center-block"
+            style="color: #ccc; background-color: #d10024; border: none"
+          >
+            Entrar
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
