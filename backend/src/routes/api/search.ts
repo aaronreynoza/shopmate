@@ -21,8 +21,8 @@ export const handler = (router: Router, routesContext: any) => {
     } = req.body;
     if (
       (typeof type_search !== 'string')
-      ||  (typeof keyword !=='string')
-      ||  (typeof category !=='number')
+      ||  (typeof keyword !== 'string')
+      ||  (typeof category !== 'number')
     ) {
         return res.status(400).send('Wrong type of data or missing fields');
     }
