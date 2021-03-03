@@ -46,7 +46,6 @@ export const handler = (router: Router, routesContext: any) => {
         price,
         description,
         product_image,
-        product_discount,
         stock_available,
         category,
         providerName,
@@ -60,8 +59,7 @@ export const handler = (router: Router, routesContext: any) => {
 
   router.get('/products', async (req, res) => {
     const products = await routesContext.db.getProducts();
-    const renamedProducts = products.map((product: any) => renamedProduct(product));
-    res.status(200).send(renamedProducts);
+    res.status(200).send(products);
   });
 
   router.get('/product/:productName', async (req, res) => {

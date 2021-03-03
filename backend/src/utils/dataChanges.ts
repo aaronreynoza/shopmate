@@ -6,34 +6,25 @@ const renamedProduct = (product: any) => {
     precio_venta,
     descripcion,
     imagen,
-    descuento,
-    cantidad,
     fk_id_categoria,
     fk_Id_Proveedor,
-    date,
   }: {
     id_producto: string,
     nombre_prod: string,
     precio_venta: number,
     descripcion: string,
     imagen: string,
-    descuento: number,
-    cantidad: number,
     fk_id_categoria: number,
     fk_Id_Proveedor: number,
-    date: string
   } = product;
   const rename = {
     product_id: id_producto,
     name: nombre_prod,
     price: precio_venta,
-    product_image: imagen,
-    product_discount: descuento,
-    stock_available: cantidad,
     description: descripcion,
+    product_image: imagen,
     categoryId: fk_id_categoria,
     providerId: fk_Id_Proveedor,
-    date,
   };
   return rename;
 };
