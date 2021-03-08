@@ -7,9 +7,10 @@
 #  Administrador de Base de Datos: MySQL/MariaDB
 #  Diagrama: db_tienda
 #  Autor: jegzstate
-#  Fecha y hora: 24/02/2021 10:00:58
+#  Fecha y hora: 02/03/2021 10:31:20
+DROP DATABASE IF EXISTS db_tienda;
 CREATE DATABASE db_tienda;
-use db_tienda;
+USE db_tienda;
 # GENERANDO TABLAS
 CREATE TABLE `usuario` (
 	`id_usuario` INTEGER AUTO_INCREMENT NOT NULL COMMENT 'Identificador del cliente',
@@ -28,6 +29,7 @@ CREATE TABLE `producto` (
 	`nombre_prod` VARCHAR(25) NOT NULL COMMENT 'Nombre del producto',
 	`precio_venta` DOUBLE NOT NULL COMMENT 'Precio del producto',
 	`especificaciones` JSON NOT NULL COMMENT 'Especificaciones del producto',
+	`imagen` VARCHAR(250) NOT NULL COMMENT 'Link de la imagen',
 	`fk_id_proveedor` INTEGER NOT NULL COMMENT 'Identificador del proveedor',
 	KEY(`fk_id_proveedor`),
 	`fk_id_categoria` INTEGER NOT NULL COMMENT 'Identificador categoria',
@@ -83,6 +85,7 @@ CREATE TABLE `encabezado_solicitud` (
 	`fecha_sol` DATE NOT NULL COMMENT 'Fecha en que se realizo la solicitud',
 	`Estado` INTEGER NOT NULL COMMENT 'Estado en que se encuentra la solicitud',
 	`tipo_compra` INTEGER NOT NULL COMMENT 'Tipo de compra consumidor final/contribuyente',
+	`numero_deposito` VARCHAR(25) NOT NULL COMMENT 'Numero deposito',
 	`fk_id_usuario` INTEGER NOT NULL COMMENT 'Identificador del cliente',
 	KEY(`fk_id_usuario`),
 	`fk_id_direccion` INTEGER NOT NULL COMMENT 'Identificador de ubicacion',
@@ -99,13 +102,6 @@ CREATE TABLE `detalle_solicitud` (
 	KEY(`fk_id_producto`),
 	PRIMARY KEY(`id_detalle`)
 ) ENGINE=INNODB;
-CREATE TABLE `descuentos` (
-	`porcentaje` DOUBLE NOT NULL COMMENT 'Porcentaje',
-	`fecha_inicio` DATE NOT NULL COMMENT 'Fecha en la que se publico el descuento',
-	`fecha_fin` DATE NOT NULL COMMENT 'Fecha en la que no se aplica descuento',
-	`fk_id_producto` INTEGER NOT NULL COMMENT 'Identificador de producto',
-	KEY(`fk_id_producto`)
-) ENGINE=INNODB;
 CREATE TABLE `direccion_entrega` (
 	`id_direccion` INTEGER AUTO_INCREMENT NOT NULL COMMENT 'Identificador de ubicacion',
 	`departamento` VARCHAR(20) NOT NULL COMMENT 'Departamento de la entrega',
@@ -120,7 +116,7 @@ CREATE TABLE `categoria` (
 	`nombre_categoria` VARCHAR(100) NOT NULL COMMENT 'String Nombre categoria',
 	`icon` VARCHAR(100) NOT NULL COMMENT 'Icono Categoria',
 	`estado` INTEGER NOT NULL COMMENT 'Estado actual del',
-	`descripcion_categoria` VARCHAR(100) NOT NULL COMMENT 'Descripcion de la categoria',
+	`descripcion_cat` VARCHAR(100) NOT NULL COMMENT 'Descripcion de la categoria',
 	PRIMARY KEY(`id_categoria`)
 ) ENGINE=INNODB;
 CREATE TABLE `tipo_usuario` (
@@ -130,11 +126,20 @@ CREATE TABLE `tipo_usuario` (
 	PRIMARY KEY(`id_tipo`)
 ) ENGINE=INNODB;
 CREATE TABLE `carrito_compra` (
-	`date` DATETIME NOT NULL COMMENT 'Fecha y hora en q se agrego al carrito',
-	`estado` INTEGER NOT NULL COMMENT 'Estado del elemento, activo o desactivado',
+	`id_carrito` INTEGER AUTO_INCREMENT NOT NULL COMMENT 'Identificador del carrito de  compra',
+	`date` DATE NOT NULL COMMENT 'Fecha y hora en q se agrego al carrito',
+	`estado` VARCHAR(20) NOT NULL COMMENT 'Estado del elemento, activo o desactivado',
 	`cantidad` INTEGER NOT NULL COMMENT 'Cantidad de elementos en el carrito de compra',
 	`fk_id_usuario` INTEGER NOT NULL COMMENT 'Identificador del cliente',
 	KEY(`fk_id_usuario`),
+	`fk_id_producto` INTEGER NOT NULL COMMENT 'Identificador de producto',
+	KEY(`fk_id_producto`),
+	PRIMARY KEY(`id_carrito`)
+) ENGINE=INNODB;
+CREATE TABLE `descuentos` (
+	`porcentaje` DOUBLE NOT NULL COMMENT 'Porcentaje',
+	`fecha_inicio` DATE NOT NULL COMMENT 'Fecha en la que se publico el descuento',
+	`fecha_fin` DATE NOT NULL COMMENT 'Fecha en la que no se aplica descuento',
 	`fk_id_producto` INTEGER NOT NULL COMMENT 'Identificador de producto',
 	KEY(`fk_id_producto`)
 ) ENGINE=INNODB;
@@ -151,7 +156,7 @@ ALTER TABLE `encabezado_solicitud` ADD CONSTRAINT `encabezado_solicitud_usuario_
 ALTER TABLE `encabezado_solicitud` ADD CONSTRAINT `encabezado_solicitud_direccion_entrega_fk_id_direccion` FOREIGN KEY (`fk_id_direccion`) REFERENCES `direccion_entrega`(`id_direccion`) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE `detalle_solicitud` ADD CONSTRAINT `detalle_solicitud_encabezado_solicitud_fk_id_encabez` FOREIGN KEY (`fk_id_encabez`) REFERENCES `encabezado_solicitud`(`id_encabez`) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE `detalle_solicitud` ADD CONSTRAINT `detalle_solicitud_producto_fk_id_producto` FOREIGN KEY (`fk_id_producto`) REFERENCES `producto`(`id_producto`) ON DELETE NO ACTION ON UPDATE CASCADE;
-ALTER TABLE `descuentos` ADD CONSTRAINT `descuentos_producto_fk_id_producto` FOREIGN KEY (`fk_id_producto`) REFERENCES `producto`(`id_producto`) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE `direccion_entrega` ADD CONSTRAINT `direccion_entrega_usuario_fk_id_usuario` FOREIGN KEY (`fk_id_usuario`) REFERENCES `usuario`(`id_usuario`) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE `carrito_compra` ADD CONSTRAINT `carrito_compra_usuario_fk_id_usuario` FOREIGN KEY (`fk_id_usuario`) REFERENCES `usuario`(`id_usuario`) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE `carrito_compra` ADD CONSTRAINT `carrito_compra_producto_fk_id_producto` FOREIGN KEY (`fk_id_producto`) REFERENCES `producto`(`id_producto`) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE `descuentos` ADD CONSTRAINT `descuentos_producto_fk_id_producto` FOREIGN KEY (`fk_id_producto`) REFERENCES `producto`(`id_producto`) ON DELETE NO ACTION ON UPDATE CASCADE;

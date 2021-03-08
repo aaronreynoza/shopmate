@@ -260,6 +260,61 @@ class Database {
       throw Error(err);
     }
   }
+
+  async insertShoppingCart(
+    fecha: string,
+    cantidad: number,
+    fk_id_producto: string,
+    fk_id_usuario: string,
+  ) {
+    try {
+      return this.queryBuilder('carrito_compra').insert([
+        {
+          date: fecha,
+          estado: "Pendiente",
+          cantidad: cantidad,
+          fk_id_producto: fk_id_producto,
+          fk_id_usuario: fk_id_usuario,
+        },
+      ]);
+    } catch (err) {
+      throw Error(err);
+    }
+  }
+
+  async getShoppingCart(user:number){
+    try {
+      const shopCartArray = await this.queryBuilder('carrito_compra')
+      .where('fk_id_usuario',user)
+      .select();
+      return shopCartArray;
+    } catch (err) {
+      throw Error(err);
+    }
+  }
+
+  async getShoppingCartData(id:number){
+    try {
+      const shopCartArray = await this.queryBuilder('carrito_compra')
+      .where('id_carrito',id)
+      .select();
+      return shopCartArray;
+    } catch (err) {
+      throw Error(err);
+    }
+  }
+
+  async deleteShoppingCartItem(id:number){
+    try {
+      const shopCartArray = await this.queryBuilder('carrito_compra')
+      .where('id_carrito',id)
+      .del();
+      return shopCartArray;
+    } catch (err) {
+      throw Error(err);
+    }
+  }
+
 }
 
 export default Database;
