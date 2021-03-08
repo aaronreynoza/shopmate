@@ -130,9 +130,7 @@ class Database {
     name: string,
     price: number,
     description: string,
-    product_image: string,
-    product_discount: number,
-    stock_available: number,
+    imagen: string,
     category: string,
     providerName: string,
   ) {
@@ -141,17 +139,15 @@ class Database {
       // eslint-disable-next-line @typescript-eslint/naming-convention
       const categoryData = await this.getCategory(category);
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      const { Id_Proveedor } = await this.getProvider(providerName);
+      const { id_proveedor } = await this.getProvider(providerName);
       return this.queryBuilder('producto').insert([
         {
           nombre_prod: name,
           precio_venta: price,
-          descripcion: description,
-          imagen: product_image,
-          descuento: product_discount,
-          cantidad: stock_available,
+          especificaciones: description,
+          imagen: imagen,
           fk_id_categoria: categoryData.category_id,
-          fk_Id_proveedor: Id_Proveedor,
+          fk_Id_proveedor: id_proveedor,
         },
       ]);
     } catch (err) {
@@ -253,8 +249,7 @@ class Database {
     try {
       const products = await this.queryBuilder('producto')
         .where('nombre_prod', product).select();
-      const renamedProd = this.renamedProduct(products[0]);
-      return renamedProd;
+      return products;
     } catch (err) {
       this.log.error({ message: `Error while getting Product: ${err}` });
       throw Error(err);

@@ -1,55 +1,73 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+require('dotenv').config();
 import { Router } from 'express';
 import * as Logger from '../../utils/logger';
-import { renamedProduct } from '../../utils/dataChanges';
+import multer from 'multer';
+import path from 'path';
 
 const log = Logger.getInstance();
 
+const inMemoryStorage = multer.memoryStorage();
+const uploadStrategy = multer({storage: inMemoryStorage}).single('image');
+const azureStorage = require('azure-storage');
+
+const blobService = azureStorage.createBlobService();
+const containerName = 'imagen-producto';
+
+const getStream = require('into-stream');
+
+function getBlobName (originalName:string, name:string){
+  const identifier = Math.random().toString().replace(/0\./,'');
+  const extension = path.extname(originalName);
+  const name1 = name.replace(/\s+/g, '');
+  return `${identifier}${name1}${extension}`;
+}
+
 // eslint-disable-next-line import/prefer-default-export
 export const handler = (router: Router, routesContext: any) => {
-  router.post('/products', async (req, res) => {
+  router.post('/products', uploadStrategy ,async (req, res) => {
     const {
-      name,
-      price,
-      product_image,
-      product_discount,
-      stock_available,
-      category,
-      description,
-      providerName,
+      nombre_prod,
+      precio_venta,
+      especificaciones,
+      categoria,
+      proveedor,
     }: {
-      name: string,
-      price: string,
-      product_image: string,
-      product_discount: number,
-      stock_available: number,
-      category: string,
-      description: string,
-      providerName: string,
+      nombre_prod: string,
+      precio_venta: number,
+      imagen: string,
+      especificaciones: string,
+      categoria: string,
+      proveedor: string,
     } = req.body;
+
+    const blobName:string = getBlobName(req.file.originalname,nombre_prod);
+    const stream = getStream(req.file.buffer);
+    const streamLength = req.file.buffer.length;
     if (
-      (typeof name !== 'string')
-      || (typeof price !== 'number')
-      || (typeof product_image !== 'string')
-      || (typeof product_discount !== 'number')
-      || (typeof stock_available !== 'number')
-      || (typeof category !== 'string')
-      || (typeof description !== 'string')
-      || (typeof providerName !== 'string')
+      (typeof nombre_prod !== 'string')
+      || (typeof precio_venta !== 'string')
+      || (typeof especificaciones !== 'string')
+      || (typeof categoria !== 'string')
+      || (typeof proveedor !== 'string')
     ) {
       return res.status(400).send('Wrong type of data or missing fields');
     }
     log.info('inserting new product with fields: ', req.body);
     try {
       await routesContext.db.insertProduct(
-        name,
-        price,
-        description,
-        product_image,
-        stock_available,
-        category,
-        providerName,
+        nombre_prod,
+        precio_venta,
+        especificaciones,
+        blobName,
+        categoria,
+        proveedor,
       );
+      await blobService.createBlockBlobFromStream(containerName, blobName, stream, streamLength, function (e:any){
+        if(e){
+          throw e;
+        }
+      });
       return res.status(200).send('Product inserted succesfully');
     } catch (e) {
       log.error(e);
@@ -75,4 +93,5 @@ export const handler = (router: Router, routesContext: any) => {
       return res.status(500).send('Something went wrong');
     }
   });
+  
 };

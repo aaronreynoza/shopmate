@@ -29,7 +29,7 @@ CREATE TABLE `producto` (
 	`nombre_prod` VARCHAR(25) NOT NULL COMMENT 'Nombre del producto',
 	`precio_venta` DOUBLE NOT NULL COMMENT 'Precio del producto',
 	`especificaciones` JSON NOT NULL COMMENT 'Especificaciones del producto',
-	`imagen` VARCHAR(250) NOT NULL COMMENT 'Link de la imagen',
+	`imagen` VARCHAR(250) NULL COMMENT 'Link de la imagen',
 	`fk_id_proveedor` INTEGER NOT NULL COMMENT 'Identificador del proveedor',
 	KEY(`fk_id_proveedor`),
 	`fk_id_categoria` INTEGER NOT NULL COMMENT 'Identificador categoria',

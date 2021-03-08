@@ -41,53 +41,53 @@ insert into categoria(nombre_categoria,icon,estado,descripcion_cat) values ('GPU
 /*Productos*/
 /*RAM*/
 insert into producto(nombre_prod,precio_venta,imagen,especificaciones,fk_id_categoria,fk_id_proveedor) 
-values ('Corsair Vengeance LPX', 50.25,'https://azurefiletestexpress.blob.core.windows.net/imagen-producto/1.jpg','{"marca":"CORSAIR","frecuencia":"3200MHz","capacidad":"8GB","tipo":"DDR4","tamaño":"escritorio"}',1,1);
+values ('Corsair Vengeance LPX', 50.25,'1.jpg','{"marca":"CORSAIR","frecuencia":"3200MHz","capacidad":"8GB","tipo":"DDR4","tamaño":"escritorio"}',1,1);
 insert into producto(nombre_prod,precio_venta,imagen,especificaciones,fk_id_categoria,fk_id_proveedor) 
-values ('HyperX Fury', 100.00,'https://azurefiletestexpress.blob.core.windows.net/imagen-producto/2.jpg','{"marca":"HyperX","frecuencia":"2666MHz","capacidad":"16GB","tipo":"DDR4","tamaño":"escritorio"}',1,1);
+values ('HyperX Fury', 100.00,'2.jpg','{"marca":"HyperX","frecuencia":"2666MHz","capacidad":"16GB","tipo":"DDR4","tamaño":"escritorio"}',1,1);
 insert into producto(nombre_prod,precio_venta,imagen,especificaciones,fk_id_categoria,fk_id_proveedor) 
-values ('ADATA Premier', 80.25,'https://azurefiletestexpress.blob.core.windows.net/imagen-producto/3.jpg','{"marca":"ADATA ","frecuencia":"2666MHz","capacidad":"16GB","tipo":"DDR4","tamaño":"escritorio"}',1,2);
+values ('ADATA Premier', 80.25,'3.jpg','{"marca":"ADATA ","frecuencia":"2666MHz","capacidad":"16GB","tipo":"DDR4","tamaño":"escritorio"}',1,2);
 /*HDD*/
 insert into producto(nombre_prod,precio_venta,imagen,especificaciones,fk_id_categoria,fk_id_proveedor)
- values ('WD10EZEX', 65.25,'https://azurefiletestexpress.blob.core.windows.net/imagen-producto/4.jpg','{"marca":"Western Digita","capacidad":"1TB","tamaño":"Escritorio"}',2,1);
+ values ('WD10EZEX', 65.25,'4.jpg','{"marca":"Western Digita","capacidad":"1TB","tamaño":"Escritorio"}',2,1);
 insert into producto(nombre_prod,precio_venta,imagen,especificaciones,fk_id_categoria,fk_id_proveedor) 
-values ('WD40EFAX', 125.00,'https://azurefiletestexpress.blob.core.windows.net/imagen-producto/5.jpg','{"marca":"Western Digita","capacidad":"4TB","tamaño":"Escritorio"}',2,1);
+values ('WD40EFAX', 125.00,'5.jpg','{"marca":"Western Digita","capacidad":"4TB","tamaño":"Escritorio"}',2,1);
 insert into producto(nombre_prod,precio_venta,imagen,especificaciones,fk_id_categoria,fk_id_proveedor) 
-values ('HDWG11AXZSTA', 300.00,'https://azurefiletestexpress.blob.core.windows.net/imagen-producto/6.jpg','{"marca":"Toshiba","capacidad":"10TB","tamaño":"Escritorio"}',2,1);
+values ('HDWG11AXZSTA', 300.00,'6.jpg','{"marca":"Toshiba","capacidad":"10TB","tamaño":"Escritorio"}',2,1);
 /*SSD*/
 insert into producto(nombre_prod,precio_venta,imagen,especificaciones,fk_id_categoria,fk_id_proveedor) 
-values ('Samsung 970 EVO', 85.00,'https://azurefiletestexpress.blob.core.windows.net/imagen-producto/7.jpg','{"marca":"Samsung","capacidad":"500GB"}',3,1);
+values ('Samsung 970 EVO', 85.00,'7.jpg','{"marca":"Samsung","capacidad":"500GB"}',3,1);
 insert into producto(nombre_prod,precio_venta,imagen,especificaciones,fk_id_categoria,fk_id_proveedor) 
-values ('WDS200T2B0C', 60.00,'https://azurefiletestexpress.blob.core.windows.net/imagen-producto/8.jpg','{"marca":"Western Digital","capacidad":"2TB"}',3,1);
+values ('WDS200T2B0C', 60.00,'8.jpg','{"marca":"Western Digital","capacidad":"2TB"}',3,1);
 insert into producto(nombre_prod,precio_venta,imagen,especificaciones,fk_id_categoria,fk_id_proveedor) 
-values ('Samsung 870 QVO', 250.00,'https://azurefiletestexpress.blob.core.windows.net/imagen-producto/9.jpg','{"marca":"Samsung","capacidad":"2TB"}',3,2);
+values ('Samsung 870 QVO', 250.00,'9.jpg','{"marca":"Samsung","capacidad":"2TB"}',3,2);
 /*Motherboard*/
 insert into producto(nombre_prod,precio_venta,imagen,especificaciones,fk_id_categoria,fk_id_proveedor) 
-values ('ASUS TUF B365M', 159.00,'https://azurefiletestexpress.blob.core.windows.net/imagen-producto/10.jpg','{"zocalo":"LGA 1151","tipo_ram":"DDR4"}',4,4);
+values ('ASUS TUF B365M', 159.00,'10.jpg','{"zocalo":"LGA 1151","tipo_ram":"DDR4"}',4,4);
 insert into producto(nombre_prod,precio_venta,imagen,especificaciones,fk_id_categoria,fk_id_proveedor) 
-values ('MSI H310M PRO', 79.00,'https://azurefiletestexpress.blob.core.windows.net/imagen-producto/11.jpg','{"zocalo":"LGA 1151","tipo_ram":"DDR4"}',4,4);
+values ('MSI H310M PRO', 79.00,'11.jpg','{"zocalo":"LGA 1151","tipo_ram":"DDR4"}',4,4);
 insert into producto(nombre_prod,precio_venta,imagen,especificaciones,fk_id_categoria,fk_id_proveedor) 
-values ('ASUS TUF GAMING B550M', 225.00,'https://azurefiletestexpress.blob.core.windows.net/imagen-producto/12.jpg','{"zocalo":"AMD AM4","tipo_ram":"DDR4"}',4,4);
+values ('ASUS TUF GAMING B550M', 225.00,'12.jpg','{"zocalo":"AMD AM4","tipo_ram":"DDR4"}',4,4);
 /*Procesadores*/
 insert into producto(nombre_prod,precio_venta,imagen,especificaciones,fk_id_categoria,fk_id_proveedor) 
-values ('INTEL CORE I5 10600K',400.00,'https://azurefiletestexpress.blob.core.windows.net/imagen-producto/13.jpg','{"nucleos":"6","frecuencia":"4.10GHz","hilos":"12"}',5,4);
+values ('INTEL CORE I5 10600K',400.00,'13.jpg','{"nucleos":"6","frecuencia":"4.10GHz","hilos":"12"}',5,4);
 insert into producto(nombre_prod,precio_venta,imagen,especificaciones,fk_id_categoria,fk_id_proveedor) 
-values ('AMD RYZEN 5 3500X',215.00,'https://azurefiletestexpress.blob.core.windows.net/imagen-producto/14.jpg','{"nucleos":"6","frecuencia":"3.6GHz","hilos":"6"}',5,3);
+values ('AMD RYZEN 5 3500X',215.00,'14.jpg','{"nucleos":"6","frecuencia":"3.6GHz","hilos":"6"}',5,3);
 insert into producto(nombre_prod,precio_venta,imagen,especificaciones,fk_id_categoria,fk_id_proveedor) 
-values ('INTEL CORE I7 9700F', 500.00,'https://azurefiletestexpress.blob.core.windows.net/imagen-producto/15.jpg','{"nucleos":"8","frecuencia":"3GHz","hilos":"8"}',5,1);
+values ('INTEL CORE I7 9700F', 500.00,'15.jpg','{"nucleos":"8","frecuencia":"3GHz","hilos":"8"}',5,1);
 /*Fuentes de poder*/
 insert into producto(nombre_prod,precio_venta,imagen,especificaciones,fk_id_categoria,fk_id_proveedor)
- values ('ROG STRIX 750G', 179.00,'https://azurefiletestexpress.blob.core.windows.net/imagen-producto/16.jpg','{"potencia":"750W","certificacion":"80 plus gold","marca":"ASUS"}',6,1);
+ values ('ROG STRIX 750G', 179.00,'16.jpg','{"potencia":"750W","certificacion":"80 plus gold","marca":"ASUS"}',6,1);
 insert into producto(nombre_prod,precio_venta,imagen,especificaciones,fk_id_categoria,fk_id_proveedor) 
-values ('P750GM', 135.00,'https://azurefiletestexpress.blob.core.windows.net/imagen-producto/17.jpg','{"potencia":"750W","certificacion":"80 plus gold","marca":"GIGABYTE"}',6,2);
+values ('P750GM', 135.00,'17.jpg','{"potencia":"750W","certificacion":"80 plus gold","marca":"GIGABYTE"}',6,2);
 insert into producto(nombre_prod,precio_venta,imagen,especificaciones,fk_id_categoria,fk_id_proveedor) 
-values ('RGPS GC-PS001', 69.00,'https://azurefiletestexpress.blob.core.windows.net/imagen-producto/18.jpg','{"potencia":"500W","certificacion":"80 plus bronce","marca":"REDRAGON"}',6,3);
+values ('RGPS GC-PS001', 69.00,'18.jpg','{"potencia":"500W","certificacion":"80 plus bronce","marca":"REDRAGON"}',6,3);
 /*Tarjetas de video*/
 insert into producto(nombre_prod,precio_venta,imagen,especificaciones,fk_id_categoria,fk_id_proveedor) 
-values ('ASUS TUF GAMING GTX1660S', 380.00,'https://azurefiletestexpress.blob.core.windows.net/imagen-producto/19.jpg','{"Capacidad":"6GB","Tipo":"GDDR6"}',7,1);
+values ('ASUS TUF GAMING GTX1660S', 380.00,'19.jpg','{"Capacidad":"6GB","Tipo":"GDDR6"}',7,1);
 insert into producto(nombre_prod,precio_venta,imagen,especificaciones,fk_id_categoria,fk_id_proveedor) 
-values ('ASUS TUF RX5700XT',630.00,'https://azurefiletestexpress.blob.core.windows.net/imagen-producto/20.jpg','{"Capacidad":"8GB","Tipo":"GDDR6"}',7,3);
+values ('ASUS TUF RX5700XT',630.00,'20.jpg','{"Capacidad":"8GB","Tipo":"GDDR6"}',7,3);
 insert into producto(nombre_prod,precio_venta,imagen,especificaciones,fk_id_categoria,fk_id_proveedor) 
-values ('ASUS GT1030',125.00,'https://azurefiletestexpress.blob.core.windows.net/imagen-producto/21.jpg','{"Capacidad":"2GB","Tipo":"GDDR5"}',7,3);
+values ('ASUS GT1030',125.00,'21.jpg','{"Capacidad":"2GB","Tipo":"GDDR5"}',7,3);
 select * from  producto;
 /*Sucursal*/
 insert into sucursal(nombre_sucursal, estado,fecha_creacion) values ('sucursal centro, san salvador',true,'2019-01-11');
