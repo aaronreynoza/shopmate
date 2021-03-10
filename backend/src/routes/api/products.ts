@@ -27,41 +27,40 @@ function getBlobName (originalName:string, name:string){
 export const handler = (router: Router, routesContext: any) => {
   router.post('/products', uploadStrategy ,async (req, res) => {
     const {
-      nombre_prod,
-      precio_venta,
-      especificaciones,
-      categoria,
-      proveedor,
+      productName,
+      price,
+      specifications,
+      category,
+      provider,
     }: {
-      nombre_prod: string,
-      precio_venta: number,
-      imagen: string,
-      especificaciones: string,
-      categoria: string,
-      proveedor: string,
+      productName: string,
+      price: number,
+      specifications: string,
+      category: string,
+      provider: string,
     } = req.body;
 
-    const blobName:string = getBlobName(req.file.originalname,nombre_prod);
+    const blobName:string = getBlobName(req.file.originalname,productName);
     const stream = getStream(req.file.buffer);
     const streamLength = req.file.buffer.length;
     if (
-      (typeof nombre_prod !== 'string')
-      || (typeof precio_venta !== 'string')
-      || (typeof especificaciones !== 'string')
-      || (typeof categoria !== 'string')
-      || (typeof proveedor !== 'string')
+      (typeof productName !== 'string')
+      || (typeof price !== 'number')
+      || (typeof specifications !== 'string')
+      || (typeof category !== 'string')
+      || (typeof provider !== 'string')
     ) {
       return res.status(400).send('Wrong type of data or missing fields');
     }
     log.info('inserting new product with fields: ', req.body);
     try {
       await routesContext.db.insertProduct(
-        nombre_prod,
-        precio_venta,
-        especificaciones,
+        productName,
+        price,
+        specifications,
         blobName,
-        categoria,
-        proveedor,
+        category,
+        provider,
       );
       await blobService.createBlockBlobFromStream(containerName, blobName, stream, streamLength, function (e:any){
         if(e){
