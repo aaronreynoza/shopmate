@@ -8,24 +8,27 @@
                 <div class="row">
                     <div class="col-md-3 col-xs-6">
                         <div class="footer">
-                            <h3 class="footer-title">About Us</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
+                            <h3 class="footer-title">Acerca de nosotros</h3>
+                            <p>Estamos ubicados en San Salvador, Calle Roosevelt #3</p>
                             <ul class="footer-links">
                                 <li><a href="#"><i class="fa fa-phone"></i> +503 7651 4152</a></li>
-                                <li><a href="#"><i class="fa fa-envelope-o"></i>soporte@shopmate.com</a></li>
+                                <li><a href="mailto:soporte@shopmate.com"><i class="fa fa-envelope-o"></i>soporte@shopmate.com</a></li>
                             </ul>
                         </div>
                     </div>
 
                     <div class="col-md-3 col-xs-6">
                         <div class="footer">
-                            <h3 class="footer-title">Categories</h3>
+                            <h3 class="footer-title">Categorias</h3>
                             <ul class="footer-links">
-                                <li><a href="#">Hot deals</a></li>
+                                <!-- <li><a href="#">Promociones</a></li>
                                 <li><a href="#">Laptops</a></li>
                                 <li><a href="#">Smartphones</a></li>
-                                <li><a href="#">Cameras</a></li>
-                                <li><a href="#">Accessories</a></li>
+                                <li><a href="#">Camaras</a></li>
+                                <li><a href="#">Accesorios</a></li> -->
+                                <ng-container *ngFor="let item of categories">
+                                    <li><a (click)="searchByCategory(item)">{{item.name.toUpperCase()}}</a></li>
+                                </ng-container>
                             </ul>
                         </div>
                     </div>
@@ -34,26 +37,26 @@
 
                     <div class="col-md-3 col-xs-6">
                         <div class="footer">
-                            <h3 class="footer-title">Information</h3>
+                            <h3 class="footer-title">Informacion</h3>
                             <ul class="footer-links">
-                                <li><a href="#">About Us</a></li>
-                                <li><a href="#">Contact Us</a></li>
-                                <li><a href="#">Privacy Policy</a></li>
-                                <li><a href="#">Orders and Returns</a></li>
-                                <li><a href="#">Terms & Conditions</a></li>
+                                <li><a href="#">Acerca de nosotros</a></li>
+                                <li><a href="#">Contactenos</a></li>
+                                <li><a href="#">Poliitca de provacidad</a></li>
+                                <li><a href="#">Ordenes y Reembolsos</a></li>
+                                <li><a href="#">Terminos y condiciones</a></li>
                             </ul>
                         </div>
                     </div>
 
                     <div class="col-md-3 col-xs-6">
                         <div class="footer">
-                            <h3 class="footer-title">Service</h3>
+                            <h3 class="footer-title">Servicio</h3>
                             <ul class="footer-links">
-                                <li><a href="#">My Account</a></li>
-                                <li><a href="#">View Cart</a></li>
+                                <li><a href="#">Mi Cuenta</a></li>
+                                <li><a href="#">Ver Carrito</a></li>
                                 <li><a href="#">Wishlist</a></li>
-                                <li><a href="#">Track My Order</a></li>
-                                <li><a href="#">Help</a></li>
+                                <li><a href="#">Seguir mi orden</a></li>
+                                <li><a href="#">Ayuda</a></li>
                             </ul>
                         </div>
                     </div>

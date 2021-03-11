@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
     }
     const users = this.utilService.getUsers()
       ? this.utilService.getUsers()
-      : [{ email: '', password: '', recordar: false }];
+      : [{ phone: "71306407",name:'Cristian',email: 'albertsevilla1996@gmail.com', password: 'Asdf1234', recordar: true }];
     const existUser = users.find(
       (item: user) =>
         item.email == formValue.email && item.password == formValue.password

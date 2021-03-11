@@ -1,0 +1,115 @@
+<div class="container">
+  <div class="row" style="margin-top: 30px;">
+    <div class="col-sm-3" style="border-top: 1px solid #ccc; border-right: 1px solid #ccc; min-height: 300px;">
+
+      <div class="col-sm-12" style="margin-top: 30px;">
+        <h4>Categorias</h4>
+        <div class="" *ngFor="let item of categories">
+          <a (click)="searchByCategory(item)" style="cursor: pointer;">{{item.name}}</a>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <h4>Filtrar  por precio</h4>
+      </div>
+    <div class="col-sm-6">
+      <input type="number" id="price_min" min="0" placeholder="$ 0" class="form-control">
+    </div>
+    <div class="col-sm-6">
+      <input type="number" id="price_max" min="0" placeholder="$ 100" class="form-control">
+    </div>
+    <div class="col-sm-6 mx-auto">
+      <button
+      style="border-radius: 5px; margin: 10px 0 10px 0;"
+      class="btn btn-primary" (click)="filtrar()">Filtrar</button>
+    </div>
+    </div>
+    <div class="col-sm-9" style="border-top: 1px solid #ccc;min-height: 300px;">
+      <div class="col-sm-12" *ngIf="products.length == 0" style="margin-top: 30px;">
+        <h2>No se encontraron resultados</h2>
+      </div>
+      <ng-container *ngFor="let product of products">
+        <!-- Products tab & slick -->
+        <div class="col-md-4 col-lg-4 col-sm-12" >
+            <div class="row">
+              <div class="products-tabs">
+                <!-- tab -->
+                <div id="tab1" class="tab-pane active">
+                  <div class="products-slick" data-nav="#slick-nav-1">
+                    <!-- product -->
+                    <div class="product">
+                      <div
+                        class="product-img"
+                        (click)="seeMore(product)"
+                        style="cursor: pointer"
+                      >
+                        <!-- <img src="{{product.images.split(',')[0]}}" alt="" /> -->
+                        <img class="product-image" src="https://azurefiletestexpress.blob.core.windows.net/imagen-producto/{{product.imagen}}" alt="">
+                        <!-- <div class="product-label"> 
+                                                  <span class="sale">-30%</span>
+                                                  <span class="new">NEW</span>
+                                              </div> -->
+                      </div>
+                      <div class="product-body" style="min-height: 136px;">
+                        <p class="product-category">
+                          <!-- Cant. Disp. {{ product.stock_available }} -->
+                        </p>
+                        <p class="product-category">{{ product.category }}</p>
+                        <h3 class="product-name">
+                          <a (click)="seeMore(product)" style="cursor: pointer">{{
+                            product.name
+                          }}</a>
+                        </h3>
+                        <h4 class="product-price">
+                          $ {{ product.price }}
+                          <!-- <del class="product-old-price">$990.00</del> -->
+                        </h4>
+                        <!-- <div class="product-rating">
+                                                  <i class="fa fa-star"></i>
+                                                  <i class="fa fa-star"></i>
+                                                  <i class="fa fa-star"></i>
+                                                  <i class="fa fa-star"></i>
+                                                  <i class="fa fa-star"></i>
+                                              </div> -->
+                        <div class="product-btns">
+                          <button
+                            class="add-to-wishlist"
+                            (click)="addToWishList(product)"
+                          >
+                            <i
+                              style="color: red"
+                              *ngIf="selectedItemWish(product) == true"
+                              class="fa fa-heart"
+                            ></i>
+                            <i
+                              *ngIf="selectedItemWish(product) == false"
+                              class="fa fa-heart"
+                            ></i>
+  
+                            <span class="tooltipp">add to wishlist</span>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="add-to-cart">
+                        <button
+                          class="add-to-cart-btn"
+                          type="button"
+                          (click)="addToCart(product)"
+                        >
+                          <i class="fa fa-shopping-cart"></i> add to cart
+                        </button>
+                      </div>
+                    </div>
+  
+                    <!-- /product -->
+                  </div>
+                  <div id="slick-nav-1" class="products-slick-nav"></div>
+                </div>
+                <!-- /tab -->
+              </div>
+            </div>
+          </div>
+          <!-- Products tab & slick -->
+      </ng-container>
+    </div>
+  </div>
+</div>
