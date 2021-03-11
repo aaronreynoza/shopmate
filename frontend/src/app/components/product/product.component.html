@@ -1,23 +1,71 @@
 <div class="container">
-    <div class="row">
-        <div class="col-sm-6">
-            <img src="assets/img/product01.png" style="width: 100%;" alt="">
+  <div class="row">
+    <div class="col-sm-6">
+      <ng-container *ngIf="product?.imagen">
+        <div class="col-sm-12">
+          <img style="width: 100%;" src="https://azurefiletestexpress.blob.core.windows.net/imagen-producto/{{product.product_image}}" alt="">
         </div>
-        <div class="col-sm-6" style="padding: 60px;">
-            <h1>{{product.name}}</h1>
-            <p>Cantidad Disponible {{product.stock_available}}</p>
-            <p>Categoria Laptops</p>
-            <h4>$ {{product.price}}</h4>
-            <p>{{product.description}}</p>
-            <div class="product-btns">
-                <button class="btn add-to-wishlist" (click)="addToWishList(product)"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-                <!-- <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button> -->
-                <!-- <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button> -->
-            </div>
-            <br>
-        <div class="add-to-cart">
-            <button class="btn add-to-cart-btn" type="button" (click)="addToCart(product)"><i class="fa fa-shopping-cart"></i> add to cart</button>
+        <div class="col-sm-12">
+          <!-- <carousel
+            (events)="handleCarouselEvents($event)"
+            arrowsTheme="dark"
+            [counter]="true"
+            [arrowsOutside]="false"
+            [loop]="true"
+            [dots]="true" -->
+          >
+            <!-- <div class="carousel-cell" *ngFor="let item of imagesProduct">
+              <img src="{{ item }}" />
+            </div> -->
+          <!-- </carousel> -->
         </div>
-        </div>
+      </ng-container>
     </div>
+    <div class="col-sm-6" style="padding: 60px">
+      <h1>{{ product?.name }}</h1>
+      <!-- <p><b>Cantidad Disponible</b>: {{ product.stock_available }}</p> -->
+      <!-- <p><b>Categoria: </b>{{ product.category }}</p> -->
+      <h4>
+        <strong>
+          {{ product?.price | currency }}
+        </strong>
+      </h4>
+      <!-- <p>{{ product.description }}</p> -->
+      <div class="product">
+        <div class="product-body">
+          <div class="product-btns">
+            <button class="add-to-wishlist" (click)="addToWishList(product)">
+              <i
+              style="color: red;"
+              *ngIf="selectedItemWish(product) == true"
+                class="fa fa-heart"
+              ></i>
+              <i
+              *ngIf="selectedItemWish(product) == false"
+                class="fa fa-heart"
+              ></i>
+              <span class="tooltipp">add to wishlist</span>
+            </button>
+          </div>
+        </div>
+        <div class="add-to-cart">
+          <button class="add-to-cart-btn" type="button" (click)="addToCart(product)"><i class="fa fa-shopping-cart"></i> add to cart</button>
+      </div>
+      </div>
+      <br />
+      <hr />
+      <h4>Especificaciones</h4>
+      <div class="col-sm-12">
+        <ng-container *ngFor="let item of Specs">
+          <hr />
+          <div class="col-sm-6" style="text-transform: capitalize">
+            <b> {{ item.name }}:</b>
+          </div>
+          <div class="col-sm-6">{{ item.description }}</div>
+          <hr />
+        </ng-container>
+      </div>
+      <hr />
+    </div>
+  </div>
 </div>

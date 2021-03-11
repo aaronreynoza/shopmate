@@ -4,7 +4,7 @@
         <div class="container">
             <ul class="header-links pull-left">
                 <li><a href="#"><i class="fa fa-phone"></i> +503 7651 4152</a></li>
-                <li><a href="#"><i class="fa fa-envelope-o"></i>soporte@shopmate.com</a></li>
+                <li><a href="mailto:soporte@shopmate.com"><i class="fa fa-envelope-o"></i>soporte@shopmate.com</a></li>
                 <!-- <li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li> -->
             </ul>
             <ul class="header-links pull-right">
@@ -41,67 +41,68 @@
                 <!-- /LOGO -->
 
                 <!-- SEARCH BAR -->
-                <div class="col-md-6">
+                <div class="col-md-7">
                     <div class="header-search">
-                        <form>
-                            <select class="input-select">
-                                <option value="1">All Categories</option>
+                        <form [formGroup]="searchForm" (ngSubmit)="onPostRequest(searchForm.value)">
+                            <select formControlName="category" class="input-select selectSearchBar"
+                            style="width: 168px;">
+                                <option value="-1">Todo</option>
                                 <ng-container *ngFor="let item of categories">
-                                    <option value="0">{{item.name}}</option>
+                                    <option [value]="item.category_id">{{item.name}}</option>
                                 </ng-container>
                             </select>
-                            <input class="input" placeholder="Laptop">
-                            <button class="search-btn">Buscar</button>
+                            <input formControlName="keyword" class="input txtSearchBar" placeholder="Laptop">
+                            <button type="submit" class="search-btn btnSearchBar">Buscar</button>
                         </form>
                     </div>
                 </div>
                 <!-- /SEARCH BAR -->
 
                 <!-- ACCOUNT -->
-                <div class="col-md-3 clearfix">
+                <div class="col-md-2 clearfix" style="padding: 0;">
                     <div class="header-ctn">
                         <!-- Wishlist -->
-                        <div>
+                        <div style="max-width: 70px;">
                             <a href="#">
                                 <i class="fa fa-heart-o"></i>
                                 <span>Wishlist</span>
-                                <div class="qty" *ngIf="wishList.count > 0">{{wishList.count}}</div>
+                                <div class="qty" *ngIf="wishList.length > 0">{{wishList.length}}</div>
                             </a>
                         </div>
                         <!-- /Wishlist -->
 
                         <!-- Cart -->
-                        <div class="dropdown">
+                        <div class="dropdown" style="max-width: 70px;">
                             <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                 <i class="fa fa-shopping-cart"></i>
                                 <span>Carrito</span>
-                                <div class="qty" *ngIf="cartList.products.length > 0">{{cartList.products.length}}</div>
+                                <div class="qty" *ngIf="cartList.length > 0">{{cartList.length}}</div>
                             </a>
                             <div class="cart-dropdown">
                                 <div class="cart-list">
-                                    <ng-container *ngFor="let item of cartList.products">
+                                    <ng-container *ngFor="let item of cartList">
 
                                         <div class="product-widget">
                                             <div class="product-img">
-                                            <img src="{{item.image}}" alt="">
+                                            <img src="https://azurefiletestexpress.blob.core.windows.net/imagen-producto/{{item.product.product_image}}" alt="">
                                         </div>
                                         <div class="product-body">
-                                            <h3 class="product-name"><a href="#">{{item.name}}</a></h3>
-                                            <h4 class="product-price"><span class="qty">1x</span>$ {{item.price}}</h4>
+                                            <h3 class="product-name"><a href="#">{{item.product.name}}</a></h3>
+                                            <h4 class="product-price"><span class="qty">{{item.quantity}}x</span> {{item.product.price | currency}}</h4>
                                         </div>
-                                        <button class="delete"><i class="fa fa-close"></i></button>
+                                        <button class="delete" (click)="deleteItemCart(item)"><i class="fa fa-close"></i></button>
                                     </div>
                                 </ng-container>
 
                                 
                                 </div>
                                 <div class="cart-summary">
-                                    <small>{{cartList.products.length}} Item(s) selected</small>
-                                    <h5>SUBTOTAL: $ {{subtotal(cartList)}}</h5>
+                                    <small>{{cartList.length}} Item(s) seleccionados</small>
+                                    <h5>SUBTOTAL:  {{subtotal(cartList) | currency}}</h5>
                                 </div>
                                 <div class="cart-btns">
-                                    <a href="#">View Cart</a>
-                                    <a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
+                                    <a routerLink="/view-cart">Ver Carrito</a>
+                                    <a routerLink="/checkout">Pagar  <i class="fa fa-arrow-circle-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -122,12 +123,12 @@
                 <div class="col-md-12">
                     <div class="dropdown">
                         <button class="btn btn-default dropdown-toggle btnCategories" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                          Categories
+                          Categorias
                           <span class="caret pull-right rowDown"></span>
                         </button>
                         <ul class="dropdown-menu ulDrop" aria-labelledby="dropdownMenu1">
                             <ng-container *ngFor="let item of categories">
-                                <li><a href="#">{{item.name}}</a></li>
+                                <li><a (click)="searchByCategory(item)">{{item.name}}</a></li>
                             </ng-container>
                         </ul>
                       </div>  

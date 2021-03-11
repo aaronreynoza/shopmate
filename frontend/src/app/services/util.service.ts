@@ -1,44 +1,114 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { product } from '../models/product.model';
 
 import { user } from '../models/user.model';
-import { wishList } from '../models/wishList.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UtilService {
   users: user[] = [];
-  public itemWishList: wishList = {
-    count: 0,
-    products: [],
-  };
-  public itemCartList: wishList = {
-    count: 0,
-    products: [],
-  };
+  public itemWishList = JSON.parse(localStorage.getItem('wishList')) || [];
+  public itemCartList = JSON.parse(localStorage.getItem('cartList')) || [];
+  // ====================================================
+  // User Login Observer
+  // ====================================================
   private statusSource = new BehaviorSubject({ isLoggedIn: false });
   public statusSubscriber = this.statusSource.asObservable();
+  // =====================================================
+  // Cart & Wish List Observers Behavior
+  // =====================================================
   private wishListSource = new BehaviorSubject(this.itemWishList);
   public wishListSubscriber = this.wishListSource.asObservable();
   private cartListSource = new BehaviorSubject(this.itemCartList);
   public cartListSubscriber = this.cartListSource.asObservable();
+  // ==================================================
+  
   constructor() {}
-  addToWishList(item: wishList) {
-    localStorage.setItem('wishList',JSON.stringify(item))
-    this.wishListSource.next(item);
+
+  // ================================================
+  // Cart & Wish List
+  // ================================================
+  addToWishList(item) {
+    const wishFromLocalStorage = this.getWishList();
+    const existWishItem = wishFromLocalStorage.find((itemW) => {
+      if (itemW.id == item.id) {
+        return item;
+      }
+    });
+    if (!existWishItem) {
+      wishFromLocalStorage.push(item);
+      this.setWishList(wishFromLocalStorage);
+    } else {
+      this.setWishList(
+        wishFromLocalStorage.filter((itemW) => {
+          if (itemW.id != item.id) return itemW;
+        })
+      );
+    }
+
+    this.wishListSource.next(this.getWishList());
   }
-  addToCart(item: wishList) {
-    localStorage.setItem('cartList',JSON.stringify(item))
-    this.cartListSource.next(item);
+
+  addToCart(product: any) {
+    const cartFromLocalStorage = this.getCart();
+    if (cartFromLocalStorage.length > 0) {
+      const existItemCart = cartFromLocalStorage.find((item) => {
+        if (item.product.id == product.id) {
+          return item;
+        }
+      });
+      if (!existItemCart) {
+        const productCarList = {
+          quantity: 1,
+          product,
+          total: product.price,
+        };
+        cartFromLocalStorage.push(productCarList);
+      } else {
+        for (let j = 0; j < cartFromLocalStorage.length; j++) {
+          let cartFrom = cartFromLocalStorage[j];
+          if (cartFrom.product.id === product.id) {
+            cartFrom.quantity += 1;
+            cartFrom.total += product.price;
+          }
+        }
+      }
+      this.setCartList(cartFromLocalStorage);
+    } else {
+      const productCarList = {
+        quantity: 1,
+        product,
+        total: product.price,
+      };
+      this.setCartList([productCarList]);
+    }
+    this.cartListSource.next(this.getCart());
+  }
+  deleteItemCart(itemDeleted) {
+    const cartFromLocalStorage = this.getCart();
+    const newCart = cartFromLocalStorage.filter(
+      (item) => item.product.id !== itemDeleted.product.id
+    );
+    this.setCartList(newCart);
+    this.cartListSource.next(newCart);
+  }
+  // ==================================================================
+  // Getters & Setters Cart & Wish List
+  // ==================================================================
+  setWishList(item) {
+    localStorage.setItem('wishList', JSON.stringify(item));
+  }
+  setCartList(item) {
+    localStorage.setItem('cartList', JSON.stringify(item));
   }
   getWishList() {
-    return  JSON.parse(localStorage.getItem('wishList'))
+    return JSON.parse(localStorage.getItem('wishList')) || [];
   }
   getCart() {
-   return  JSON.parse(localStorage.getItem('cartList'))
+    return JSON.parse(localStorage.getItem('cartList')) || [];
   }
+  // ==========================================================================
 
   isLoggedIn(status: boolean) {
     this.statusSource.next({ isLoggedIn: status });
@@ -61,7 +131,7 @@ export class UtilService {
     );
   }
   getStatus() {
-    return JSON.parse(localStorage.getItem('status'));
+    return JSON.parse(localStorage.getItem('status')) || { isLoggedIn: false } ;
   }
   setUsers(formValue: user) {
     console.log(formValue);
