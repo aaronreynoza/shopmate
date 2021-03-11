@@ -166,7 +166,8 @@ class Database {
           'nombre_prod',
           'precio_venta', 
 	        'nombre_categoria', 
-          'especificaciones' 
+          'especificaciones',
+          'imagen' 
         );
       return prodArray;
     }catch(Err){
@@ -186,7 +187,8 @@ class Database {
           'nombre_prod',
           'precio_venta', 
 	        'nombre_categoria', 
-          'especificaciones' 
+          'especificaciones',
+          'imagen' 
         );
       return prodArray;
     }catch(Err){
@@ -205,7 +207,8 @@ class Database {
             'nombre_prod',
             'precio_venta', 
 	          'nombre_categoria', 
-            'especificaciones' 
+            'especificaciones' ,
+            'imagen' 
         );
       return prodArray;
     }catch(err){
@@ -226,7 +229,8 @@ class Database {
             'nombre_prod',
             'precio_venta', 
 	          'nombre_categoria', 
-            'especificaciones' 
+            'especificaciones',
+            'imagen' 
         );
       return prodArray;
     }catch(err){
