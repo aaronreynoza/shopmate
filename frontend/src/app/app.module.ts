@@ -11,9 +11,18 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+
+
+import {IvyCarouselModule} from 'angular-responsive-carousel';
+
+
 import { LoginComponent } from './components/login/login.component';
 import { RegiterComponent } from './components/regiter/regiter.component';
 import { ProductComponent } from './components/product/product.component';
+import { ViewCartComponent } from './components/view-cart/view-cart.component';
+import { SearchComponent } from './components/search/search.component';
+import { CheckoutComponent } from './components/checkout/checkout.component';
+import { AuthPipe } from './pipes/auth.pipe';
 
 @NgModule({
   declarations: [
@@ -21,7 +30,11 @@ import { ProductComponent } from './components/product/product.component';
     HomeComponent,
     LoginComponent,
     RegiterComponent,
-    ProductComponent 
+    ProductComponent,
+    ViewCartComponent,
+    SearchComponent,
+    CheckoutComponent,
+    AuthPipe 
   ],
   imports: [
     BrowserModule,
@@ -30,7 +43,8 @@ import { ProductComponent } from './components/product/product.component';
     HttpClientModule,
     RouterModule,
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    IvyCarouselModule
   ],
   providers: [],
   bootstrap: [AppComponent, HeaderComponent, FooterComponent]

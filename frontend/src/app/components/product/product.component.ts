@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { product } from 'src/app/models/product.model';
 import { ProductService } from 'src/app/services/product.service';
 import { UtilService } from 'src/app/services/util.service';
-
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
@@ -14,6 +14,10 @@ export class ProductComponent implements OnInit {
   product: any;
   itemsWishList: any[] = [];
   itemCartList: any[] = [];
+  Specs = [];
+  imagesProduct = [];
+  itemWishList = [];
+
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
@@ -21,36 +25,61 @@ export class ProductComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    window.scroll(0, 0);
     this.product_id = parseInt(this.route.snapshot.paramMap.get('id'));
-    // console.log(this.product_id)
     this.getProduct();
+    this.utilService.wishListSubscriber.subscribe((data) => {
+      this.itemWishList = data;
+    });
   }
 
   getProduct() {
-    this.product = JSON.parse(localStorage.getItem('product'));
-    console.log(this.product);
-    // this.productService.getProduct(this.product_id).subscribe(
-    //   data => {
-    //     this.product = data;
-    //   }
-    // );
+    this.productService.getProduct(this.product_id).subscribe(async(data) => {
+      this.product = await data[0];
+      console.log(data)
+      this.product.especificaciones = JSON.parse(this.product.especificaciones);
+      const namesKeySpecs = Object.keys(this.product.especificaciones);
+      // this.imagesProduct = this.product.images.split(',');
+      for (let i = 0; i < namesKeySpecs.length; i++) {
+        const nameKeySpec = namesKeySpecs[i];
+        const spec = {
+          name: nameKeySpec,
+          description: this.product.especificaciones[nameKeySpec],
+        };
+        this.Specs.push(spec);
+      }
+    });
+
   }
-  addToWishList(product: product) {
-    // if(this.utilService.getWishList()){
-    //   this.itemsWishList.push(this.utilService.getWishList());
-    // }
-    this.itemsWishList.push(product);
-    this.utilService.addToWishList({
-      count: this.itemsWishList.length,
-      products: this.itemsWishList,
+  addToWishList(product: any) {
+    this.utilService.addToWishList(product);
+  }
+  addToCart(product: any) {
+    this.utilService.addToCart(product);
+    Swal.fire({
+      position: 'bottom-right',
+      icon: 'success',
+      title: 'Producto agregado al carrito de compras',
+      showConfirmButton: false,
+      timer: 2000,
+      backdrop: true,
     });
   }
-  addToCart(product: product) {
-    console.log('cart', product);
-    this.itemCartList.push(product);
-    this.utilService.addToCart({
-      count: this.itemCartList.length,
-      products: this.itemCartList,
-    });
+  handleCarouselEvents(event) {
+    console.log(event);
+  }
+  selectedItemWish(item) {
+    if(item){
+      const exist = this.itemWishList.find((prod) => {
+        if (prod.id == item.id) {
+          return prod;
+        }
+      });
+      if (!exist) {
+        return false;
+      } else {
+        return true;
+      }
+    }
   }
 }
