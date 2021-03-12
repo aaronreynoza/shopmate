@@ -3,15 +3,19 @@ import bunyanMiddleware from 'bunyan-middleware';
 import express, { Express } from 'express';
 import nocache from 'nocache';
 import cors from 'cors';
+import path from 'path';
+import config from './src/config';
 
-import * as Logger from './utils/logger';
-import Database from './db';
-import routesInstance from './routes';
-import { ConfigType, ConnectionType } from './utils/types';
+import * as Logger from './src/utils/logger';
+import Database from './src/db';
+import routesInstance from './src/routes';
+import { ConfigType, ConnectionType } from './src/utils/types';
 
-const initDb = (config: ConnectionType) => {
+Logger.create();
+
+const initDb = (configuration: ConnectionType) => {
   // try open a db connection pool
-  const database = new Database(config);
+  const database = new Database(configuration);
   return database.connect();
 };
 
@@ -28,12 +32,21 @@ function mountRoutes(serverInstance: Express, database: Database) {
 
   routesInstance(router, database);
   serverInstance.use('/api/v1', router);
+
+  if (process.env.NODE_ENV === 'production') {
+    // Set static folder
+    serverInstance.use(express.static('./frontend/dist/shopmate'));
+
+    serverInstance.get('*', (req, res) => {
+      res.sendFile(path.resolve('frontend', 'dist', 'shopmate', 'index.html'));
+    });
+  }
 }
 
-async function start(config: ConfigType) {
+async function start(configuration: ConfigType) {
   const log = Logger.getInstance();
   const instance = express();
-  const database = await initDb(config.database.connection);
+  const database = await initDb(configuration.database.connection);
   mountMiddlewares(instance);
   mountRoutes(instance, database);
 
@@ -44,4 +57,4 @@ async function start(config: ConfigType) {
   return instance;
 }
 
-export default start;
+start(config);
