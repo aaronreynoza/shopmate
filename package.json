@@ -4,11 +4,11 @@
   "description": "backend for the shopmate store",
   "main": "src/index.ts",
   "scripts": {
-    "start": "npm run build && node build/index.js | bunyan -o short",
-    "start:dev": "nodemon | bunyan -o short",
-    "start:simple": "nodemon",
-    "build": "rimraf ./build && tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "server": "nodemon index",
+    "frontend": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run frontend\"",
+    "build-frontend": "npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "npm install && npm run build-frontend && ts-node index"
   },
   "repository": {
     "type": "git",
@@ -32,6 +32,7 @@
     "@types/node": "^14.14.6",
     "@typescript-eslint/eslint-plugin": "^4.8.2",
     "@typescript-eslint/parser": "^4.8.2",
+    "concurrently": "^6.0.0",
     "eslint": "^7.14.0",
     "eslint-config-airbnb-typescript": "^12.0.0",
     "eslint-plugin-import": "^2.22.1",
