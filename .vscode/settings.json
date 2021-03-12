@@ -1,0 +1,8 @@
+{
+  "appService.zipIgnorePattern": [
+    "node_modules{,/**}",
+    ".vscode{,/**}"
+  ],
+  "appService.defaultWebAppToDeploy": "/subscriptions/c12e6d48-33a4-40be-b811-daef51dd5225/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/shopmate",
+  "appService.deploySubpath": "."
+}

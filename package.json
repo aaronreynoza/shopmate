@@ -7,8 +7,8 @@
     "server": "nodemon index",
     "frontend": "npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run frontend\"",
-    "build-frontend": "npm install --prefix frontend && npm run build --prefix frontend",
-    "start": "npm install && npm run build-frontend && ts-node index"
+    "build-frontend": "npm run build --prefix frontend",
+    "start": "ts-node index"
   },
   "repository": {
     "type": "git",
