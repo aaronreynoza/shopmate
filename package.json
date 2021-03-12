@@ -8,7 +8,7 @@
     "frontend": "npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run frontend\"",
     "build-frontend": "npm install --prefix frontend && npm run build --prefix frontend",
-    "start": "npm run build-frontend && ts-node index"
+    "start": "npm install && npm run build-frontend && ts-node index"
   },
   "repository": {
     "type": "git",
