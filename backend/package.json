@@ -4,11 +4,9 @@
   "description": "backend for the shopmate store",
   "main": "src/index.ts",
   "scripts": {
-    "server": "nodemon index",
-    "frontend": "npm start --prefix frontend",
-    "dev": "concurrently \"npm run server\" \"npm run frontend\"",
-    "build-frontend": "npm install --prefix frontend && npm run build --prefix frontend",
-    "start": "npm install && npm run build-frontend && ts-node index"
+    "server": "nodemon index | bunyan -o short",
+    "build": "tsc",
+    "start": "node build/index.js"
   },
   "repository": {
     "type": "git",

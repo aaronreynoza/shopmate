@@ -4,12 +4,12 @@ import express, { Express } from 'express';
 import nocache from 'nocache';
 import cors from 'cors';
 import path from 'path';
-import config from './src/config';
+import config from './config';
 
-import * as Logger from './src/utils/logger';
-import Database from './src/db';
-import routesInstance from './src/routes';
-import { ConfigType, ConnectionType } from './src/utils/types';
+import * as Logger from './utils/logger';
+import Database from './db';
+import routesInstance from './routes';
+import { ConfigType, ConnectionType } from './utils/types';
 
 Logger.create();
 
@@ -35,10 +35,10 @@ function mountRoutes(serverInstance: Express, database: Database) {
 
   if (process.env.NODE_ENV === 'production') {
     // Set static folder
-    serverInstance.use(express.static('./frontend/dist/shopmate'));
+    serverInstance.use(express.static('../frontend/dist/shopmate'));
 
     serverInstance.get('*', (req, res) => {
-      res.sendFile(path.resolve('frontend', 'dist', 'shopmate', 'index.html'));
+      res.sendFile(path.resolve('../', 'frontend', 'dist', 'shopmate', 'index.html'));
     });
   }
 }
