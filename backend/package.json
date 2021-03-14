@@ -4,9 +4,9 @@
   "description": "backend for the shopmate store",
   "main": "src/index.ts",
   "scripts": {
-    "server": "nodemon index | bunyan -o short",
+    "server": "nodemon src/index | bunyan -o short",
     "build": "tsc",
-    "start": "node build/index.js"
+    "start": "node build/index.js | bunyan -o short"
   },
   "repository": {
     "type": "git",
@@ -34,7 +34,6 @@
     "eslint": "^7.14.0",
     "eslint-config-airbnb-typescript": "^12.0.0",
     "eslint-plugin-import": "^2.22.1",
-    "nodemon": "^2.0.6",
     "rimraf": "^3.0.2",
     "ts-node": "^9.0.0",
     "typescript": "^4.0.5"
