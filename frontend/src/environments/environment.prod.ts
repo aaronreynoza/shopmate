@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  API_URL: '/api/v1'
+  API_URL: 'https://shopmate.azurewebsites.net/api/v1'
 };
