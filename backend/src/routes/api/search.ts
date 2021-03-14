@@ -29,17 +29,34 @@ export const handler = (router: Router, routesContext: any) => {
     switch(type_search){
       case "category":
         if(filter !== null){
-          const products = await routesContext.db.getSearchProductCategoryFilter(category, filter.price_min,filter.price_max);
-          res.status(200).send(products);
-        }else{
+          if(filter.price_max !== null && filter.price_min !== null){
+            const products = await routesContext.db.getSearchProductCategoryFilter(category, filter.price_min,filter.price_max);
+            res.status(200).send(products);  
+          } else if(filter.price_min !== null && filter.price_max == null){
+            const products = await routesContext.db.getSearchProductCategoryFilterMin(category, filter.price_min);
+            res.status(200).send(products);
+          } else if (filter.price_max !== null && filter.price_min == null){
+            const products = await routesContext.db.getSearchProductCategoryFilterMax(category, filter.price_max);
+            res.status(200).send(products);
+          }
+        } else {
           const products = await routesContext.db.getSearchProductCategory(category);
           res.status(200).send(products);
         }
         break;
       case "keyword":
         if(filter !== null){
-          const products = await routesContext.db.getSearchProductKeywordFilter(keyword, filter.price_min,filter.price_max);
+          if(filter.price_max !== null && filter.price_min !== null){
+            const products = await routesContext.db.getSearchProductKeywordFilter(keyword, filter.price_min,filter.price_max);
           res.status(200).send(products);
+          } else if(filter.price_min !== null && filter.price_max === null){
+            const products = await routesContext.db.getSearchProductKeywordFilterMin(category, filter.price_min);
+            res.status(200).send(products);
+          } else if (filter.price_max !== null && filter.price_min === null){
+            const products = await routesContext.db.getSearchProductKeywordFilterMax(category, filter.price_max);
+            res.status(200).send(products);
+          }
+          
         }else{
           const products = await routesContext.db.getSearchProductKeyword(keyword);
           res.status(200).send(products);

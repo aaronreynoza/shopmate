@@ -4,6 +4,8 @@ interface ConfigType {
     PORT: number,
   },
   database: DatabaseType,
+  jwtSeed:string,
+  algorithm:string,
 }
 
 interface DatabaseType {
@@ -30,8 +32,14 @@ interface ConnectionType {
   database: string,
 }
 interface Filter{
-  price_min:number,
-  price_max:number,
+  price_min:number|null,
+  price_max:number|null,
 }
-
-export { ConfigType, DatabaseType, ConnectionType , Filter};
+interface IdataUser{
+  address:string,
+  name:string,
+  lastname:string,
+  email:string,
+  phone:string
+}
+export { ConfigType, DatabaseType, ConnectionType , Filter, IdataUser};

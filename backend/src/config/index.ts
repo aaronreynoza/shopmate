@@ -32,6 +32,8 @@ const config: ConfigType = {
     },
     debug: false,
   },
+  jwtSeed:process.env.SECRET_KEY_FOR_JWT!,
+  algorithm:process.env.ALGORITHM_FOR_JWT!,
 };
 
 export default config;
