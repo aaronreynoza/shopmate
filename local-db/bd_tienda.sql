@@ -145,6 +145,7 @@ CREATE TABLE `descuentos` (
 ) ENGINE=INNODB;
 
 # GENERANDO RELACIONES
+alter table producto add fulltext(nombre_prod);
 ALTER TABLE `usuario` ADD CONSTRAINT `usuario_tipo_usuario_fk_id_tipo` FOREIGN KEY (`fk_id_tipo`) REFERENCES `tipo_usuario`(`id_tipo`) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE `producto` ADD CONSTRAINT `producto_proveedor_fk_id_proveedor` FOREIGN KEY (`fk_id_proveedor`) REFERENCES `proveedor`(`id_proveedor`) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE `producto` ADD CONSTRAINT `producto_categoria_fk_id_categoria` FOREIGN KEY (`fk_id_categoria`) REFERENCES `categoria`(`id_categoria`) ON DELETE NO ACTION ON UPDATE CASCADE;
