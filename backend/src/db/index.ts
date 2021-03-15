@@ -2,6 +2,7 @@ import Knex from 'knex';
 import { ConnectionType } from '../utils/types';
 import * as Logger from '../utils/logger';
 import { renamedProduct, renameCategory } from '../utils/dataChanges';
+import { threadId } from 'worker_threads';
 
 /**
  * Abstracts operations against the database
@@ -167,7 +168,7 @@ class Database {
           'precio_venta', 
 	        'nombre_categoria', 
           'especificaciones',
-          'imagen' 
+          'imagen'
         );
       return prodArray;
     }catch(Err){
@@ -179,7 +180,7 @@ class Database {
     try{
       const prodArray = await this.queryBuilder.table('producto')
         .innerJoin('categoria', 'producto.fk_id_categoria', '=', 'categoria.id_categoria')
-        .where({'producto.fk_id_categoria': category,})
+        .where({'producto.fk_id_categoria': category})
         .andWhere('precio_venta','>',priceMin)
         .andWhere('precio_venta','<',priceMax)
         .select(
@@ -188,7 +189,47 @@ class Database {
           'precio_venta', 
 	        'nombre_categoria', 
           'especificaciones',
-          'imagen' 
+          'imagen'
+        );
+      return prodArray;
+    }catch(Err){
+      console.log(Err);
+    }
+  }
+
+  async getSearchProductCategoryFilterMin(category:number, priceMin:number){
+    try{
+      const prodArray = await this.queryBuilder.table('producto')
+        .innerJoin('categoria', 'producto.fk_id_categoria', '=', 'categoria.id_categoria')
+        .where({'producto.fk_id_categoria': category})
+        .andWhere('precio_venta','>',priceMin)
+        .select(
+          'id_producto',
+          'nombre_prod',
+          'precio_venta', 
+	        'nombre_categoria', 
+          'especificaciones',
+          'imagen'
+        );
+      return prodArray;
+    }catch(Err){
+      console.log(Err);
+    }
+  }
+
+  async getSearchProductCategoryFilterMax(category:number, priceMax:number){
+    try{
+      const prodArray = await this.queryBuilder.table('producto')
+        .innerJoin('categoria', 'producto.fk_id_categoria', '=', 'categoria.id_categoria')
+        .where({'producto.fk_id_categoria': category})
+        .andWhere('precio_venta','<',priceMax)
+        .select(
+          'id_producto',
+          'nombre_prod',
+          'precio_venta', 
+	        'nombre_categoria', 
+          'especificaciones',
+          'imagen'
         );
       return prodArray;
     }catch(Err){
@@ -200,15 +241,15 @@ class Database {
     try{
       const prodArray = await this.queryBuilder.table('producto')
         .innerJoin('categoria', 'producto.fk_id_categoria', '=', 'categoria.id_categoria')
-        .where({
-          'producto.nombre_prod': keyword,
-        }).select(
+        .where(
+          this.queryBuilder.raw('MATCH(nombre_prod)  AGAINST(?)', keyword)
+        ).select(
             'id_producto',
             'nombre_prod',
             'precio_venta', 
 	          'nombre_categoria', 
-            'especificaciones' ,
-            'imagen' 
+            'especificaciones',
+            'imagen'
         );
       return prodArray;
     }catch(err){
@@ -221,8 +262,9 @@ class Database {
     try{
       const prodArray = await this.queryBuilder.table('producto')
         .innerJoin('categoria', 'producto.fk_id_categoria', '=', 'categoria.id_categoria')
-        .where({'nombre_prod': keyword,})
-        .andWhere('precio_venta','<',priceMax)
+        .where(
+          this.queryBuilder.raw('MATCH(nombre_prod)  AGAINST(?)', keyword)
+        ).andWhere('precio_venta','<',priceMax)
         .andWhere('precio_venta','>',priceMin)
         .select(
             'id_producto',
@@ -230,7 +272,51 @@ class Database {
             'precio_venta', 
 	          'nombre_categoria', 
             'especificaciones',
-            'imagen' 
+            'imagen'
+        );
+      return prodArray;
+    }catch(err){
+      this.log.error({ message: `Error while getting Products: ${err}` });
+      throw Error(err);
+    }
+  }
+
+  async getSearchProductKeywordFilterMin(keyword:string, priceMin:number){
+    try{
+      const prodArray = await this.queryBuilder.table('producto')
+        .innerJoin('categoria', 'producto.fk_id_categoria', '=', 'categoria.id_categoria')
+        .where(
+          this.queryBuilder.raw('MATCH(nombre_prod)  AGAINST(?)', keyword)
+        ).andWhere('precio_venta','>',priceMin)
+        .select(
+            'id_producto',
+            'nombre_prod',
+            'precio_venta', 
+	          'nombre_categoria', 
+            'especificaciones',
+            'imagen'
+        );
+      return prodArray;
+    }catch(err){
+      this.log.error({ message: `Error while getting Products: ${err}` });
+      throw Error(err);
+    }
+  }
+
+  async getSearchProductKeywordFilterMax(keyword:string, priceMax:number){
+    try{
+      const prodArray = await this.queryBuilder.table('producto')
+        .innerJoin('categoria', 'producto.fk_id_categoria', '=', 'categoria.id_categoria')
+        .where(
+          this.queryBuilder.raw('MATCH(nombre_prod)  AGAINST(?)', keyword)
+        ).andWhere('precio_venta','<',priceMax)
+        .select(
+            'id_producto',
+            'nombre_prod',
+            'precio_venta', 
+	          'nombre_categoria', 
+            'especificaciones',
+            'imagen'
         );
       return prodArray;
     }catch(err){
@@ -249,10 +335,10 @@ class Database {
     }
   }
 
-  async getProduct(product: string) {
+  async getProduct(idProduct: number) {
     try {
       const products = await this.queryBuilder('producto')
-        .where('nombre_prod', product).select();
+        .where('id_producto', idProduct).select();
       return products;
     } catch (err) {
       this.log.error({ message: `Error while getting Product: ${err}` });
@@ -311,6 +397,34 @@ class Database {
       return shopCartArray;
     } catch (err) {
       throw Error(err);
+    }
+  }
+
+  async loginUser(
+    email: string,
+    password: string,
+  ) {
+    try {
+      const userData = await this.queryBuilder('usuario')
+      .select('id_usuario','email_usu','nombres_usuario')
+      .where('email_usu',email)
+      .andWhere('clave_usu',password);
+      return userData;
+    } catch (err) {
+      throw Error(err);
+    }
+  }
+
+  async dataUserFront(email:string){
+    try {
+      const dataUser = await this.queryBuilder('direccion_entrega')
+      .innerJoin('usuario', 'usuario.id_usuario', '=', 'direccion_entrega.fk_id_usuario')
+      .select()
+      .where('email_usu',email)
+      return dataUser;
+    }
+    catch (e){
+      throw Error(e);
     }
   }
 
