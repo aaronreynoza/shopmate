@@ -4,7 +4,7 @@ import { Router } from 'express';
 import * as Logger from '../../utils/logger';
 import multer from 'multer';
 import path from 'path';
-
+import {IResponse} from '../../utils/types';
 const log = Logger.getInstance();
 
 const inMemoryStorage = multer.memoryStorage();
@@ -34,29 +34,34 @@ export const handler = (router: Router, routesContext: any) => {
       provider,
     }: {
       productName: string,
-      price: number,
+      price: string,
       specifications: string,
       category: string,
       provider: string,
     } = req.body;
-
+    const priceVar:number = parseFloat(price)
     const blobName:string = getBlobName(req.file.originalname,productName);
     const stream = getStream(req.file.buffer);
     const streamLength = req.file.buffer.length;
     if (
       (typeof productName !== 'string')
-      || (typeof price !== 'number')
+      || (typeof priceVar !== 'number')
       || (typeof specifications !== 'string')
       || (typeof category !== 'string')
       || (typeof provider !== 'string')
     ) {
-      return res.status(400).send('Wrong type of data or missing fields');
+      const respObject:IResponse = {
+        status:400,
+        data:[],
+        message:"Something went wrong"
+      }
+      return res.status(400).json(respObject);
     }
     log.info('inserting new product with fields: ', req.body);
     try {
       await routesContext.db.insertProduct(
         productName,
-        price,
+        priceVar,
         specifications,
         blobName,
         category,
@@ -67,10 +72,20 @@ export const handler = (router: Router, routesContext: any) => {
           throw e;
         }
       });
-      return res.status(200).send('Product inserted succesfully');
+      const respObject:IResponse = {
+        status:200,
+        data:req.body,
+        message:"Producto insertado correctamente"
+      }
+      return res.status(200).json(respObject);
     } catch (e) {
       log.error(e);
-      return res.status(500).send('Something went wrong');
+      const respObject:IResponse = {
+        status:400,
+        data:[],
+        message:"Something went wrong"
+      }
+      return res.status(500).json(respObject);
     }
   });
 

@@ -58,9 +58,9 @@ class Database {
       return this.queryBuilder('categoria').insert([
         {
           nombre_categoria: name,
-          descripcion_categoria: description,
+          descripcion_cat: description,
           icon,
-          estado: state,
+          estado: state,  
         },
       ]);
     } catch (err) {

@@ -48,4 +48,9 @@ interface ItokenData{
   email:string,
   access:number
 }
-export { ConfigType, DatabaseType, ConnectionType , Filter, ItokenData};
+interface IResponse{
+  status:number,
+  data:any,
+  message:string
+}
+export { ConfigType, DatabaseType, ConnectionType , Filter, ItokenData,IResponse};

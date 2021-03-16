@@ -31,13 +31,13 @@ insert into proveedor(nombre_prov,telefono_prov,email_prov) values ('HardwareXtr
 insert into proveedor(nombre_prov,telefono_prov,email_prov) values ('PCMax','2596-9696','contacto@pcmax.com');
 select * from proveedor;
 /*Categoria Productos*/
-insert into categoria(nombre_categoria,icon,estado,descripcion_cat) values ('MEMORIAS RAM','icono dato extraño',1,'Memoria volatil');
-insert into categoria(nombre_categoria,icon,estado,descripcion_cat) values ('HDD','icono dato extraño',1,'Almacenamiento HDD');
-insert into categoria(nombre_categoria,icon,estado,descripcion_cat) values ('SSD','icono dato extraño',1,'Unida de almacenamiento');
-insert into categoria(nombre_categoria,icon,estado,descripcion_cat) values ('MOTHERBOARD','icono dato extraño',1,'Tarjeta Madre');
-insert into categoria(nombre_categoria,icon,estado,descripcion_cat) values ('PROCESADOR','icono dato extraño',1,'Unidad central de procesamiento');
-insert into categoria(nombre_categoria,icon,estado,descripcion_cat) values ('FUENTES DE PODER','icono dato extraño',1,'Alimentacio pc');
-insert into categoria(nombre_categoria,icon,estado,descripcion_cat) values ('GPU','icono dato extraño',1,'Tarjeta grafica');
+insert into categoria(nombre_categoria,icon,estado,descripcion_cat) values ('MEMORIAS RAM','fas fa-memory',1,'Memoria volatil');
+insert into categoria(nombre_categoria,icon,estado,descripcion_cat) values ('HDD','fas fa-hdd',1,'Almacenamiento HDD');
+insert into categoria(nombre_categoria,icon,estado,descripcion_cat) values ('SSD','far fa-hdd',1,'Unida de almacenamiento');
+insert into categoria(nombre_categoria,icon,estado,descripcion_cat) values ('MOTHERBOARD','"fas fa-chess-board"',1,'Tarjeta Madre');
+insert into categoria(nombre_categoria,icon,estado,descripcion_cat) values ('PROCESADOR','"fas fa-microchip"',1,'Unidad central de procesamiento');
+insert into categoria(nombre_categoria,icon,estado,descripcion_cat) values ('FUENTES DE PODER','fas fa-plug',1,'Alimentacio pc');
+insert into categoria(nombre_categoria,icon,estado,descripcion_cat) values ('GPU','fas fa-digital-tachograph',1,'Tarjeta grafica');
 /*Productos*/
 /*RAM*/
 insert into producto(nombre_prod,precio_venta,imagen,especificaciones,fk_id_categoria,fk_id_proveedor) 
