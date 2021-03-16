@@ -34,14 +34,22 @@ export const handler = (router: Router, routesContext: any) => {
       || (typeof email !== 'string')
       || (typeof password !== 'string')
     ) {
-      return res.status(400).send('Wrong type of data or missing fields');
+      return res.status(400).json({
+        status:500,
+        data:[],
+        messages:"Wrong type of data or missing fields"
+      });
     }
     log.info('inserting new product with fields: ', req.body);
     try{
       //it is validated if the email is already active
       const emailVal:boolean = await routesContext.db.emailValidator(email);
       if (emailVal!) {
-        return res.status(400).send('Este correo ya se encuentra en uso dentro de la plataforma');
+        return res.status(400).json({
+          status:400,
+          data:[],
+          messages:"Este usuario ya se encuentra dentro de la plataforma"
+        });
       }
       //si el correo no se encuentra en la base de datos se inserta
       await routesContext.db.registerClient(names,lastName,secondLastName,phone,email,password);
@@ -86,9 +94,17 @@ export const handler = (router: Router, routesContext: any) => {
       //a message + and message is printed on the console
       console.log('envio de correo verificacion' + info.messageId +routeVal)
       //se retorna el siguiente mensaje
-      res.status(200).send('Se ingreso usuario correctamente, porfavor valide correo de usuario');
+      res.status(200).json({
+        status:200,
+        data:req.body,
+        message:"Usuario registrado correctamente"
+      });
     } catch (e) {
-      throw Error(e)
+      res.status(400).json({
+        status:500,
+        data:[],
+        messages:"Algo salio mal"
+      })
     }
   });
 
