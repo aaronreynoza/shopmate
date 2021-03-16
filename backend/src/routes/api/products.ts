@@ -75,13 +75,13 @@ export const handler = (router: Router, routesContext: any) => {
       const respObject:IResponse = {
         status:200,
         data:req.body,
-        message:"Producto insertado correctamente"
+        message:"Product inserted correctly"
       }
       return res.status(200).json(respObject);
     } catch (e) {
       log.error(e);
       const respObject:IResponse = {
-        status:400,
+        status:500,
         data:[],
         message:"Something went wrong"
       }

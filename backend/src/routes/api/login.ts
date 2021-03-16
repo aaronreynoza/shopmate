@@ -31,10 +31,10 @@ export const handler = (router: Router, routesContext: any) => {
       //check if the user exists
       const user1 = await routesContext.db.loginUser(email,password);
       if(user1.length === 0){
-        res.status(403).json({
-          status:500,
+        res.status(400).json({
+          status:400,
           data:[],
-          messages:"Usuario no enctrado, verifique que el correo y la contrasela esten bien"
+          messages:"User not found, verify that the email and password are correct"
         });
       }
       //getting data for the front-end
@@ -69,7 +69,7 @@ export const handler = (router: Router, routesContext: any) => {
               "token":token,
               "user":user
             },
-            message:"Usuario Logueado"
+            message:"Login Successful"
         });
       });
 
@@ -78,7 +78,7 @@ export const handler = (router: Router, routesContext: any) => {
       return res.status(500).json({
         status:500,
         data:[],
-        messages:"Algo salio mal"
+        messages:"Something went wrong"
       });
     }
   });
