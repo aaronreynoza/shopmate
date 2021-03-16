@@ -6,6 +6,14 @@ interface ConfigType {
   database: DatabaseType,
   jwtSeed:string,
   algorithm:string,
+  emailApp:string,
+  passwordEmail:string
+  emailService:string,
+  hostServer:string
+  secureEmail:string,
+  emailHost:string,
+  emailPort:string
+
 }
 
 interface DatabaseType {
@@ -35,11 +43,9 @@ interface Filter{
   price_min:number|null,
   price_max:number|null,
 }
-interface IdataUser{
-  address:string,
-  name:string,
-  lastname:string,
+interface ItokenData{
+  id:number,
   email:string,
-  phone:string
+  access:number
 }
-export { ConfigType, DatabaseType, ConnectionType , Filter, IdataUser};
+export { ConfigType, DatabaseType, ConnectionType , Filter, ItokenData};

@@ -6,14 +6,14 @@ insert into tipo_usuario (nombre_tu, descripcion) values ('Vendedor', 'Ofrecer i
 insert into tipo_usuario (nombre_tu, descripcion) values ('Repartidor', 'Usuario que se encarga de entregar los pedidos');
 insert into tipo_usuario (nombre_tu, descripcion) values ('Cliente', 'Usuario que adquiere los productos');
 /*Clientes*/
-insert into usuario (nombres_usuario, primer_apellido_usu, segundo_apellido_usu, email_usu, clave_usu, estado,fk_id_tipo) values ('Jose', 'Maldonado', 'Menjivar', 'j_maldonado@gmail.com','123456',1,1);
-insert into usuario (nombres_usuario, primer_apellido_usu, segundo_apellido_usu, email_usu, clave_usu, estado,fk_id_tipo) values ('Mario', 'Reynoza', 'Valdez', 'mario_rv@gmail.com','123456',1,2);
-insert into usuario (nombres_usuario, primer_apellido_usu, segundo_apellido_usu, email_usu, clave_usu, estado,fk_id_tipo) values ('Cristian', 'Gonzales', 'Hernandez', 'cristian_gh@gmail.com','123456',1,2);
-insert into usuario (nombres_usuario, primer_apellido_usu, segundo_apellido_usu, email_usu, clave_usu, estado,fk_id_tipo) values ('Elena', 'Villacorta', 'Rafaelano', 'elena1296@gmail.com','123456',1,3);
-insert into usuario (nombres_usuario, primer_apellido_usu, segundo_apellido_usu, email_usu, clave_usu, estado,fk_id_tipo) values ('Sonia', 'Critales', 'de Avila', 'sonia1215@gmail.com','123456',1,4);
-insert into usuario (nombres_usuario, primer_apellido_usu, segundo_apellido_usu, email_usu, clave_usu, estado,fk_id_tipo) values ('Marcos', 'Ruiz', 'Jimenez', 'm.jimenez@gmail.com','123456',1,4);
-insert into usuario (nombres_usuario, primer_apellido_usu, segundo_apellido_usu, email_usu, clave_usu, estado,fk_id_tipo) values ('Daniel', 'Rauda', 'Rosa', 'drraagos@gmail.com','123456',1,4);
-insert into usuario (nombres_usuario, primer_apellido_usu, segundo_apellido_usu, email_usu, clave_usu, estado,fk_id_tipo) values ('Felix', 'Alberto', 'Moran', 'fam8595@gmail.com','123456',1,4);
+insert into usuario (nombres_usuario, primer_apellido_usu, segundo_apellido_usu, email_usu, clave_usu, estado,fk_id_tipo,phone,validacion) values ('Jose', 'Maldonado', 'Menjivar', 'j_maldonado@gmail.com','123456',1,1,'25693456',1);
+insert into usuario (nombres_usuario, primer_apellido_usu, segundo_apellido_usu, email_usu, clave_usu, estado,fk_id_tipo,phone,validacion) values ('Mario', 'Reynoza', 'Valdez', 'mario_rv@gmail.com','123456',1,2,'25698478',1);
+insert into usuario (nombres_usuario, primer_apellido_usu, segundo_apellido_usu, email_usu, clave_usu, estado,fk_id_tipo,phone,validacion) values ('Cristian', 'Gonzales', 'Hernandez', 'cristian_gh@gmail.com','123456',1,2,'25369587',1);
+insert into usuario (nombres_usuario, primer_apellido_usu, segundo_apellido_usu, email_usu, clave_usu, estado,fk_id_tipo,phone,validacion) values ('Elena', 'Villacorta', 'Rafaelano', 'elena1296@gmail.com','123456',1,3,'78524169',1);
+insert into usuario (nombres_usuario, primer_apellido_usu, segundo_apellido_usu, email_usu, clave_usu, estado,fk_id_tipo,phone,validacion) values ('Sonia', 'Critales', 'de Avila', 'sonia1215@gmail.com','123456',1,4,'72653420',1);
+insert into usuario (nombres_usuario, primer_apellido_usu, segundo_apellido_usu, email_usu, clave_usu, estado,fk_id_tipo,phone,validacion) values ('Marcos', 'Ruiz', 'Jimenez', 'm.jimenez@gmail.com','123456',1,4,'69875214',1);
+insert into usuario (nombres_usuario, primer_apellido_usu, segundo_apellido_usu, email_usu, clave_usu, estado,fk_id_tipo,phone,validacion) values ('Daniel', 'Rauda', 'Rosa', 'drraagos@gmail.com','123456',1,4,'29653512',1);
+insert into usuario (nombres_usuario, primer_apellido_usu, segundo_apellido_usu, email_usu, clave_usu, estado,fk_id_tipo,phone,validacion) values ('Felix', 'Alberto', 'Moran', 'fam8595@gmail.com','123456',1,4,'76524569',1);
 select * from usuario;
 
 /*Direccion de entrega*/
@@ -116,12 +116,8 @@ insert into inventario(cantidad,fk_id_producto,fk_id_sucursal) values (35,19,1);
 insert into inventario(cantidad,fk_id_producto,fk_id_sucursal) values (35,20,1);
 insert into inventario(cantidad,fk_id_producto,fk_id_sucursal) values (35,21,1); 
 /*Solicitud nueva*/
-insert into encabezado_solicitud(fecha_sol,estado,tipo_compra,fk_id_usuario,fk_id_direccion,numero_deposito) values('2021-01-12',1,1,1,1,'452165879');
-insert into detalle_solicitud(cantidad, precio, fk_id_encabez,fk_id_producto) values (1,50.25,1,1);
-insert into detalle_solicitud(cantidad, precio, fk_id_encabez,fk_id_producto) values (2,200.00,1,11);
-insert into detalle_solicitud(cantidad, precio, fk_id_encabez,fk_id_producto) values (1,380.00,1,19);
 select * from categoria;
-select * from encabezado_solicitud;
 select * from usuario;
 use db_tienda;
 select * from producto;
+select * from verificacion;

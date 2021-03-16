@@ -406,7 +406,7 @@ class Database {
   ) {
     try {
       const userData = await this.queryBuilder('usuario')
-      .select('id_usuario','email_usu','nombres_usuario')
+      .select('id_usuario','email_usu','fk_id_tipo')
       .where('email_usu',email)
       .andWhere('clave_usu',password);
       return userData;
@@ -424,6 +424,120 @@ class Database {
       return dataUser;
     }
     catch (e){
+      throw Error(e);
+    }
+  }
+
+  async dataUserAdmin(email:string){
+    try {
+      const dataUser = await this.queryBuilder('usuario')
+      .select(
+        'nombres_usuario',
+        'primer_apellido_usu',
+        'phone',
+        'email_usu',
+
+      )
+      .where('email_usu',email)
+      return dataUser;
+    }
+    catch (e){
+      throw Error(e);
+    }
+  }
+
+  async emailValidator(email:string){
+    try {
+      var mssg:boolean = false;
+      const datEmail = await this.queryBuilder('usuario')
+      .select()
+      .where('email_usu',email)
+      if (datEmail.length >= 1) {
+        mssg = true;
+      } else {
+        mssg = false;
+      }
+      return mssg;
+    } catch (e){
+      throw Error(e);
+    }
+  }
+
+  async registerClient(
+    names:string,
+    lastName:string,
+    secondLastName:string,
+    phone:string,
+    email:string,
+    password:string
+  ){
+    try{
+      return this.queryBuilder('usuario').insert([
+        {
+          nombres_usuario:names,
+          primer_apellido_usu:lastName,
+          segundo_apellido_usu:secondLastName,
+          phone:phone,
+          email_usu:email,
+          clave_usu:password,
+          validacion:false,
+          estado:1,
+          fk_id_tipo:4
+        }
+      ])
+    } catch(e) {
+      throw Error(e);
+    }
+  }
+
+  async verification(
+    id:string,
+    email:string
+  ){
+    try{
+      return this.queryBuilder('verificacion').insert([
+        {
+          id_verificacion:id,
+          email:email,
+        }
+      ]);
+    } catch (e) {
+      throw Error(e);
+    }
+  }
+
+  async verifyUserToken(token:string){
+    try{
+      const email = await this.queryBuilder('verificacion')
+      .where('id_verificacion',token)
+      .select('email');
+      return email;
+    } catch(e) {
+      throw Error(e);
+    }
+  }
+
+  async idUser(email:string){
+    try{
+      const userData = await this.queryBuilder('usuario')
+      .select('id_usuario')
+      .where('email_usu',email)
+      return userData;
+    } catch(e) {
+      throw Error(e);
+    }
+  }
+
+  async verifyUser(idUsu:string){
+    try{
+       return await this.queryBuilder('usuario')
+      .where('id_usuario',idUsu)
+      .update(
+        {
+          validacion:1
+        }
+      );
+    } catch(e) {
       throw Error(e);
     }
   }
