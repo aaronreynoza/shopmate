@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { UtilService } from 'src/app/services/util.service';
 
 @Component({
@@ -9,7 +10,7 @@ import { UtilService } from 'src/app/services/util.service';
 export class ViewCartComponent implements OnInit {
   products = [];
 
-  constructor(private utilService: UtilService) {}
+  constructor(private utilService: UtilService, private router: Router) {}
 
   ngOnInit(): void {
     this.products = this.utilService.getCart();
@@ -21,8 +22,14 @@ export class ViewCartComponent implements OnInit {
     });
     return total;
   }
-  deleteItemCart(item){
-    this.utilService.deleteItemCart(item)
+  deleteItemCart(item) {
+    this.utilService.deleteItemCart(item);
     this.products = this.utilService.getCart();
+  }
+  navigateToPath(path) {
+    this.router.navigate([path]);
+  }
+  seeMore(product: any) {
+    this.router.navigateByUrl(`store/product/${product.id}`);
   }
 }

@@ -60,8 +60,8 @@ export class HeaderComponent implements OnInit {
     );
   }
 
-  navigateToPath(path) {
-    this.router.navigate([path]);
+  navigateToPath() {
+    this.router.navigate(['/']);
   }
   logOut() {
     this.utilService.isLoggedIn(false);
@@ -104,7 +104,7 @@ export class HeaderComponent implements OnInit {
     values.category = 0;
     console.log(values);
     this.searchService.setSearch(values);
-    this.router.navigate([`/search`], {
+    this.router.navigate([`store/search`], {
       queryParams: { query: values.keyword, category: values.category },
     });
   }
@@ -115,7 +115,7 @@ export class HeaderComponent implements OnInit {
     item.keyword = '';
     item.type_search = 'category';
     this.searchService.setSearch(item);
-    this.router.navigate([`/search`], {
+    this.router.navigate([`store/search`], {
       queryParams: { category: item.category },
     });
   }

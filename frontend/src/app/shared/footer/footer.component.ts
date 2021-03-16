@@ -33,7 +33,7 @@ categories = []
     item.keyword= '';
     item.type_search= 'category';
     this.searchService.setSearch(item);
-    this.router.navigate([`/search`], {
+    this.router.navigate([`store/search`], {
       queryParams: { category: item.category },
     });
   }

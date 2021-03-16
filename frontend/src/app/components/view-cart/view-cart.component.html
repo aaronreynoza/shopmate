@@ -31,7 +31,7 @@
             />
           </div>
           <div class="col-sm-8">
-            <strong class="seeProduct" routerLink="/product/{{product.product.id}}">
+            <strong class="seeProduct"   (click)="seeMore(product)" >
               {{ product.product.name }}
             </strong>
             <p>Cant: {{ product.quantity }} x</p>
@@ -61,7 +61,7 @@
                 </div> -->
           <div class="add-to-cart">
             <button
-            routerLink="/checkout"
+            (click)="navigateToPath('store/checkout')"
             class="add-to-cart-btn" type="button">
               <i class="fa fa-credit-card"></i> Continuar
             </button>

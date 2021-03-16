@@ -2401,3 +2401,64 @@ button {
   object-fit: contain;
   object-position: center;
 }
+.divisorCard {
+  background: white;
+  padding: 10px;
+  margin: 10px 0 10px 0;
+}
+
+.btnWarning{
+  border-radius: 2px;
+  margin: 0 2px 0 2px;
+  padding: 5px;
+  border: 1px solid orange;
+  background: white;
+  color: orange;
+}
+.btnSuccess{
+  border-radius: 2px;
+  margin: 0 2px 0 2px;
+  padding: 5px;
+  border: 1px solid green;
+  background: white;
+  color: green;
+}
+.btnDanger{
+  border-radius: 2px;
+  margin: 0 2px 0 2px;
+  padding: 5px;
+  border: 1px solid red;
+  background: white;
+  color: red;
+}
+
+.btnWarning:hover{
+  color: white;
+  background: orange;
+}
+.btnSuccess:hover{
+  color: white;
+  background: green;
+}
+.btnDanger:hover{
+  color: white;
+  background: red;
+}
+.bgWarning{
+  padding: 5px;
+  border-radius: 5px;
+  color: white;
+  background: orange;
+}
+.bgSuccess{
+  padding: 5px;
+  border-radius: 5px;
+  color: white;
+  background: green;
+}
+.bgDanger{
+  padding: 5px;
+  border-radius: 5px;
+  color: white;
+  background: red;
+}

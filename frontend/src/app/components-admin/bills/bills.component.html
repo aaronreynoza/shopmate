@@ -1,0 +1,63 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div class="divisorCard">
+      <button class="btnWarning">Pendientes: 5</button>
+      <button class="btnSuccess">Aprobadas: 10</button>
+      <button class="btnDanger">Denegadas: 1</button>
+
+      <table
+        style="margin-top: 30px"
+        class="table table-dark table-striped table-hover"
+      >
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Factura</th>
+            <th>Status</th>
+            <th>Imagen</th>
+            <th>Opciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let person of bills">
+            <td>{{ person.orderID }}</td>
+            <td>{{ person.name }}</td>
+            <td>
+              <span class="bgSuccess" *ngIf="person.status ==1">
+                {{ convertToStatus(person.status) }}
+              </span>
+              <span class="bgDanger" *ngIf="person.status ==2">
+                {{ convertToStatus(person.status) }}
+              </span>
+              <span class="bgWarning" *ngIf="person.status ==3">
+                {{ convertToStatus(person.status) }}
+              </span>
+            </td>
+            <td><img src="{{ person.image }}" width="50" alt="factura" /></td>
+            <td>
+              <a
+                style="
+                  margin-right: 5px;
+                  text-decoration: underline;
+                  cursor: pointer;
+                "
+                >Editar</a
+              >
+              <a
+                style="
+                  margin-right: 5px;
+                  text-decoration: underline;
+                  cursor: pointer;
+                "
+                >Eliminar</a
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="divisorCard"></div>
+  </div>
+</div>
