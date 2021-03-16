@@ -70,6 +70,6 @@ export class HomeComponent implements OnInit {
     });
   }
   seeMore(product: any) {
-    this.router.navigateByUrl(`/product/${product.id}`);
+    this.router.navigateByUrl(`store/product/${product.id}`);
   }
 }

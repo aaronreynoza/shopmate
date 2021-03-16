@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from 'src/app/services/product.service';
 import { SearchServiceService } from 'src/app/services/search-service.service';
 import { UtilService } from 'src/app/services/util.service';
-
+declare var $;
 import Swal from 'sweetalert2';
 
 @Component({
@@ -41,38 +41,45 @@ export class SearchComponent implements OnInit {
       this.queryParams = params;
     });
     console.log('queryparmas', this.queryParams);
-    const itemSearch: any = {};
-    // if(){
-    //   itemSearch.filter = {
-    //     price_max:'',
-    //     price_min:''
-    //   }
-    // }
+    let itemSearch: any = {};
+    const $input_price_min = $('#price_min');
+    const $input_price_max = $('#price_max');
+    itemSearch = {
+      price_max: this.queryParams.params.price_max
+        ? parseInt(this.queryParams.params.price_max)
+        : 0,
+      price_min: this.queryParams.params.price_min
+        ? parseInt(this.queryParams.params.price_min)
+        : 0,
+    };
+    $input_price_min.val(itemSearch.price_min);
+    $input_price_max.val(itemSearch.price_max);
+    console.log(itemSearch, 'itemsearch');
     if (this.queryParams.params.query) {
       this.searchProduct({
         keyword: this.queryParams.params.query,
         type_search: 'keyword',
         category: 0,
-        filter: null,
+        filter: itemSearch || null,
       });
       this.searchService.setSearch({
         keyword: this.queryParams.params.query,
         type_search: 'keyword',
         category: 0,
-        filter: null,
+        filter: itemSearch || null,
       });
     } else {
       this.searchProduct({
         keyword: '',
         type_search: 'category',
         category: parseInt(this.queryParams.params.category),
-        filter: null,
+        filter: itemSearch || null,
       });
       this.searchService.setSearch({
         keyword: '',
         type_search: 'category',
         category: parseInt(this.queryParams.params.category),
-        filter: null,
+        filter: itemSearch || null,
       });
     }
   }
@@ -128,7 +135,7 @@ export class SearchComponent implements OnInit {
     }
   }
   seeMore(product: any) {
-    this.router.navigateByUrl(`/product/${product.id_producto}`);
+    this.router.navigateByUrl(`store/product/${product.id_producto}`);
   }
   getCategories() {
     this.productService.getCategories().subscribe((data) => {
@@ -142,15 +149,24 @@ export class SearchComponent implements OnInit {
     item.keyword = '';
     item.type_search = 'category';
     this.searchService.setSearch(item);
-    this.router.navigate([`/search`], {
+    this.router.navigate([`store/search`], {
       queryParams: { category: item.category },
     });
   }
   filtrar() {
+    // const $input_price_min = $('#price_min').val();
+    // const $input_price_max = $('#price_max').val();
+    // if ($input_price_max && $input_price_min) {
+    //   return;
+    // }
     const price_min =
-      parseInt((<HTMLInputElement>document.getElementById('price_min')).value) || null;
+      parseInt(
+        (<HTMLInputElement>document.getElementById('price_min')).value
+      ) || 0;
     const price_max =
-      parseInt((<HTMLInputElement>document.getElementById('price_max')).value) || null;
+      parseInt(
+        (<HTMLInputElement>document.getElementById('price_max')).value
+      ) || 0;
     console.log(price_max, price_min);
     this.route.queryParamMap.subscribe((params: any) => {
       // delete params.category;
@@ -169,10 +185,10 @@ export class SearchComponent implements OnInit {
 
     searchParams.filter = {
       price_max,
-      price_min
-    }
+      price_min,
+    };
     this.searchService.setSearch(searchParams);
-    this.router.navigate([`/search`], {
+    this.router.navigate([`store/search`], {
       queryParams: { price_max, price_min },
       queryParamsHandling: 'merge',
     });

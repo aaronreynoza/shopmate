@@ -9,7 +9,9 @@ import { FooterComponent } from './footer/footer.component';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
-  declarations: [HeaderComponent, FooterComponent],
+  declarations: [
+    HeaderComponent, 
+    FooterComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -17,6 +19,8 @@ import { RouterModule } from '@angular/router';
     FormsModule,
     ReactiveFormsModule,
   ],
-  exports: [HeaderComponent, FooterComponent],
+  exports: [
+    HeaderComponent, 
+    FooterComponent],
 })
 export class SharedModule {}
