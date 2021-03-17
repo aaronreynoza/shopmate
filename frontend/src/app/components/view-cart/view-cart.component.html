@@ -1,18 +1,4 @@
-<style>
-  .contenedorData {
-    background: rgb(235, 235, 235, 0.5);
-    padding: 5px;
-    margin-bottom: 15px;
-  }
-  .seeProduct{
-      cursor: pointer;
-      outline: none;
-  }
-  .seeProduct:hover{
-      color: blue;
-      text-decoration: underline;
-  }
-</style>
+
 
 <div class="container">
   <div class="row" style="margin: 30px 0 30px 0">
@@ -20,6 +6,9 @@
       <div class="col-sm-12 contenedorData">
         <h3>Resumen del carrito de compras</h3>
         <hr />
+      </div>
+      <div class="col-sm-12" *ngIf="!products.length">
+        <h5>No tienes articulos en tu carrito</h5>
       </div>
       <ng-container *ngFor="let product of products">
         <div class="col-sm-12 contenedorData">
@@ -51,7 +40,7 @@
         </div>
       </ng-container>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-4" *ngIf="products.length">
       <div class="contenedorData">
         <p>Subtotal ( {{ products.length }} Productos)</p>
         <p>Total a pagar: <strong> {{subtotal(products) | currency}} </strong> </p>

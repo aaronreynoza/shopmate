@@ -40,7 +40,6 @@ export class SearchComponent implements OnInit {
       // delete params.category;
       this.queryParams = params;
     });
-    console.log('queryparmas', this.queryParams);
     let itemSearch: any = {};
     const $input_price_min = $('#price_min');
     const $input_price_max = $('#price_max');
@@ -54,33 +53,34 @@ export class SearchComponent implements OnInit {
     };
     $input_price_min.val(itemSearch.price_min);
     $input_price_max.val(itemSearch.price_max);
-    console.log(itemSearch, 'itemsearch');
     if (this.queryParams.params.query) {
+      console.log('busqueda de los query params')
       this.searchProduct({
         keyword: this.queryParams.params.query,
         type_search: 'keyword',
         category: 0,
         filter: itemSearch || null,
       });
-      this.searchService.setSearch({
-        keyword: this.queryParams.params.query,
-        type_search: 'keyword',
-        category: 0,
-        filter: itemSearch || null,
-      });
+      // this.searchService.setSearch({
+      //   keyword: this.queryParams.params.query,
+      //   type_search: 'keyword',
+      //   category: 0,
+      //   filter: itemSearch || null,
+      // });
     } else {
+      console.log('busqueda de los por categoria')
       this.searchProduct({
         keyword: '',
         type_search: 'category',
         category: parseInt(this.queryParams.params.category),
         filter: itemSearch || null,
       });
-      this.searchService.setSearch({
-        keyword: '',
-        type_search: 'category',
-        category: parseInt(this.queryParams.params.category),
-        filter: itemSearch || null,
-      });
+      // this.searchService.setSearch({
+      //   keyword: '',
+      //   type_search: 'category',
+      //   category: parseInt(this.queryParams.params.category),
+      //   filter: itemSearch || null,
+      // });
     }
   }
   searchProduct(data) {

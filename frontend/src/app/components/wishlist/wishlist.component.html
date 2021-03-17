@@ -1,0 +1,42 @@
+<div class="container">
+    <div class="row">
+        <h3 style="margin-top: 30px;">Lista de deseos</h3>
+        <div class="col-sm-12">
+            Lista de deseos
+            <hr>
+        </div>
+        <div class="col-sm-12">
+            <div class="col-sm-12" style="margin-bottom: 30px;" *ngIf="!products.length">
+              <h5>No tienes articulos en tu lista de deseos</h5>
+            </div>
+            <ng-container *ngFor="let product of products">
+              <div class="col-sm-12 contenedorData">
+                <div class="col-sm-2">
+                  <img
+                    src="https://azurefiletestexpress.blob.core.windows.net/imagen-producto/{{ product.product_image }}"
+                    width="100"
+                    alt=""
+                  />
+                </div>
+                <div class="col-sm-8">
+                  <strong class="seeProduct"   (click)="seeMore(product)" >
+                    {{ product.name }}
+                  </strong>
+                  <strong>
+                    {{ product.price | currency }}
+                  </strong>
+                </div>
+                <div class="col-sm-2">
+                  <!-- <strong>
+                    {{ product.total | currency }}
+                  </strong> -->
+                  <p>
+                    <a (click)="deleteItemCart(product)" style="text-decoration: underline; cursor: pointer;">Eliminar</a>
+                  </p>
+                </div>
+                <hr />
+              </div>
+            </ng-container>
+          </div>
+    </div>
+</div>
