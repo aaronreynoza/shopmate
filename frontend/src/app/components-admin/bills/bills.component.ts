@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 @Component({
   selector: 'app-bills',
   templateUrl: './bills.component.html',
-  styles: [],
+  styleUrls: ['../page.component.css']
 })
 export class BillsComponent implements OnInit {
   dtOptions: any = {};

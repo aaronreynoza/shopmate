@@ -2392,6 +2392,24 @@ textarea.input {
     border-radius: 25px !important;
   }
 }
+
+
+.contenedorData {
+  background: rgb(235, 235, 235, 0.5);
+  padding: 5px;
+  margin-bottom: 15px;
+}
+.seeProduct{
+    cursor: pointer;
+    outline: none;
+}
+.seeProduct:hover{
+    color: blue;
+    text-decoration: underline;
+}
+
+
+
 button {
   outline: none;
 }
@@ -2407,6 +2425,38 @@ button {
   margin: 10px 0 10px 0;
 }
 
+.btnWarning-inverse{
+  border-radius: 2px;
+  margin: 0 2px 0 2px;
+  padding: 5px;
+  border: 1px solid orange;
+  background: orange;
+  color: white;
+}
+.btnSuccess-inverse{
+  border-radius: 2px;
+  margin: 0 2px 0 2px;
+  padding: 5px;
+  border: 1px solid green;
+  background: green;
+  color: white;
+}
+.btnPrimary-inverse{
+  border-radius: 2px;
+  margin: 0 2px 0 2px;
+  padding: 5px;
+  border: 1px solid dodgerblue;
+  background: dodgerblue;
+  color: white;
+}
+.btnDanger-inverse{
+  border-radius: 2px;
+  margin: 0 2px 0 2px;
+  padding: 5px;
+  border: 1px solid red;
+  background: red;
+  color: white;
+}
 .btnWarning{
   border-radius: 2px;
   margin: 0 2px 0 2px;
@@ -2423,6 +2473,14 @@ button {
   background: white;
   color: green;
 }
+.btnPrimary{
+  border-radius: 2px;
+  margin: 0 2px 0 2px;
+  padding: 5px;
+  border: 1px solid dodgerblue;
+  background: white;
+  color: dodgerblue;
+}
 .btnDanger{
   border-radius: 2px;
   margin: 0 2px 0 2px;
@@ -2432,6 +2490,22 @@ button {
   color: red;
 }
 
+.btnWarning-inverse:hover{
+  color: orange;
+  background: white;
+}
+.btnSuccess-inverse:hover{
+  color: green;
+  background: white;
+}
+.btnPrimary-inverse:hover{
+  color: dodgerblue;
+  background: white;
+}
+.btnDanger-inverse:hover{
+  color: red;
+  background: white;
+}
 .btnWarning:hover{
   color: white;
   background: orange;
@@ -2439,6 +2513,10 @@ button {
 .btnSuccess:hover{
   color: white;
   background: green;
+}
+.btnPrimary:hover{
+  color: white;
+  background: dodgerblue;
 }
 .btnDanger:hover{
   color: white;
@@ -2456,6 +2534,7 @@ button {
   color: white;
   background: green;
 }
+
 .bgDanger{
   padding: 5px;
   border-radius: 5px;

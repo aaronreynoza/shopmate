@@ -201,12 +201,14 @@
               >
             </li>
             <li>
-              <a routerLink="/admin/productos"
-              routerLinkActive="active-link"><i class="fas fa-cogs"></i> Productos</a>
+              <a routerLink="/admin/productos" routerLinkActive="active-link"
+                ><i class="fas fa-cogs"></i> Productos</a
+              >
             </li>
             <li>
-              <a routerLink="/admin/usuarios"
-              routerLinkActive="active-link"><i class="fas fa-users"></i> Usuarios</a>
+              <a routerLink="/admin/usuarios" routerLinkActive="active-link"
+                ><i class="fas fa-users"></i> Usuarios</a
+              >
             </li>
           </ul>
         </div>
@@ -216,69 +218,47 @@
       <div class="app-main__inner">
         <!-- Body content -->
         <div class="row">
-          <div class="col-sm-12">
-            <div class="divisorCard">
-              <button class="btnWarning">Pendientes: 5</button>
-              <button class="btnSuccess">Aprobadas: 10</button>
-              <button class="btnDanger">Denegadas: 1</button>
-
-              <table
-                style="margin-top: 30px"
-                class="table  table-striped table-hover"
-              >
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Factura</th>
-                    <th>Status</th>
-                    <th>Imagen</th>
-                    <th>Opciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let person of bills">
-                    <td>{{ person.orderID }}</td>
-                    <td>{{ person.name }}</td>
-                    <td>
-                      <span class="bgSuccess" *ngIf="person.status == 1">
-                        {{ convertToStatus(person.status) }}
-                      </span>
-                      <span class="bgDanger" *ngIf="person.status == 2">
-                        {{ convertToStatus(person.status) }}
-                      </span>
-                      <span class="bgWarning" *ngIf="person.status == 3">
-                        {{ convertToStatus(person.status) }}
-                      </span>
-                    </td>
-                    <td>
-                      <img src="{{ person.image }}" width="50" alt="factura" />
-                    </td>
-                    <td>
-                      <a
-                        style="
-                          margin-right: 5px;
-                          text-decoration: underline;
-                          cursor: pointer;
-                        "
-                        >Editar</a
-                      >
-                      <a
-                        style="
-                          margin-right: 5px;
-                          text-decoration: underline;
-                          cursor: pointer;
-                        "
-                        >Eliminar</a
-                      >
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+            <div class="col-sm-12">
+                <div class="divisorCard">
+                    <h1>Administracion de productos</h1>
+                </div>
             </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="divisorCard"></div>
-          </div>
+            <div class="col-sm-12">
+                <div class="divisorCard">
+                    <table style="margin-top: 30px" class="table table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Imagen</th>
+                            <th>Opciones</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let item of products">
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.price | currency }}</td>
+                            <td>
+                              <img
+                                src="https://azurefiletestexpress.blob.core.windows.net/imagen-producto/{{
+                                  item.image
+                                }}"
+                                alt="producto"
+                                style="object-fit: cover;"
+                                width="100"
+                                height="100"
+                              />
+                            </td>
+                            <td>
+                                <a (click)="showModal('editProduct', item)">Editar</a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
         </div>
         <!-- Body content -->
       </div>
@@ -286,3 +266,36 @@
   </div>
 </div>
 <script type="text/javascript" src="./assets/scripts/main.js"></script>
+<!-- modal -->
+<!-- The Modal -->
+<div id="editProduct" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close text-right" (click)="closeModal('editProduct')">&times;</span>
+      <div class="row">
+          <div class="col-sm-12">
+              <div class="divisorCard">
+                  <form [formGroup]="editForm" (ngSubmit)="editItem(editForm.value)">
+                      <div class="form-group">
+                          <label for="">Nombre del producto</label>
+                          <input 
+                          [value]="editForm.value.name"
+                          type="text" class="form-control" forControlName="name">
+                      </div>
+                      <div class="form-group">
+                          <label for="">Precio</label>
+                          <input 
+                          [value]="editForm.value.price"
+                          type="number" class="form-control" forControlName="price">
+                      </div>
+                      <div class="form-group">
+                          <img style="width: 400px;" src="https://azurefiletestexpress.blob.core.windows.net/imagen-producto/{{editForm.value.image}}" alt="producto">
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+    </div>
+  
+  </div>

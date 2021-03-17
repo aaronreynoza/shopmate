@@ -34,7 +34,7 @@ export class HeaderComponent implements OnInit {
     this.subscribersRefresh();
     this.getCategories();
     this.searchService.searchSubscriber.subscribe((data) => {
-      console.log('adsasdad');
+      console.log('se envia keyword a search service');
       if (data) {
         this.searchForm.controls.keyword.setValue(data.keyword);
       }
@@ -60,8 +60,8 @@ export class HeaderComponent implements OnInit {
     );
   }
 
-  navigateToPath() {
-    this.router.navigate(['/']);
+  navigateToPath(path) {
+    this.router.navigate([path]);
   }
   logOut() {
     this.utilService.isLoggedIn(false);
@@ -102,7 +102,6 @@ export class HeaderComponent implements OnInit {
     values.type_search = 'keyword';
     values.filter = null;
     values.category = 0;
-    console.log(values);
     this.searchService.setSearch(values);
     this.router.navigate([`store/search`], {
       queryParams: { query: values.keyword, category: values.category },

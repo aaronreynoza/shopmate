@@ -33,7 +33,14 @@
         <div class="col-sm-6">
           <label for="">Forma de entrega</label>
           <div class="form-group">
-            <input checked type="radio" name="" id="sucursal" />
+            <input
+              checked
+              value="1"
+              type="radio"
+              name=""
+              id="sucursal"
+              forcControlName="delivery_type"
+            />
             <label for="sucursal" style="margin-left: 5px; font-size: 12px"
               >Retirar en sucursal</label
             >
@@ -42,7 +49,14 @@
         <div class="col-sm-6">
           <label for="">Sucursal</label>
           <div class="form-group">
-            <input checked type="radio" name="" id="sucursal" />
+            <input
+              checked
+              type="radio"
+              value="San Salvador"
+              name=""
+              id="sucursal"
+              formControlName="location_delivery"
+            />
             <label for="sucursal" style="margin-left: 5px; font-size: 12px"
               >San Salvador</label
             >
@@ -57,7 +71,14 @@
         <div class="col-sm-12">
           <label for="">Forma de pago</label>
           <div class="form-group">
-            <input checked type="radio" name="" id="sucursal" />
+            <input
+              checked
+              type="radio"
+              value="1"
+              name=""
+              id="sucursal"
+              formControlName="payment_type"
+            />
             <label for="sucursal" style="margin-left: 5px; font-size: 12px"
               >Tranferencia</label
             >
@@ -91,6 +112,7 @@
           <label for="">Cuenta bancaria</label>
           <div class="form-group">
             <input
+              checked
               type="radio"
               value="016401000572839"
               name="cuentaBancaria"
@@ -103,7 +125,154 @@
           </div>
         </div>
       </div>
+
+      <div class="col-sm-12">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="account_owner"
+              >Titular de la cuenta <span style="color: red">*</span> </label
+            ><input
+              type="text"
+              value=""
+              class="form-control"
+              id="account_owner"
+              formControlName="account_owner"
+            />
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="description"
+              >Concepto <span style="color: red">*</span></label
+            ><input
+              type="text"
+              value=""
+              class="form-control"
+              id="description"
+              formControlName="description"
+            />
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="reference_number">
+              Numero de referencia <span style="color: red">*</span></label
+            ><input
+              type="text"
+              value=""
+              class="form-control"
+              id="reference_number"
+              formControlName="reference_number"
+            />
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="amount"> Monto <span style="color: red">*</span></label
+            ><input
+              type="number"
+              value=""
+              class="form-control"
+              id="amount"
+              formControlName="amount"
+            />
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="proof_payment">
+              Comprobante de pago <span style="color: red">*</span></label
+            ><input
+              type="file"
+              value=""
+              class="form-control"
+              id="proof_payment"
+              accept="image/*"
+              (change)="changeImage($event)"
+            />
+            <input type="hidden" formControlName="image" />
+          </div>
+          <div
+            *ngIf="imageSrc"
+            class="col-sm-6 image-container"
+            style="
+              text-align: center;
+              margin: 0 0 10px 0;
+              width: 100%;
+              border: 1px solid #ccc;
+            "
+          >
+            <img
+              [src]="imageSrc"
+              style="max-height: 300px"
+              alt="comprobante-pago"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="form-group">
+          <input
+            type="checkbox"
+            formControlName="terms_agree"
+            id="terms_agree"
+          />
+          <label for="terms_agree" style="margin-left: 5px">
+            Acepto los términos y condiciones de pago, envío y garantías al
+            realizar la compra
+            <span style="color: red"> * </span>
+          </label>
+        </div>
+      </div>
+      <div class="col-sm-12" style="margin-bottom: 0px;">
+        <div class="col-sm-12 contenedorData">
+          <h4>Resumen de la orden</h4>
+          <hr />
+        </div>
+        <ng-container *ngFor="let product of products">
+          <div class="col-sm-12 contenedorData">
+            <div class="col-sm-2">
+              <img
+                src="https://azurefiletestexpress.blob.core.windows.net/imagen-producto/{{ product.product.product_image }}"
+                width="100"
+                alt=""
+              />
+            </div>
+            <div class="col-sm-8">
+              <strong class="seeProduct"   (click)="seeMore(product)" >
+                {{ product.product.name }}
+              </strong>
+              <p>Cant: {{ product.quantity }} x</p>
+              <p>
+                <!-- {{ product.product.category }} -->
+              </p>
+            </div>
+            <div class="col-sm-2">
+              <strong>
+                {{ product.total | currency }}
+              </strong>
+              <p>
+                <a (click)="deleteItemCart(product)" style="text-decoration: underline; cursor: pointer;">Eliminar</a>
+              </p>
+            </div>
+            <hr />
+          </div>
+        </ng-container>
+        
+      </div>
     </div>
-    <button type="submit">Enviar</button>
+    <div class="col-sm-12 contenedorData" *ngIf="products.length">
+      <div style="padding: 15px; text-align: right;">
+        <p>Subtotal ( {{ products.length }} Productos)</p>
+        <p>Total a pagar: <strong> {{subtotal(products) | currency}} </strong> </p>
+      </div>
+    </div>
+    <div
+      class="col-sm-12"
+      style="padding: 15px; text-align: center; margin: 0 auto"
+    >
+      <button style="width: 200px;" type="submit" class="btn btnPrimary-inverse">Reservar</button>
+    </div>
   </form>
 </div>

@@ -4,7 +4,7 @@
         <div class="container">
             <ul class="header-links pull-left">
                 <li><a href="#"><i class="fa fa-phone"></i> +503 7651 4152</a></li>
-                <li><a href="mailto:soporte@shopmate.com"><i class="fa fa-envelope-o"></i>soporte@shopmate.com</a></li>
+                <li><a href="mailto:shopmasterrace@gmail.com"><i class="fa fa-envelope-o"></i>shopmasterrace@gmail.com</a></li>
                 <!-- <li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li> -->
             </ul>
             <ul class="header-links pull-right">
@@ -14,7 +14,7 @@
                     <li><a (click)="logOut()"><i class="fa fa-close"></i>cerrar sesion</a></li>
                 </ng-container>
                 <ng-container *ngIf="!currentUser">
-                    <li><a (click)="navigateToPath('login')"><i class="fa fa-user-o"></i> Iniciar Sesion</a></li>
+                    <li><a (click)="navigateToPath('store/login')" style="cursor: pointer;"><i class="fa fa-user-o"></i> Iniciar Sesion</a></li>
                 </ng-container>
             </ul>
         </div>
@@ -30,7 +30,7 @@
                 <!-- LOGO -->
                 <div class="col-md-3">
                     <div class="header-logo">
-                        <a (click)="navigateToPath()" class="logo">
+                        <a (click)="navigateToPath('store')" class="logo">
                             <!-- <img src="assets/img/logo.png" alt=""> -->
                             <p style="cursor: pointer; color: white; font-size: 25px; padding-top: 20px;">
                                 SHOPMASTERRACE
@@ -62,8 +62,8 @@
                 <div class="col-md-2 clearfix" style="padding: 0;">
                     <div class="header-ctn">
                         <!-- Wishlist -->
-                        <div style="max-width: 70px;">
-                            <a href="#">
+                        <div style="max-width: 70px; cursor: pointer;">
+                            <a (click)="navigateToPath('store/wishlist')">
                                 <i class="fa fa-heart-o"></i>
                                 <span>Wishlist</span>
                                 <div class="qty" *ngIf="wishList.length > 0">{{wishList.length}}</div>
@@ -72,7 +72,7 @@
                         <!-- /Wishlist -->
 
                         <!-- Cart -->
-                        <div class="dropdown" style="max-width: 70px;">
+                        <div class="dropdown" style="max-width: 70px; cursor: pointer;">
                             <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                 <i class="fa fa-shopping-cart"></i>
                                 <span>Carrito</span>

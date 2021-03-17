@@ -93,6 +93,14 @@ export class UtilService {
     this.setCartList(newCart);
     this.cartListSource.next(newCart);
   }
+  deleteItemWishlist(itemDeleted) {
+    const wishlistFromLocalStorage = this.getWishList();
+    const newWishlist = wishlistFromLocalStorage.filter(
+      (item) => item.id !== itemDeleted.id
+    );
+    this.setWishList(newWishlist);
+    this.wishListSource.next(newWishlist);
+  }
   // ==================================================================
   // Getters & Setters Cart & Wish List
   // ==================================================================
