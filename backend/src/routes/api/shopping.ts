@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-require('dotenv').config();
-import { json } from 'body-parser';
 import { Router } from 'express';
 import multer from 'multer';
 import path from 'path';
@@ -111,7 +109,7 @@ export const handler = (router: Router, routesContext: any) => {
       var quantityInventori = [];
       //get the number of products in the database
       for(let i in requestDetail){
-        var dat = await routesContext.db.verifuProductQuantity(requestDetail[i].idProduct,branchOfficeId);
+        var dat = await routesContext.db.verifyProductQuantity(requestDetail[i].idProduct,branchOfficeId);
         if(dat.length ===0){
           return res.status(400).json(
             {

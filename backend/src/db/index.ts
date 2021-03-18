@@ -540,7 +540,7 @@ class Database {
     }
   }
 
-  async verifuProductQuantity(idProd:number, idBranchOffice:number){
+  async verifyProductQuantity(idProd:number, idBranchOffice:number){
     try{
       const quantityProduct = this.queryBuilder('inventario')
     .where('fk_id_producto',idProd)
@@ -625,7 +625,7 @@ class Database {
         cuenta_usuario:accountHolder,
         titular:accountNumber,
         numero_deposito:depositNumber,
-        monto:amoun,
+        monto:amount,
         concept:concept,
         foto_comp:idPhotoName,
         fk_id_encabez:idRequest
