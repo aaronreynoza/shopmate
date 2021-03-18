@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-require('dotenv').config();
-import { json } from 'body-parser';
 import { Router } from 'express';
 import multer from 'multer';
 import path from 'path';
