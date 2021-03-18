@@ -44,7 +44,7 @@ const renameCategory = (category: any) => {
     descripcion_categoria: string,
   } = category;
   return {
-    category_id: id_categoria,
+    categoryId: id_categoria,
     name: nombre_categoria,
     icon,
     active: estado,
@@ -52,4 +52,10 @@ const renameCategory = (category: any) => {
   };
 };
 
-export { renamedProduct, renameCategory };
+const renameInventory = (inventory: any) => ({
+  quantity: inventory.cantidad,
+  idProduct: inventory.fk_id_producto,
+  idOffice: inventory.fk_id_sucursal,
+});
+
+export { renamedProduct, renameCategory, renameInventory };

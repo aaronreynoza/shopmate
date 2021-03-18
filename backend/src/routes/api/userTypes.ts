@@ -5,38 +5,33 @@ const log = Logger.getInstance();
 
 // eslint-disable-next-line import/prefer-default-export
 export const handler = (router: Router, routesContext: any) => {
-  router.post('/categories', async (req, res) => {
+  router.post('/user-types', async (req, res) => {
     const {
       name,
       description,
-      icon,
-      active,
     }: {
       name: string,
       description: string
-      icon: string,
-      active: number,
     } = req.body;
     if (
       (typeof description !== 'string')
       || (typeof name !== 'string')
-      || (typeof icon !== 'string')
-    ) { 
+    ) {
       return res.status(400).send('Wrong type of data or missing fields');
     }
-    log.info('inserting new category with fields: ', req.body);
+    log.info('inserting new user type with fields: ', req.body);
     try {
-      await routesContext.db.insertCategory(name, description, icon, active);
-      return res.status(200).send('Category inserted succesfully');
+      await routesContext.db.insertUserType(name, description);
+      return res.status(200).send('User Type inserted succesfully');
     } catch (e) {
       log.error(e);
       return res.status(500).send('Something went wrong');
     }
   });
 
-  router.get('/categories', async (req, res) => {
+  router.get('/user-types', async (req, res) => {
     try {
-      const categories = await routesContext.db.getCategories();
+      const categories = await routesContext.db.getUserTypes();
       return res.status(200).send(categories);
     } catch (e) {
       log.error(e);
@@ -44,14 +39,14 @@ export const handler = (router: Router, routesContext: any) => {
     }
   });
 
-  router.get('/category/:categoryId', async (req, res) => {
-    const { categoryId } = req.params;
-    if (typeof categoryId !== 'string') {
+  router.get('/user-types/:userTypeId', async (req, res) => {
+    const { userTypeId } = req.params;
+    if (typeof userTypeId !== 'string') {
       return res.status(400).send('Wrong type of data');
     }
     try {
-      const category = await routesContext.db.getCategory(categoryId);
-      return res.status(200).send(category);
+      const userType = await routesContext.db.getUserType(userTypeId);
+      return res.status(200).send(userType);
     } catch (e) {
       log.error(e);
       return res.status(500).send('Something went wrong');

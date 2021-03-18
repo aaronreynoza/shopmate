@@ -1,8 +1,7 @@
 import Knex from 'knex';
 import { ConnectionType } from '../utils/types';
 import * as Logger from '../utils/logger';
-import { renamedProduct, renameCategory } from '../utils/dataChanges';
-import { threadId } from 'worker_threads';
+import { renamedProduct, renameCategory, renameInventory } from '../utils/dataChanges';
 
 /**
  * Abstracts operations against the database
@@ -14,6 +13,8 @@ class Database {
 
   renamedProduct: any;
 
+  renameInventory: any;
+
   queryBuilder: any;
 
   log: any;
@@ -22,6 +23,7 @@ class Database {
     this.config = config;
     this.renamedProduct = renamedProduct;
     this.renameCategory = renameCategory;
+    this.renameInventory = renameInventory;
     this.log = Logger.getInstance();
   }
 
@@ -60,7 +62,7 @@ class Database {
           nombre_categoria: name,
           descripcion_cat: description,
           icon,
-          estado: state,  
+          estado: state,
         },
       ]);
     } catch (err) {
@@ -83,11 +85,90 @@ class Database {
   async getCategory(category: string) {
     try {
       const categories = await this.queryBuilder('categoria')
-        .where('nombre_categoria', category).select();
-        const newCategory = this.renameCategory(categories[0]);
+        .where('id_categoria', category).select();
+      const newCategory = this.renameCategory(categories[0]);
       return newCategory;
     } catch (err) {
       this.log.error({ message: `Error while getting Categories: ${err}` });
+      throw Error(err);
+    }
+  }
+
+  async insertUserType(name: string, description: string) {
+    try {
+      return this.queryBuilder('tipo_usuario').insert([
+        {
+          nombre_tu: name,
+          descripcion: description,
+        },
+      ]);
+    } catch (err) {
+      this.log.error({ message: `Error while inserting User Type: ${err}` });
+      throw Error(err);
+    }
+  }
+
+  async getUserTypes() {
+    try {
+      const userTypes = await this.queryBuilder('tipo_usuario').select();
+      const renamed = userTypes.map((uType: any) => ({
+        name: uType.nombre_tu,
+        description: uType.descripcion,
+      }));
+      return renamed;
+    } catch (err) {
+      this.log.error({ message: `Error while getting user types: ${err}` });
+      throw Error(err);
+    }
+  }
+
+  async getUserType(category: string) {
+    try {
+      const userType = await this.queryBuilder('categoria')
+        .where('id_categoria', category).select();
+      return {
+        name: userType.nombre_tu,
+        description: userType.descripcion,
+      };
+    } catch (err) {
+      this.log.error({ message: `Error while getting Categories: ${err}` });
+      throw Error(err);
+    }
+  }
+
+  async insertInventory(quantity: string, idProduct: string, idOffice: string) {
+    try {
+      return this.queryBuilder('inventario').insert([
+        {
+          cantidad: quantity,
+          fk_id_producto: idProduct,
+          fk_id_sucursal: idOffice,
+        },
+      ]);
+    } catch (err) {
+      this.log.error({ message: `Error while inserting Category: ${err}` });
+      throw Error(err);
+    }
+  }
+
+  async getInventories() {
+    try {
+      const inventories = await this.queryBuilder('inventario').select();
+      const renamed = inventories.map((category: any) => this.renameInventory(category));
+      return renamed;
+    } catch (err) {
+      this.log.error({ message: `Error while getting inventories: ${err}` });
+      throw Error(err);
+    }
+  }
+
+  async getInventory(IdProduct: string) {
+    try {
+      const inventory = await this.queryBuilder('inventario')
+        .where('fk_id_producto', IdProduct).select();
+      return this.renameInventory(inventory[0]);
+    } catch (err) {
+      this.log.error({ message: `Error while getting inventory: ${err}` });
       throw Error(err);
     }
   }
@@ -126,6 +207,50 @@ class Database {
       throw Error(err);
     }
   }
+  
+  async insertOffice(name: string, state: string) {
+    try {
+      return this.queryBuilder('sucursal').insert([
+        {
+          nombre_sucursal: name,
+          estado: state,
+          fecha_creacion: new Date(),
+        },
+      ]);
+    } catch (err) {
+      this.log.error({ message: `Error while inserting Office: ${err}` });
+      throw Error(err);
+    }
+  }
+
+  async getOffices() {
+    try {
+      const offices = await this.queryBuilder('sucursal').select();
+      return offices.map((office: any) => ({
+        name: office.nombre_sucursal,
+        state: office.estado,
+        date: office.fecha_creacion,
+      }));
+    } catch (err) {
+      this.log.error({ message: `Error while getting Offices: ${err}` });
+      throw Error(err);
+    }
+  }
+
+  async getOffice(officeId: string) {
+    try {
+      const office = await this.queryBuilder('sucursal')
+        .where('id_sucursal', officeId).select();
+      return {
+        name: office[0].nombre_sucursal,
+        state: office[0].estado,
+        date: office.fecha_creacion,
+      };
+    } catch (err) {
+      this.log.error({ message: `Error while getting Office: ${err}` });
+      throw Error(err);
+    }
+  }
 
   async insertProduct(
     name: string,
@@ -153,9 +278,9 @@ class Database {
       throw Error(err);
     }
   }
-  
-  async getSearchProductCategory(category:number){
-    try{
+
+  async getSearchProductCategory(category:number) {
+    try {
       const prodArray = await this.queryBuilder.table('producto')
         .innerJoin('categoria', 'producto.fk_id_categoria', '=', 'categoria.id_categoria')
         .where({
@@ -163,161 +288,165 @@ class Database {
         }).select(
           'id_producto',
           'nombre_prod',
-          'precio_venta', 
-	        'nombre_categoria', 
+          'precio_venta',
+          'nombre_categoria',
           'especificaciones',
-          'imagen'
+          'imagen',
         );
       return prodArray;
-    }catch(Err){
-      console.log(Err);
+    } catch (Err) {
+      this.log.error({ message: Err });
     }
+    return new Error('failed to Search for Product');
   }
 
-  async getSearchProductCategoryFilter(category:number, priceMin:number, priceMax:number){
-    try{
+  async getSearchProductCategoryFilter(category:number, priceMin:number, priceMax:number) {
+    try {
       const prodArray = await this.queryBuilder.table('producto')
         .innerJoin('categoria', 'producto.fk_id_categoria', '=', 'categoria.id_categoria')
-        .where({'producto.fk_id_categoria': category})
-        .andWhere('precio_venta','>',priceMin)
-        .andWhere('precio_venta','<',priceMax)
+        .where({ 'producto.fk_id_categoria': category })
+        .andWhere('precio_venta', '>', priceMin)
+        .andWhere('precio_venta', '<', priceMax)
         .select(
           'id_producto',
           'nombre_prod',
-          'precio_venta', 
-	        'nombre_categoria', 
+          'precio_venta',
+          'nombre_categoria',
           'especificaciones',
-          'imagen'
+          'imagen',
         );
       return prodArray;
-    }catch(Err){
-      console.log(Err);
+    } catch (Err) {
+      this.log.error({ message: Err });
     }
+    return new Error('failed to Search for Product');
   }
 
-  async getSearchProductCategoryFilterMin(category:number, priceMin:number){
-    try{
+  async getSearchProductCategoryFilterMin(category:number, priceMin:number) {
+    try {
       const prodArray = await this.queryBuilder.table('producto')
         .innerJoin('categoria', 'producto.fk_id_categoria', '=', 'categoria.id_categoria')
-        .where({'producto.fk_id_categoria': category})
-        .andWhere('precio_venta','>',priceMin)
+        .where({ 'producto.fk_id_categoria': category })
+        .andWhere('precio_venta', '>', priceMin)
         .select(
           'id_producto',
           'nombre_prod',
-          'precio_venta', 
-	        'nombre_categoria', 
+          'precio_venta',
+          'nombre_categoria',
           'especificaciones',
-          'imagen'
+          'imagen',
         );
       return prodArray;
-    }catch(Err){
-      console.log(Err);
+    } catch (Err) {
+      this.log.error({ message: Err });
     }
+    return new Error('failed to Search for Product');
   }
 
-  async getSearchProductCategoryFilterMax(category:number, priceMax:number){
-    try{
+  async getSearchProductCategoryFilterMax(category:number, priceMax:number) {
+    try {
       const prodArray = await this.queryBuilder.table('producto')
         .innerJoin('categoria', 'producto.fk_id_categoria', '=', 'categoria.id_categoria')
-        .where({'producto.fk_id_categoria': category})
-        .andWhere('precio_venta','<',priceMax)
+        .where({ 'producto.fk_id_categoria': category })
+        .andWhere('precio_venta', '<', priceMax)
         .select(
           'id_producto',
           'nombre_prod',
-          'precio_venta', 
-	        'nombre_categoria', 
+          'precio_venta',
+          'nombre_categoria',
           'especificaciones',
-          'imagen'
+          'imagen',
         );
       return prodArray;
-    }catch(Err){
-      console.log(Err);
+    } catch (Err) {
+      this.log.error({ message: Err });
     }
+    return new Error('failed to Search for Product');
   }
 
-  async getSearchProductKeyword(keyword:string){
-    try{
+  async getSearchProductKeyword(keyword:string) {
+    try {
       const prodArray = await this.queryBuilder.table('producto')
         .innerJoin('categoria', 'producto.fk_id_categoria', '=', 'categoria.id_categoria')
         .where(
-          this.queryBuilder.raw('MATCH(nombre_prod)  AGAINST(?)', keyword)
+          this.queryBuilder.raw('MATCH(nombre_prod)  AGAINST(?)', keyword),
         ).select(
-            'id_producto',
-            'nombre_prod',
-            'precio_venta', 
-	          'nombre_categoria', 
-            'especificaciones',
-            'imagen'
+          'id_producto',
+          'nombre_prod',
+          'precio_venta',
+          'nombre_categoria',
+          'especificaciones',
+          'imagen',
         );
       return prodArray;
-    }catch(err){
+    } catch (err) {
       this.log.error({ message: `Error while getting Products: ${err}` });
       throw Error(err);
     }
   }
 
-  async getSearchProductKeywordFilter(keyword:string, priceMin:number, priceMax:number){
-    try{
+  async getSearchProductKeywordFilter(keyword:string, priceMin:number, priceMax:number) {
+    try {
       const prodArray = await this.queryBuilder.table('producto')
         .innerJoin('categoria', 'producto.fk_id_categoria', '=', 'categoria.id_categoria')
         .where(
-          this.queryBuilder.raw('MATCH(nombre_prod)  AGAINST(?)', keyword)
-        ).andWhere('precio_venta','<',priceMax)
-        .andWhere('precio_venta','>',priceMin)
+          this.queryBuilder.raw('MATCH(nombre_prod)  AGAINST(?)', keyword),
+        ).andWhere('precio_venta', '<', priceMax)
+        .andWhere('precio_venta', '>', priceMin)
         .select(
-            'id_producto',
-            'nombre_prod',
-            'precio_venta', 
-	          'nombre_categoria', 
-            'especificaciones',
-            'imagen'
+          'id_producto',
+          'nombre_prod',
+          'precio_venta',
+          'nombre_categoria',
+          'especificaciones',
+          'imagen',
         );
       return prodArray;
-    }catch(err){
+    } catch (err) {
       this.log.error({ message: `Error while getting Products: ${err}` });
       throw Error(err);
     }
   }
 
-  async getSearchProductKeywordFilterMin(keyword:string, priceMin:number){
-    try{
+  async getSearchProductKeywordFilterMin(keyword:string, priceMin:number) {
+    try {
       const prodArray = await this.queryBuilder.table('producto')
         .innerJoin('categoria', 'producto.fk_id_categoria', '=', 'categoria.id_categoria')
         .where(
-          this.queryBuilder.raw('MATCH(nombre_prod)  AGAINST(?)', keyword)
-        ).andWhere('precio_venta','>',priceMin)
+          this.queryBuilder.raw('MATCH(nombre_prod)  AGAINST(?)', keyword),
+        ).andWhere('precio_venta', '>', priceMin)
         .select(
-            'id_producto',
-            'nombre_prod',
-            'precio_venta', 
-	          'nombre_categoria', 
-            'especificaciones',
-            'imagen'
+          'id_producto',
+          'nombre_prod',
+          'precio_venta',
+          'nombre_categoria',
+          'especificaciones',
+          'imagen',
         );
       return prodArray;
-    }catch(err){
+    } catch (err) {
       this.log.error({ message: `Error while getting Products: ${err}` });
       throw Error(err);
     }
   }
 
-  async getSearchProductKeywordFilterMax(keyword:string, priceMax:number){
-    try{
+  async getSearchProductKeywordFilterMax(keyword:string, priceMax:number) {
+    try {
       const prodArray = await this.queryBuilder.table('producto')
         .innerJoin('categoria', 'producto.fk_id_categoria', '=', 'categoria.id_categoria')
         .where(
-          this.queryBuilder.raw('MATCH(nombre_prod)  AGAINST(?)', keyword)
-        ).andWhere('precio_venta','<',priceMax)
+          this.queryBuilder.raw('MATCH(nombre_prod)  AGAINST(?)', keyword),
+        ).andWhere('precio_venta', '<', priceMax)
         .select(
-            'id_producto',
-            'nombre_prod',
-            'precio_venta', 
-	          'nombre_categoria', 
-            'especificaciones',
-            'imagen'
+          'id_producto',
+          'nombre_prod',
+          'precio_venta',
+          'nombre_categoria',
+          'especificaciones',
+          'imagen',
         );
       return prodArray;
-    }catch(err){
+    } catch (err) {
       this.log.error({ message: `Error while getting Products: ${err}` });
       throw Error(err);
     }
@@ -354,10 +483,10 @@ class Database {
       return this.queryBuilder('carrito_compra').insert([
         {
           date: fecha,
-          estado: "Pendiente",
-          cantidad: cantidad,
-          fk_id_producto: fk_id_producto,
-          fk_id_usuario: fk_id_usuario,
+          estado: 'Pendiente',
+          cantidad,
+          fk_id_producto,
+          fk_id_usuario,
         },
       ]);
     } catch (err) {
@@ -365,33 +494,33 @@ class Database {
     }
   }
 
-  async getShoppingCart(user:number){
+  async getShoppingCart(user:number) {
     try {
       const shopCartArray = await this.queryBuilder('carrito_compra')
-      .where('fk_id_usuario',user)
-      .select();
+        .where('fk_id_usuario', user)
+        .select();
       return shopCartArray;
     } catch (err) {
       throw Error(err);
     }
   }
 
-  async getShoppingCartData(id:number){
+  async getShoppingCartData(id:number) {
     try {
       const shopCartArray = await this.queryBuilder('carrito_compra')
-      .where('id_carrito',id)
-      .select();
+        .where('id_carrito', id)
+        .select();
       return shopCartArray;
     } catch (err) {
       throw Error(err);
     }
   }
 
-  async deleteShoppingCartItem(id:number){
+  async deleteShoppingCartItem(id:number) {
     try {
       const shopCartArray = await this.queryBuilder('carrito_compra')
-      .where('id_carrito',id)
-      .del();
+        .where('id_carrito', id)
+        .del();
       return shopCartArray;
     } catch (err) {
       throw Error(err);
@@ -404,59 +533,57 @@ class Database {
   ) {
     try {
       const userData = await this.queryBuilder('usuario')
-      .select('id_usuario','email_usu','fk_id_tipo')
-      .where('email_usu',email)
-      .andWhere('clave_usu',password);
+        .select('id_usuario', 'email_usu', 'fk_id_tipo')
+        .where('email_usu', email)
+        .andWhere('clave_usu', password);
       return userData;
     } catch (err) {
       throw Error(err);
     }
   }
 
-  async dataUserFront(email:string){
+  async dataUserFront(email:string) {
     try {
       const dataUser = await this.queryBuilder('direccion_entrega')
-      .innerJoin('usuario', 'usuario.id_usuario', '=', 'direccion_entrega.fk_id_usuario')
-      .select()
-      .where('email_usu',email)
+        .innerJoin('usuario', 'usuario.id_usuario', '=', 'direccion_entrega.fk_id_usuario')
+        .select()
+        .where('email_usu', email);
       return dataUser;
-    }
-    catch (e){
+    } catch (e) {
       throw Error(e);
     }
   }
 
-  async dataUserAdmin(email:string){
+  async dataUserAdmin(email:string) {
     try {
       const dataUser = await this.queryBuilder('usuario')
-      .select(
-        'nombres_usuario',
-        'primer_apellido_usu',
-        'phone',
-        'email_usu',
+        .select(
+          'nombres_usuario',
+          'primer_apellido_usu',
+          'phone',
+          'email_usu',
 
-      )
-      .where('email_usu',email)
+        )
+        .where('email_usu', email);
       return dataUser;
-    }
-    catch (e){
+    } catch (e) {
       throw Error(e);
     }
   }
 
-  async emailValidator(email:string){
+  async emailValidator(email:string) {
     try {
-      var mssg:boolean = false;
+      let mssg:boolean = false;
       const datEmail = await this.queryBuilder('usuario')
-      .select()
-      .where('email_usu',email)
+        .select()
+        .where('email_usu', email);
       if (datEmail.length >= 1) {
         mssg = true;
       } else {
         mssg = false;
       }
       return mssg;
-    } catch (e){
+    } catch (e) {
       throw Error(e);
     }
   }
@@ -467,75 +594,103 @@ class Database {
     secondLastName:string,
     phone:string,
     email:string,
-    password:string
-  ){
-    try{
+    password:string,
+  ) {
+    try {
       return this.queryBuilder('usuario').insert([
         {
-          nombres_usuario:names,
-          primer_apellido_usu:lastName,
-          segundo_apellido_usu:secondLastName,
-          phone:phone,
-          email_usu:email,
-          clave_usu:password,
-          validacion:false,
-          estado:1,
-          fk_id_tipo:4
-        }
-      ])
-    } catch(e) {
-      throw Error(e);
-    }
-  }
-
-  async verification(
-    id:string,
-    email:string
-  ){
-    try{
-      return this.queryBuilder('verificacion').insert([
-        {
-          id_verificacion:id,
-          email:email,
-        }
+          nombres_usuario: names,
+          primer_apellido_usu: lastName,
+          segundo_apellido_usu: secondLastName,
+          phone,
+          email_usu: email,
+          clave_usu: password,
+          validacion: false,
+          estado: 1,
+          fk_id_tipo: 4,
+        },
       ]);
     } catch (e) {
       throw Error(e);
     }
   }
 
-  async verifyUserToken(token:string){
-    try{
-      const email = await this.queryBuilder('verificacion')
-      .where('id_verificacion',token)
-      .select('email');
-      return email;
-    } catch(e) {
-      throw Error(e);
-    }
-  }
-
-  async idUser(email:string){
-    try{
-      const userData = await this.queryBuilder('usuario')
-      .select('id_usuario')
-      .where('email_usu',email)
-      return userData;
-    } catch(e) {
-      throw Error(e);
-    }
-  }
-
-  async verifyUser(idUsu:string){
-    try{
-       return await this.queryBuilder('usuario')
-      .where('id_usuario',idUsu)
-      .update(
+  async registerUser(
+    names:string,
+    lastName:string,
+    secondLastName:string,
+    phone:string,
+    email:string,
+    password:string,
+    userType:string,
+  ) {
+    try {
+      return this.queryBuilder('usuario').insert([
         {
-          validacion:1
-        }
-      );
-    } catch(e) {
+          nombres_usuario: names,
+          primer_apellido_usu: lastName,
+          segundo_apellido_usu: secondLastName,
+          phone,
+          email_usu: email,
+          clave_usu: password,
+          validacion: true,
+          estado: 1,
+          fk_id_tipo: userType,
+        },
+      ]);
+    } catch (e) {
+      throw Error(e);
+    }
+  }
+
+  async verification(
+    id:string,
+    email:string,
+  ) {
+    try {
+      return this.queryBuilder('verificacion').insert([
+        {
+          id_verificacion: id,
+          email,
+        },
+      ]);
+    } catch (e) {
+      throw Error(e);
+    }
+  }
+
+  async verifyUserToken(token:string) {
+    try {
+      const email = await this.queryBuilder('verificacion')
+        .where('id_verificacion', token)
+        .select('email');
+      return email;
+    } catch (e) {
+      throw Error(e);
+    }
+  }
+
+  async idUser(email:string) {
+    try {
+      const userData = await this.queryBuilder('usuario')
+        .select('id_usuario')
+        .where('email_usu', email);
+      return userData;
+    } catch (e) {
+      throw Error(e);
+    }
+  }
+
+  async verifyUser(idUsu:string) {
+    try {
+      return await this.queryBuilder('usuario')
+        .where('id_usuario', idUsu)
+        .update(
+          {
+            validacion: 1,
+          },
+        );
+    } catch (e) {
       throw Error(e);
     }
   }
@@ -615,7 +770,7 @@ class Database {
     accountHolder:string,
     accountNumber:string,
     depositNumber:string,
-    amoun:number, 
+    amount:number, 
     concept:string,
     idPhotoName:string,
     idRequest:string){
