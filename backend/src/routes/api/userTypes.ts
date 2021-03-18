@@ -46,7 +46,7 @@ export const handler = (router: Router, routesContext: any) => {
     }
     try {
       const userType = await routesContext.db.getUserType(userTypeId);
-      return res.status(200).send(userType);
+      return res.status(200).send(userType[0]);
     } catch (e) {
       log.error(e);
       return res.status(500).send('Something went wrong');
