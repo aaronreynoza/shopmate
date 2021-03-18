@@ -40,9 +40,9 @@ export const handler = (router: Router, routesContext: any) => {
         messages: 'Wrong type of data or missing fields',
       });
     }
-    log.info('inserting new product with fields: ', req.body);
-    try {
-      // it is validated if the email is already active
+    log.info('inserting new client with fields: ', req.body);
+    try{
+      //it is validated if the email is already active
       const emailVal:boolean = await routesContext.db.emailValidator(email);
       if (emailVal!) {
         return res.status(400).json({

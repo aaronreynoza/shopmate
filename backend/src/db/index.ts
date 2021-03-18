@@ -171,23 +171,21 @@ class Database {
     price: number,
     description: string,
     imagen: string,
-    category: string,
-    providerName: string,
+    idcategory: number,
+    idproviderName: number,
   ) {
     try {
       // the database creator doesn't know what CamelCase is. I hate you so much, Jesus.
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      const categoryData = await this.getCategory(category);
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      const { id_proveedor } = await this.getProvider(providerName);
+      // eslint-disable-next-line @typescript-eslint/naming-convention}
       return this.queryBuilder('producto').insert([
         {
           nombre_prod: name,
           precio_venta: price,
           especificaciones: description,
-          imagen,
-          fk_id_categoria: categoryData.category_id,
-          fk_Id_proveedor: id_proveedor,
+          imagen: imagen,
+          fk_id_categoria: idcategory,
+          fk_Id_proveedor: idproviderName,
         },
       ]);
     } catch (err) {
@@ -610,6 +608,102 @@ class Database {
       throw Error(e);
     }
   }
+
+  async verifyProductQuantity(idProd:number, idBranchOffice:number){
+    try{
+      const quantityProduct = this.queryBuilder('inventario')
+    .where('fk_id_producto',idProd)
+    .andWhere('fk_id_sucursal',idBranchOffice)
+    .select()
+    return (quantityProduct)
+    } catch(e) {
+      throw Error(e);
+    }
+  }
+
+  async shoppingUpdateProduct(idProd:number,quantity:number){
+    try{
+      return await this.queryBuilder('inventario')
+      .where('fk_id_producto',idProd)
+      .update('cantidad',quantity)
+    } catch(e){
+      throw Error(e);
+    }
+  }
+
+  async insertRequestHeader(
+    idRequest:string, 
+    date:string, 
+    deliveryType:number, 
+    bank:string,
+    accountNumberStore:string,
+    typeOfPurchase:number,
+    email:string
+    ){
+    try{
+      const estado:number = 1;
+      const dat = await this.idUser(email);
+      console.log(dat);
+      const id = dat[0].id_usuario;
+      return await this.queryBuilder('encabezado_solicitud')
+      .insert({
+        id_encabez:idRequest,
+        fecha_sol:date,
+        estado:estado,
+        tipo_compra:typeOfPurchase,
+        banco:bank,
+        numero_cuenta:accountNumberStore,
+        tipo_entrega:deliveryType,
+        fk_id_usuario:id
+      })
+    } catch(e) {
+      throw Error(e)
+    }
+  }
+
+  async insertPurchaseDetail(
+    idProd:number, 
+    quantity:number, 
+    totalPrice:number,
+    idRequest:string
+    ){
+    try{
+      return await this.queryBuilder('detalle_solicitud')
+      .insert([{
+        cantidad:quantity,
+        total_pagar:totalPrice,
+        fk_id_encabez:idRequest,
+        fk_id_producto:idProd,
+      }])
+    } catch(e) {
+      throw Error(e)
+    }
+  }
+
+  async insertPaymentDetail(
+    accountHolder:string,
+    accountNumber:string,
+    depositNumber:string,
+    amoun:number, 
+    concept:string,
+    idPhotoName:string,
+    idRequest:string){
+    try{
+      return this.queryBuilder('detalle_pago')
+      .insert({
+        cuenta_usuario:accountHolder,
+        titular:accountNumber,
+        numero_deposito:depositNumber,
+        monto:amount,
+        concept:concept,
+        foto_comp:idPhotoName,
+        fk_id_encabez:idRequest
+      })
+    } catch(e) {
+      throw Error(e)
+    }
+  }
+
 }
 
 export default Database;

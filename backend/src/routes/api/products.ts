@@ -2,9 +2,8 @@
 import { Router } from 'express';
 import multer from 'multer';
 import path from 'path';
-import * as Logger from '../../utils/logger';
-import { IResponse } from '../../utils/types';
-
+import {IResponse} from '../../utils/types';
+import { PassThrough } from 'stream';
 const log = Logger.getInstance();
 
 const inMemoryStorage = multer.memoryStorage();
@@ -39,26 +38,36 @@ export const handler = (router: Router, routesContext: any) => {
       category: string,
       provider: string,
     } = req.body;
-    const priceVar:number = parseFloat(price);
-    const blobName:string = getBlobName(req.file.originalname, productName);
-    const stream = getStream(req.file.buffer);
-    const streamLength = req.file.buffer.length;
+    const priceVar:number = parseFloat(price)
+    const idCat:number =parseInt(category);
+    const IdProv:number = parseInt(provider);
     if (
       (typeof productName !== 'string')
       || (typeof priceVar !== 'number')
       || (typeof specifications !== 'string')
-      || (typeof category !== 'string')
-      || (typeof provider !== 'string')
+      || (typeof idCat !== 'number')
+      || (typeof IdProv !== 'number')
     ) {
       const respObject:IResponse = {
-        status: 400,
-        data: [],
-        message: 'Something went wrong',
-      };
+        status:401,
+        data:[],
+        message:"Something went wrong"
+      }
       return res.status(400).json(respObject);
     }
-    log.info('inserting new product with fields: ', req.body);
     try {
+      if(req.file.originalname ===undefined || req.file.originalname === null || req.file.originalname === ""){
+        const respObject:IResponse = {
+          status:400,
+          data:[],
+          message:"Please, send a image"
+        }
+        return res.status(400).json(respObject);
+      }
+      const blobName:string = getBlobName(req.file.originalname,productName);
+      const stream = getStream(req.file.buffer);
+      const streamLength = req.file.buffer.length;
+      log.info('inserting new product with fields: ', req.body);
       await routesContext.db.insertProduct(
         productName,
         priceVar,
