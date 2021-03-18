@@ -53,4 +53,9 @@ interface IResponse{
   data:any,
   message:string
 }
-export { ConfigType, DatabaseType, ConnectionType , Filter, ItokenData,IResponse};
+interface IrequestDetail{
+  idProducto:number,
+  productQuatity:number,
+  productPrice:number
+}
+export { ConfigType, DatabaseType, ConnectionType , Filter, ItokenData,IResponse,IrequestDetail};
