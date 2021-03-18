@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Router } from 'express';
-import * as Logger from '../../utils/logger';
 import multer from 'multer';
 import path from 'path';
 import {IResponse} from '../../utils/types';
