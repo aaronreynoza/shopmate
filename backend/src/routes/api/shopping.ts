@@ -24,7 +24,7 @@ function getBlobName (originalName:string, name1:string){
 
 // eslint-disable-next-line import/prefer-default-export
 export const handler = (router: Router, routesContext: any) => {
-  router.post('/shopping',uploadStrategy,async (req, res) => {
+  router.post('/shopping',async (req, res) => {
     const {
       userName,
       email,
