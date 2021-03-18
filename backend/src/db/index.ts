@@ -770,7 +770,7 @@ class Database {
     accountHolder:string,
     accountNumber:string,
     depositNumber:string,
-    amoun:number, 
+    amount:number, 
     concept:string,
     idPhotoName:string,
     idRequest:string){
