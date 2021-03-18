@@ -7,7 +7,7 @@
 #  Administrador de Base de Datos: MySQL/MariaDB
 #  Diagrama: db_tienda
 #  Autor: jegzstate
-#  Fecha y hora: 15/03/2021 18:31:01
+#  Fecha y hora: 17/03/2021 20:18:32
 DROP DATABASE IF EXISTS db_tienda;
 CREATE DATABASE db_tienda;
 USE db_tienda;
@@ -77,6 +77,7 @@ CREATE TABLE `encabezado_solicitud` (
 	`tipo_compra` INTEGER NOT NULL COMMENT 'Tipo de compra consumidor final/contribuyente',
 	`banco` VARCHAR(150) NOT NULL COMMENT 'Banco al que se hizo el deposito',
 	`numero_cuenta` VARCHAR(20) NOT NULL COMMENT 'Numero de cuenta a depositar',
+	`tipo_entrega` INTEGER NOT NULL COMMENT 'Tipo de entrega solicitud',
 	`fk_id_usuario` INTEGER NOT NULL COMMENT 'Identificador del cliente',
 	KEY(`fk_id_usuario`),
 	PRIMARY KEY(`id_encabez`)
@@ -85,10 +86,10 @@ CREATE TABLE `detalle_solicitud` (
 	`id_detalle` INTEGER AUTO_INCREMENT NOT NULL,
 	`cantidad` INTEGER NOT NULL COMMENT 'Cantidad del producto a comprar',
 	`total_pagar` DOUBLE NOT NULL COMMENT 'Precio del producto',
-	`fk_id_producto` INTEGER NOT NULL COMMENT 'Identificador de producto',
-	KEY(`fk_id_producto`),
 	`fk_id_encabez` VARCHAR(100) NOT NULL COMMENT 'Identificador en solicitud',
 	KEY(`fk_id_encabez`),
+	`fk_id_producto` INTEGER NOT NULL COMMENT 'Identificador de producto',
+	KEY(`fk_id_producto`),
 	PRIMARY KEY(`id_detalle`)
 ) ENGINE=INNODB;
 CREATE TABLE `direccion_entrega` (
@@ -126,6 +127,7 @@ CREATE TABLE `detalle_pago` (
 	`titular` VARCHAR(150) NOT NULL COMMENT 'Nombre del titular de la cuenta',
 	`numero_deposito` VARCHAR(25) NOT NULL COMMENT 'Numero del deposito de la cuenta',
 	`monto` DOUBLE NOT NULL COMMENT 'Monto del deposito',
+	`concept` VARCHAR(100) NOT NULL COMMENT 'Concepto de compra',
 	`foto_comp` VARCHAR(75) NOT NULL COMMENT 'Fotografia del comprobante',
 	`fk_id_encabez` VARCHAR(100) NOT NULL COMMENT 'Identificador en solicitud',
 	KEY(`fk_id_encabez`)
@@ -157,8 +159,8 @@ ALTER TABLE `inventario` ADD CONSTRAINT `inventario_producto_fk_id_producto` FOR
 ALTER TABLE `inventario` ADD CONSTRAINT `inventario_sucursal_fk_id_sucursal` FOREIGN KEY (`fk_id_sucursal`) REFERENCES `sucursal`(`id_sucursal`) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE `direccion_almacen` ADD CONSTRAINT `direccion_almacen_sucursal_fk_id_sucursal` FOREIGN KEY (`fk_id_sucursal`) REFERENCES `sucursal`(`id_sucursal`) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE `encabezado_solicitud` ADD CONSTRAINT `encabezado_solicitud_usuario_fk_id_usuario` FOREIGN KEY (`fk_id_usuario`) REFERENCES `usuario`(`id_usuario`) ON DELETE NO ACTION ON UPDATE CASCADE;
-ALTER TABLE `detalle_solicitud` ADD CONSTRAINT `detalle_solicitud_producto_fk_id_producto` FOREIGN KEY (`fk_id_producto`) REFERENCES `producto`(`id_producto`) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE `detalle_solicitud` ADD CONSTRAINT `detalle_solicitud_encabezado_solicitud_fk_id_encabez` FOREIGN KEY (`fk_id_encabez`) REFERENCES `encabezado_solicitud`(`id_encabez`) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE `detalle_solicitud` ADD CONSTRAINT `detalle_solicitud_producto_fk_id_producto` FOREIGN KEY (`fk_id_producto`) REFERENCES `producto`(`id_producto`) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE `direccion_entrega` ADD CONSTRAINT `direccion_entrega_usuario_fk_id_usuario` FOREIGN KEY (`fk_id_usuario`) REFERENCES `usuario`(`id_usuario`) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE `descuentos` ADD CONSTRAINT `descuentos_producto_fk_id_producto` FOREIGN KEY (`fk_id_producto`) REFERENCES `producto`(`id_producto`) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE `detalle_pago` ADD CONSTRAINT `detalle_pago_encabezado_solicitud_fk_id_encabez` FOREIGN KEY (`fk_id_encabez`) REFERENCES `encabezado_solicitud`(`id_encabez`) ON DELETE NO ACTION ON UPDATE CASCADE;
