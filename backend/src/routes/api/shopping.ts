@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { json } from 'body-parser';
 import { Router } from 'express';
 import multer from 'multer';
 import path from 'path';
@@ -7,7 +8,7 @@ const log = Logger.getInstance();
 
 
 const inMemoryStorage = multer.memoryStorage();
-const uploadStrategy = multer({storage: inMemoryStorage}).single('image');
+const uploadStrategy = multer( {storage: inMemoryStorage} ).single('image');
 const azureStorage = require('azure-storage');
 
 const getStream = require('into-stream');
@@ -42,44 +43,47 @@ export const handler = (router: Router, routesContext: any) => {
       userName:string,
       email:string,
       dateTime:string,
-      branchOfficeId:number,
-      typeOfPurchase:number,
-      deliveryType:number,
+      branchOfficeId:string,
+      typeOfPurchase:string,
+      deliveryType:string,
       bankOfTheStore:string,
       accountNumberStore:string,
       customerAccount:string,
       bankAccountHolder:string,
       depositNumber:string,
-      amount:number,
+      amount:string,
       concept:string,
-      requestDetail:any
+      requestDetail:string
     } = req.body;
     
     if (
       (typeof userName !== 'string')
       || (typeof email !== 'string')
       || (typeof dateTime !== 'string')
-      || (typeof branchOfficeId !== 'number')
-      || (typeof typeOfPurchase !== 'number')
-      || (typeof deliveryType !== 'number')
+      || (typeof branchOfficeId !== 'string')
+      || (typeof typeOfPurchase !== 'string')
+      || (typeof deliveryType !== 'string')
       || (typeof bankOfTheStore !== 'string')
       || (typeof accountNumberStore !== 'string')
       || (typeof customerAccount !== 'string')
       || (typeof bankAccountHolder !== 'string')
       || (typeof depositNumber !== 'string')
-      || (typeof amount !== 'number')
+      || (typeof amount !== 'string')
       || (typeof concept !== 'string')
+      || (typeof requestDetail !== 'string')
     ) {
       return res.status(400).json(
         {
           status:400,
           data:[],
-          message:"Something went wrong"
+          message:"Error in data"
         }
       );
     }
     log.info('inserting new purchase request with fields: ', req.body);
     try {
+      const convertRequest:any = JSON.parse(requestDetail);
+      console.log(convertRequest)
       if(req.file.originalname ===undefined || req.file.originalname === null || req.file.originalname === ""){
         const respObject = {
           status:400,
@@ -108,8 +112,8 @@ export const handler = (router: Router, routesContext: any) => {
       }
       var quantityInventori = [];
       //get the number of products in the database
-      for(let i in requestDetail){
-        var dat = await routesContext.db.verifyProductQuantity(requestDetail[i].idProduct,branchOfficeId);
+      for(let i in convertRequest){
+        var dat = await routesContext.db.verifyProductQuantity(convertRequest[i].idProduct,branchOfficeId);
         if(dat.length ===0){
           return res.status(400).json(
             {
@@ -119,7 +123,7 @@ export const handler = (router: Router, routesContext: any) => {
             }
           );
         }
-        if(requestDetail[i].productQuantity <= dat[0].cantidad){
+        if(convertRequest[i].productQuantity <= dat[0].cantidad){
           quantityInventori.push(dat[0]);
         }
         else{
@@ -135,7 +139,7 @@ export const handler = (router: Router, routesContext: any) => {
       //subtract the amount of the request with that of the database
       const arrayUpadate:any = [];
       for(let i in quantityInventori){
-        if(quantityInventori[i].fk_id_producto!==requestDetail[i].idProduct){
+        if(quantityInventori[i].fk_id_producto!==convertRequest[i].idProduct){
           return res.status(400).json(
             {
               status:400,
@@ -145,7 +149,7 @@ export const handler = (router: Router, routesContext: any) => {
           );
         }
         let id = quantityInventori[i].fk_id_producto;
-        let quantity = (quantityInventori[i].cantidad - requestDetail[i].productQuantity);
+        let quantity = (quantityInventori[i].cantidad - convertRequest[i].productQuantity);
         let obj ={
           id,quantity
         }
@@ -154,7 +158,7 @@ export const handler = (router: Router, routesContext: any) => {
       //Insert Request Header
       await routesContext.db.insertRequestHeader(numeroSolicitud,dateTime,typeOfPurchase,bankOfTheStore,accountNumberStore,deliveryType,email);
       //InserRequest Detail
-      requestDetail.forEach(async function(element:any){
+      convertRequest.forEach(async function(element:any){
         await routesContext.db.insertPurchaseDetail(element.idProduct,element.productQuantity,element.productPrice,numeroSolicitud);
         return element;
       });
@@ -176,7 +180,7 @@ export const handler = (router: Router, routesContext: any) => {
           status:200,
           data:{
             data1:quantityInventori,
-            data2:requestDetail
+            data2:convertRequest
           },
           message:"Product inserted correctly"
         }
