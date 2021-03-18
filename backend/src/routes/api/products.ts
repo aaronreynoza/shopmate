@@ -2,8 +2,9 @@
 import { Router } from 'express';
 import multer from 'multer';
 import path from 'path';
-import {IResponse} from '../../utils/types';
-import { PassThrough } from 'stream';
+import { IResponse } from '../../utils/types';
+import * as Logger from '../../utils/logger';
+
 const log = Logger.getInstance();
 
 const inMemoryStorage = multer.memoryStorage();
@@ -38,9 +39,9 @@ export const handler = (router: Router, routesContext: any) => {
       category: string,
       provider: string,
     } = req.body;
-    const priceVar:number = parseFloat(price)
-    const idCat:number =parseInt(category);
-    const IdProv:number = parseInt(provider);
+    const priceVar:number = parseFloat(price);
+    const idCat:number = parseInt(category, 10);
+    const IdProv:number = parseInt(provider, 10);
     if (
       (typeof productName !== 'string')
       || (typeof priceVar !== 'number')
@@ -49,22 +50,22 @@ export const handler = (router: Router, routesContext: any) => {
       || (typeof IdProv !== 'number')
     ) {
       const respObject:IResponse = {
-        status:401,
-        data:[],
-        message:"Something went wrong"
-      }
+        status: 401,
+        data: [],
+        message: 'Something went wrong',
+      };
       return res.status(400).json(respObject);
     }
     try {
-      if(req.file.originalname ===undefined || req.file.originalname === null || req.file.originalname === ""){
+      if (req.file.originalname === undefined || req.file.originalname === null || req.file.originalname === '') {
         const respObject:IResponse = {
-          status:400,
-          data:[],
-          message:"Please, send a image"
-        }
+          status: 400,
+          data: [],
+          message: 'Please, send a image',
+        };
         return res.status(400).json(respObject);
       }
-      const blobName:string = getBlobName(req.file.originalname,productName);
+      const blobName:string = getBlobName(req.file.originalname, productName);
       const stream = getStream(req.file.buffer);
       const streamLength = req.file.buffer.length;
       log.info('inserting new product with fields: ', req.body);
