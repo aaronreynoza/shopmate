@@ -94,6 +94,48 @@ class Database {
     }
   }
 
+  async insertUserType(name: string, description: string) {
+    try {
+      return this.queryBuilder('tipo_usuario').insert([
+        {
+          nombre_tu: name,
+          descripcion: description,
+        },
+      ]);
+    } catch (err) {
+      this.log.error({ message: `Error while inserting User Type: ${err}` });
+      throw Error(err);
+    }
+  }
+
+  async getUserTypes() {
+    try {
+      const userTypes = await this.queryBuilder('tipo_usuario').select();
+      const renamed = userTypes.map((uType: any) => ({
+        name: uType.nombre_tu,
+        description: uType.descripcion,
+      }));
+      return renamed;
+    } catch (err) {
+      this.log.error({ message: `Error while getting user types: ${err}` });
+      throw Error(err);
+    }
+  }
+
+  async getUserType(category: string) {
+    try {
+      const userType = await this.queryBuilder('categoria')
+        .where('id_categoria', category).select();
+      return {
+        name: userType.nombre_tu,
+        description: userType.descripcion,
+      };
+    } catch (err) {
+      this.log.error({ message: `Error while getting Categories: ${err}` });
+      throw Error(err);
+    }
+  }
+
   async insertInventory(quantity: string, idProduct: string, idOffice: string) {
     try {
       return this.queryBuilder('inventario').insert([
@@ -162,6 +204,50 @@ class Database {
       return categories[0];
     } catch (err) {
       this.log.error({ message: `Error while getting Provider: ${err}` });
+      throw Error(err);
+    }
+  }
+  
+  async insertOffice(name: string, state: string) {
+    try {
+      return this.queryBuilder('sucursal').insert([
+        {
+          nombre_sucursal: name,
+          estado: state,
+          fecha_creacion: new Date(),
+        },
+      ]);
+    } catch (err) {
+      this.log.error({ message: `Error while inserting Office: ${err}` });
+      throw Error(err);
+    }
+  }
+
+  async getOffices() {
+    try {
+      const offices = await this.queryBuilder('sucursal').select();
+      return offices.map((office: any) => ({
+        name: office.nombre_sucursal,
+        state: office.estado,
+        date: office.fecha_creacion,
+      }));
+    } catch (err) {
+      this.log.error({ message: `Error while getting Offices: ${err}` });
+      throw Error(err);
+    }
+  }
+
+  async getOffice(officeId: string) {
+    try {
+      const office = await this.queryBuilder('sucursal')
+        .where('id_sucursal', officeId).select();
+      return {
+        name: office[0].nombre_sucursal,
+        state: office[0].estado,
+        date: office.fecha_creacion,
+      };
+    } catch (err) {
+      this.log.error({ message: `Error while getting Office: ${err}` });
       throw Error(err);
     }
   }
