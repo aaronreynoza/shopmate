@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-require('dotenv').config();
 import { Router } from 'express';
-import * as Logger from '../../utils/logger';
 import multer from 'multer';
 import path from 'path';
-import {IResponse} from '../../utils/types';
+import * as Logger from '../../utils/logger';
+import { IResponse } from '../../utils/types';
+
 const log = Logger.getInstance();
 
 const inMemoryStorage = multer.memoryStorage();
-const uploadStrategy = multer({storage: inMemoryStorage}).single('image');
+const uploadStrategy = multer({ storage: inMemoryStorage }).single('image');
 const azureStorage = require('azure-storage');
 
 const blobService = azureStorage.createBlobService();
@@ -16,8 +16,8 @@ const containerName = 'imagen-producto';
 
 const getStream = require('into-stream');
 
-function getBlobName (originalName:string, name:string){
-  const identifier = Math.random().toString().replace(/0\./,'');
+function getBlobName(originalName:string, name:string) {
+  const identifier = Math.random().toString().replace(/0\./, '');
   const extension = path.extname(originalName);
   const name1 = name.replace(/\s+/g, '');
   return `${identifier}${name1}${extension}`;
@@ -25,7 +25,7 @@ function getBlobName (originalName:string, name:string){
 
 // eslint-disable-next-line import/prefer-default-export
 export const handler = (router: Router, routesContext: any) => {
-  router.post('/products', uploadStrategy ,async (req, res) => {
+  router.post('/products', uploadStrategy, async (req, res) => {
     const {
       productName,
       price,
@@ -39,8 +39,8 @@ export const handler = (router: Router, routesContext: any) => {
       category: string,
       provider: string,
     } = req.body;
-    const priceVar:number = parseFloat(price)
-    const blobName:string = getBlobName(req.file.originalname,productName);
+    const priceVar:number = parseFloat(price);
+    const blobName:string = getBlobName(req.file.originalname, productName);
     const stream = getStream(req.file.buffer);
     const streamLength = req.file.buffer.length;
     if (
@@ -51,10 +51,10 @@ export const handler = (router: Router, routesContext: any) => {
       || (typeof provider !== 'string')
     ) {
       const respObject:IResponse = {
-        status:400,
-        data:[],
-        message:"Something went wrong"
-      }
+        status: 400,
+        data: [],
+        message: 'Something went wrong',
+      };
       return res.status(400).json(respObject);
     }
     log.info('inserting new product with fields: ', req.body);
@@ -67,24 +67,30 @@ export const handler = (router: Router, routesContext: any) => {
         category,
         provider,
       );
-      await blobService.createBlockBlobFromStream(containerName, blobName, stream, streamLength, function (e:any){
-        if(e){
-          throw e;
-        }
-      });
+      await blobService.createBlockBlobFromStream(
+        containerName,
+        blobName,
+        stream,
+        streamLength,
+        (e:any) => {
+          if (e) {
+            throw e;
+          }
+        },
+      );
       const respObject:IResponse = {
-        status:200,
-        data:req.body,
-        message:"Product inserted correctly"
-      }
+        status: 200,
+        data: req.body,
+        message: 'Product inserted correctly',
+      };
       return res.status(200).json(respObject);
     } catch (e) {
       log.error(e);
       const respObject:IResponse = {
-        status:500,
-        data:[],
-        message:"Something went wrong"
-      }
+        status: 500,
+        data: [],
+        message: 'Something went wrong',
+      };
       return res.status(500).json(respObject);
     }
   });
@@ -107,5 +113,4 @@ export const handler = (router: Router, routesContext: any) => {
       return res.status(500).send('Something went wrong');
     }
   });
-  
 };

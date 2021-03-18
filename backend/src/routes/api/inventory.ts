@@ -5,28 +5,26 @@ const log = Logger.getInstance();
 
 // eslint-disable-next-line import/prefer-default-export
 export const handler = (router: Router, routesContext: any) => {
-  router.post('/categories', async (req, res) => {
+  router.post('/inventario', async (req, res) => {
     const {
-      name,
-      description,
-      icon,
-      active,
+      quantity,
+      idProduct,
+      idOffice,
     }: {
-      name: string,
-      description: string
-      icon: string,
-      active: number,
+      quantity: string,
+      idProduct: string
+      idOffice: string,
     } = req.body;
     if (
-      (typeof description !== 'string')
-      || (typeof name !== 'string')
-      || (typeof icon !== 'string')
-    ) { 
+      (typeof idProduct !== 'string')
+      || (typeof quantity !== 'string')
+      || (typeof idOffice !== 'string')
+    ) {
       return res.status(400).send('Wrong type of data or missing fields');
     }
-    log.info('inserting new category with fields: ', req.body);
+    log.info('inserting new inventory with fields: ', req.body);
     try {
-      await routesContext.db.insertCategory(name, description, icon, active);
+      await routesContext.db.insertInventory(quantity, idProduct, idOffice);
       return res.status(200).send('Category inserted succesfully');
     } catch (e) {
       log.error(e);
@@ -34,23 +32,23 @@ export const handler = (router: Router, routesContext: any) => {
     }
   });
 
-  router.get('/categories', async (req, res) => {
+  router.get('/inventories', async (req, res) => {
     try {
-      const categories = await routesContext.db.getCategories();
-      return res.status(200).send(categories);
+      const inventories = await routesContext.db.getInventories();
+      return res.status(200).send(inventories);
     } catch (e) {
       log.error(e);
       return res.status(500).send('Something went wrong');
     }
   });
 
-  router.get('/category/:categoryId', async (req, res) => {
-    const { categoryId } = req.params;
-    if (typeof categoryId !== 'string') {
+  router.get('/inventory/:idProduct', async (req, res) => {
+    const { idProduct } = req.params;
+    if (typeof idProduct !== 'string') {
       return res.status(400).send('Wrong type of data');
     }
     try {
-      const category = await routesContext.db.getCategory(categoryId);
+      const category = await routesContext.db.getInventory(idProduct);
       return res.status(200).send(category);
     } catch (e) {
       log.error(e);
