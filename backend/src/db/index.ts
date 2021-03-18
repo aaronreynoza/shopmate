@@ -625,7 +625,7 @@ class Database {
         cuenta_usuario:accountHolder,
         titular:accountNumber,
         numero_deposito:depositNumber,
-        monto:amoun,
+        monto:amount,
         concept:concept,
         foto_comp:idPhotoName,
         fk_id_encabez:idRequest
