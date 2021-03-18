@@ -540,7 +540,7 @@ class Database {
     }
   }
 
-  async verifuProductQuantity(idProd:number, idBranchOffice:number){
+  async verifyProductQuantity(idProd:number, idBranchOffice:number){
     try{
       const quantityProduct = this.queryBuilder('inventario')
     .where('fk_id_producto',idProd)
