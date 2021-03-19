@@ -31,11 +31,20 @@ export const handler = (router: Router, routesContext: any) => {
       //check if the project is validated
       const val:number = await routesContext.db.getShoppingRequestStatus(idRequest)
       if(val === 2 || val === 3){
-        res.status(400).json({message:"This request is already approved / rejected."});
+        res.status(400).json({
+          status: 400,
+          data: [],
+          messages: 'This request is already approved / rejected.',
+        });
       }
       if(status === 1){
-        res.status(400).json({message:"Unable to place pending status"});
+        res.status(400).json({
+          status: 400,
+          data: [],
+          messages: 'Unable to place pending status',
+        });
       }
+      //update data
       await routesContext.db.approvelRequest(idRequest,status);
       // email data is verified
       transporter.verify().then(() => {
@@ -61,11 +70,18 @@ export const handler = (router: Router, routesContext: any) => {
         subject: 'Respuesta de solicitu de compra', // Subject line
         html: dataEmail,
         });
-        
-      res.status(200).json({message:"Prueba pasada"})
+        return res.status(200).json({
+          status: 200,
+          data: req.body,
+          message: 'Solicitud Validada',
+          });
     } catch (e) {
       log.error(e);
-      return res.status(500).send('Something went wrong');
+      res.status(500).json({
+        status: 500,
+        data: [],
+        messages: 'Something went wrong',
+      });
     }
   });
 
