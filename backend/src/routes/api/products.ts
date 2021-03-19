@@ -32,27 +32,31 @@ export const handler = (router: Router, routesContext: any) => {
       specifications,
       category,
       provider,
+      quantity,
     }: {
       productName: string,
       price: string,
       specifications: string,
       category: string,
       provider: string,
+      quantity: string
     } = req.body;
     const priceVar:number = parseFloat(price);
     const idCat:number = parseInt(category, 10);
     const IdProv:number = parseInt(provider, 10);
+    const productQuantity:number = parseInt(quantity, 10);
     if (
       (typeof productName !== 'string')
       || (typeof priceVar !== 'number')
       || (typeof specifications !== 'string')
       || (typeof idCat !== 'number')
       || (typeof IdProv !== 'number')
+      || (typeof quantity !== 'string')
     ) {
       const respObject:IResponse = {
         status: 401,
         data: [],
-        message: 'Something went wrong',
+        message: 'Bad request. Please fix your params',
       };
       return res.status(400).json(respObject);
     }
@@ -69,7 +73,7 @@ export const handler = (router: Router, routesContext: any) => {
       const stream = getStream(req.file.buffer);
       const streamLength = req.file.buffer.length;
       log.info('inserting new product with fields: ', req.body);
-      await routesContext.db.insertProduct(
+      const productResult = await routesContext.db.insertProduct(
         productName,
         priceVar,
         specifications,
@@ -77,6 +81,8 @@ export const handler = (router: Router, routesContext: any) => {
         category,
         provider,
       );
+      const productId = productResult[0];
+      await routesContext.db.insertInventory(productQuantity, productId, IdProv);
       await blobService.createBlockBlobFromStream(
         containerName,
         blobName,
