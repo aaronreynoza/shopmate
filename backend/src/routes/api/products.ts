@@ -82,7 +82,7 @@ export const handler = (router: Router, routesContext: any) => {
         provider,
       );
       const productId = productResult[0];
-      await routesContext.db.insertInventory(productQuantity, productId, IdProv);
+      await routesContext.db.insertInventory(productQuantity, productId, 1);
       await blobService.createBlockBlobFromStream(
         containerName,
         blobName,
