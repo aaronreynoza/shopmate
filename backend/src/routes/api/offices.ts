@@ -21,7 +21,8 @@ export const handler = (router: Router, routesContext: any) => {
     }
     log.info('inserting new office with fields: ', req.body);
     try {
-      await routesContext.db.insertOffice(name, state);
+      const num:number = parseInt(state)
+      await routesContext.db.insertOffice(name, num);
       return res.status(200).send('Office inserted succesfully');
     } catch (e) {
       log.error(e);

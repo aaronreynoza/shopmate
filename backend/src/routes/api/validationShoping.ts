@@ -31,21 +31,21 @@ export const handler = (router: Router, routesContext: any) => {
       //check if the project is validated
       const val:number = await routesContext.db.getShoppingRequestStatus(idRequest)
       if(val === 2 || val === 3){
-        res.status(400).json({
+        return res.status(400).json({
           status: 400,
           data: [],
           messages: 'This request is already approved / rejected.',
         });
       }
       if(status === 1){
-        res.status(400).json({
+        return res.status(400).json({
           status: 400,
           data: [],
           messages: 'Unable to place pending status',
         });
       }
-      //update data
-      //await routesContext.db.approvelRequest(idRequest,status);
+      //update status
+      await routesContext.db.approvelRequest(idRequest,status);
       // email data is verified
       transporter.verify().then(() => {
         console.log('ready');
@@ -62,11 +62,31 @@ export const handler = (router: Router, routesContext: any) => {
       var quantityInventori = [];
       //get the number of products in the database
       const convertRequest = await routesContext.db.getShoppingDetailData(idRequest);
-      console.log(convertRequest);
+      console.log(convertRequest)
       for(let i in convertRequest){
-        var dat = await routesContext.db.verifyProductQuantity(convertRequest[i].idProduct,convertRequest[i]);
-        
+        var dat = await routesContext.db.verifyProductQuantity(convertRequest[i].id_producto,idUser[0].fk_id_sucursal);
+        quantityInventori.push(dat[0]);
       }
+      var update = [];
+      for(let i in quantityInventori){
+        if(quantityInventori[0].fk_id_producto !== convertRequest[0].id_producto){
+          console.log('error')
+        }
+        else{
+          const num1:number = convertRequest[i].cantidad;
+          const num2:number = quantityInventori[i].cantidad;
+          let sum = ( num1 + num2 );
+          const invent = {
+            branchOfficeId:quantityInventori[i].fk_id_sucursal,
+            productId:quantityInventori[i].fk_id_producto,
+            amount:sum
+          }
+          update.push(invent)
+        }
+      }
+      update.forEach(async function(element:any){
+        await routesContext.db.shoppingUpdateProduct(element.productId,element.amount);
+      })
       // data email
       const dataEmail:string = contentHTML(idRequest,estado);
       // the mail is sent
@@ -83,7 +103,7 @@ export const handler = (router: Router, routesContext: any) => {
           });
     } catch (e) {
       log.error(e);
-      res.status(500).json({
+      return res.status(500).json({
         status: 500,
         data: [],
         messages: 'Something went wrong',

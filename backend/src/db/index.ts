@@ -856,8 +856,17 @@ class Database {
   async getShoppingDetailData(idRequest:string){
     try{
       const shopingDetal = await this.queryBuilder('detalle_solicitud')
+      .join('producto', 'producto.id_producto', '=', 'detalle_solicitud.fk_id_producto')
       .where('fk_id_encabez',idRequest)
-      .select()
+      .select(
+        'id_producto',
+        'cantidad',
+        'precio_venta',
+        'total_pagar',
+        'especificaciones',
+        'nombre_prod',
+        'imagen'
+        )
       return shopingDetal;
     } catch(e){
       throw Error(e)
@@ -867,7 +876,7 @@ class Database {
   async getIdUserFromIdRequest(idRequest:string){
     try{
       const idUser = await this.queryBuilder('encabezado_solicitud')
-      .select('fk_id_usuario')
+      .select('fk_id_usuario','fk_id_sucursal')
       .where('id_encabez',idRequest);
       return idUser
     } catch (e) {
@@ -887,9 +896,14 @@ class Database {
   }
 
   async getRequestHeaderForUser(id:string){
+    try{
     const header = await this.queryBuilder('encabezado_solicitud')
     .select()
-    .whe
+    .where('fk_id_usuario',id)
+    return header
+    } catch (e){
+      throw Error(e);
+    }
   }
 
   async getIdUserForEmail(email:string){

@@ -1,5 +1,4 @@
 const contentHTML = (estado:string, numero:string) => {
-
     return `
       <!DOCTYPE html>
       <html lang="en">
