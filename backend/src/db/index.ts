@@ -124,12 +124,9 @@ class Database {
 
   async getUserType(category: string) {
     try {
-      const userType = await this.queryBuilder('categoria')
-        .where('id_categoria', category).select();
-      return {
-        name: userType.nombre_tu,
-        description: userType.descripcion,
-      };
+      const userType = await this.queryBuilder('tipo_usuario')
+        .where('id_tipo', category).select('nombre_tu','descripcion');
+      return userType
     } catch (err) {
       this.log.error({ message: `Error while getting Categories: ${err}` });
       throw Error(err);

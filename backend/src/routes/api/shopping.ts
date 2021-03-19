@@ -163,7 +163,7 @@ export const handler = (router: Router, routesContext: any) => {
         return element;
       });
       //Insert payment detail
-      await routesContext.db.insertPaymentDetail(bankAccountHolder,customerAccount,depositNumber,amount,concept,numeroSolicitud,numeroSolicitud)
+      await routesContext.db.insertPaymentDetail(bankAccountHolder,customerAccount,depositNumber,amount,concept,blobName,numeroSolicitud)
       //insert changes to inventory
       arrayUpadate.forEach(async function(element:any){
         await routesContext.db.shoppingUpdateProduct(element.id, element.quantity);
