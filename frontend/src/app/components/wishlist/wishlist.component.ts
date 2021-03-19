@@ -12,6 +12,7 @@ export class WishlistComponent implements OnInit {
   constructor(private utilService: UtilService, private router: Router) {}
 
   ngOnInit(): void {
+    window.scroll(0, 0);
     this.products = this.utilService.getWishList();
   }
   subtotal(cartList) {

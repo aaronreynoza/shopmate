@@ -1,5 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 import { user } from '../models/user.model';
 
@@ -24,7 +26,7 @@ export class UtilService {
   public cartListSubscriber = this.cartListSource.asObservable();
   // ==================================================
   
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   // ================================================
   // Cart & Wish List
@@ -93,6 +95,10 @@ export class UtilService {
     this.setCartList(newCart);
     this.cartListSource.next(newCart);
   }
+  deleteAllCart(){
+    this.setCartList([]);
+    this.cartListSource.next([]); 
+  }
   deleteItemWishlist(itemDeleted) {
     const wishlistFromLocalStorage = this.getWishList();
     const newWishlist = wishlistFromLocalStorage.filter(
@@ -148,5 +154,8 @@ export class UtilService {
   }
   getUsers() {
     return JSON.parse(localStorage.getItem('users'));
+  }
+  sentContactEmail(data){
+    return this.http.post(`${environment.API_URL}/contact`, data)
   }
 }

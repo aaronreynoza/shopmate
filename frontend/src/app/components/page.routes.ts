@@ -25,7 +25,7 @@ const routes: Routes = [
       { path: 'register', component: RegiterComponent },
       { path: 'product/:id', component: ProductComponent },
       { path: 'view-cart', component: ViewCartComponent },
-      { path: 'orders', component: OrdersComponent },
+      { path: 'orders', component: OrdersComponent, canActivate: [AuthGuard] },
       { path: 'wishlist', component: WishlistComponent },
       { path: 'contact', component: ContactComponent },
       { path: 'about', component: AboutComponent },

@@ -32,6 +32,7 @@ export class SearchComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    window.scroll(0, 0);
     this.utilService.wishListSubscriber.subscribe((data) => {
       this.itemWishList = data;
     });
@@ -54,7 +55,7 @@ export class SearchComponent implements OnInit {
     $input_price_min.val(itemSearch.price_min);
     $input_price_max.val(itemSearch.price_max);
     if (this.queryParams.params.query) {
-      console.log('busqueda de los query params')
+      console.log('busqueda de los query params');
       this.searchProduct({
         keyword: this.queryParams.params.query,
         type_search: 'keyword',
@@ -68,7 +69,7 @@ export class SearchComponent implements OnInit {
       //   filter: itemSearch || null,
       // });
     } else {
-      console.log('busqueda de los por categoria')
+      console.log('busqueda de los por categoria');
       this.searchProduct({
         keyword: '',
         type_search: 'category',
@@ -143,22 +144,20 @@ export class SearchComponent implements OnInit {
     });
   }
   searchByCategory(item) {
-    console.log(item);
-    item.category = item.category_id;
-    item.filter = null;
-    item.keyword = '';
-    item.type_search = 'category';
-    this.searchService.setSearch(item);
+    const searchCategory = {
+      type_search: 'category',
+      keyword: '',
+      categoryId: item.categoryId,
+      filter: null,
+      active: 1
+    };
+
+    this.searchService.setSearch(searchCategory);
     this.router.navigate([`store/search`], {
-      queryParams: { category: item.category },
+      queryParams: { category: item.categoryId },
     });
   }
   filtrar() {
-    // const $input_price_min = $('#price_min').val();
-    // const $input_price_max = $('#price_max').val();
-    // if ($input_price_max && $input_price_min) {
-    //   return;
-    // }
     const price_min =
       parseInt(
         (<HTMLInputElement>document.getElementById('price_min')).value
@@ -173,14 +172,14 @@ export class SearchComponent implements OnInit {
       this.queryParams = params.params;
     });
     const searchParams: any = {};
-    if (this.queryParams.category == '0') {
+    if (this.queryParams.category == '-1') {
       searchParams.keyword = this.queryParams.query;
       searchParams.type_search = 'keyword';
-      searchParams.category = parseInt(this.queryParams.category);
+      searchParams.categoryId = parseInt(this.queryParams.category) | 0;
     } else {
       searchParams.keyword = '';
       searchParams.type_search = 'category';
-      searchParams.category = parseInt(this.queryParams.category);
+      searchParams.categoryId = parseInt(this.queryParams.category);
     }
 
     searchParams.filter = {

@@ -6,15 +6,20 @@
           background-color: none;
           width: 500px;
           height: 200px;
-          margin: 0 auto;
+          margin: auto;
+          margin-top: 40px;
+          margin-bottom: 40px;
           background: rgba(21, 22, 29, 0.9);
-          border-radius: 15px;
+          border-radius: 5px;
           height: auto;
           padding: 25px;
           color: #ccc;
         "
       >
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.value)">
+        <h3 style="text-align: center; padding: 25px 0 25px 0; color: white">
+          SHOPMASTERRACE
+        </h3>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm)">
           <div class="form-group">
             <label for="">Email</label>
             <input class="form-control" type="text" formControlName="email" />
@@ -30,19 +35,32 @@
 
           <button
             class="btn btn-success center-block"
-            style="color: #ccc; background-color: #d10024; border: none"
+            style="
+              border-radius: 0;
+              width: 200px;
+              color: #ccc;
+              background-color: #d10024;
+              border: none;
+            "
           >
             Entrar
           </button>
 
           <div class="form-group">
-              <label for="recordar" style="margin-right: 5px;" >Recordar</label>
-              
-              <input type="checkbox" id="recordar" formControlName="recordar" />
+            <label for="recordar" style="margin-right: 5px">Recordar</label>
+
+            <input type="checkbox" id="recordar" formControlName="recordar" />
           </div>
 
           <span>
-            Aun no tienes cuenta? <a routerLink="register" class="text-danger"> Registrate aqui </a>
+            Aun no tienes cuenta?
+            <a
+              (click)="navigatePath('store/register')"
+              class="text-danger"
+              style="cursor: pointer"
+            >
+              Registrate aqui
+            </a>
           </span>
         </form>
       </div>

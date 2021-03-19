@@ -14,6 +14,7 @@ import { UtilService } from '../services/util.service';
 })
 export class AuthGuard implements CanActivate {
   isLogged;
+  currentUser;
   constructor(private utilService: UtilService, private router: Router) {
     
   }
@@ -22,8 +23,9 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot
   ) {
     this.isLogged = this.utilService.getStatus().isLoggedIn;
+    this.currentUser = this.utilService.getCurrentUser();
     console.log(this.isLogged)
-  if(this.isLogged){
+  if(this.isLogged && this.currentUser){
     return true;
   } else {
     this.router.navigateByUrl('store/login');

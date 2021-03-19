@@ -1,8 +1,64 @@
-<div class="container">
-    <div class="row">
-        <h3 style="margin-top: 30px;">Contactanos</h3>
-        <div class="col-sm-12">
-            <p>Cualquier duda, puedes contactarne con nosotros</p>
-        </div>
+<div class="container" style="margin-top: 40px">
+  <div class="row">
+    <div class="col-sm-12">
+      <h2 style="color: #d10024; text-align: center">Formulario de contacto</h2>
+      <h6 style="text-align: center">
+        Cualquier duda, puedes contactarne con nosotros
+      </h6>
     </div>
+    <div class="col-md-12" style="padding: 20px">
+      <div
+        style="
+          background-color: none;
+          width: 500px;
+          height: 200px;
+          margin: auto;
+          margin-top: 40px;
+          margin-bottom: 40px;
+          background: rgba(21, 22, 29, 0.9);
+          border-radius: 5px;
+          height: auto;
+          padding: 25px;
+          color: #ccc;
+        "
+      >
+        <h3 style="text-align: center; padding: 25px 0 25px 0; color: white">
+          SHOPMASTERRACE
+        </h3>
+        <form [formGroup]="form" (ngSubmit)="onPostSubmit(form)">
+          <div class="form-group">
+            <label for="">Nombre</label>
+            <input class="form-control" type="text"
+            formControlName="name"
+            />
+          </div>
+          <div class="form-group">
+            <label for="">Email</label>
+            <input class="form-control" type="text" 
+            formControlName="email"
+            />
+          </div>
+          <div class="form-group">
+            <label for="">Mensaje</label>
+            <textarea class="form-control" maxlength="255" cols="30" rows="5"
+            formControlName="message"
+            ></textarea>
+          </div>
+
+          <button
+            class="btn btn-success center-block"
+            style="
+              border-radius: 0;
+              width: 200px;
+              color: #ccc;
+              background-color: #d10024;
+              border: none;
+            "
+          >
+            Enviar
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
