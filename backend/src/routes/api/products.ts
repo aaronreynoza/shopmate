@@ -107,7 +107,7 @@ export const handler = (router: Router, routesContext: any) => {
 
   router.get('/products', async (req, res) => {
     const products = await routesContext.db.getProducts();
-    res.status(200).send(products);
+    res.status(200).send(products[0]);
   });
 
   router.get('/product/:productName', async (req, res) => {
