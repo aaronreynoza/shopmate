@@ -17,7 +17,7 @@ export const handler = (router: Router, routesContext: any) => {
       type_search:string,
       keyword:string,
       category:number,
-      filter: Filter | null,
+      filter: Filter | null | undefined,
     } = req.body;
     if (
       (typeof type_search !== 'string')
@@ -29,9 +29,10 @@ export const handler = (router: Router, routesContext: any) => {
     try {
       switch(type_search){
         case "category":
-          if(filter !== null){
-            if(filter.price_max !== null && filter.price_min !== null){
-              const products = await routesContext.db.getSearchProductCategoryFilter(category, filter.price_min,filter.price_max);
+          if(filter !== null ){
+            
+            if(filter?.price_max !== null && filter?.price_min !== null){
+              const products = await routesContext.db.getSearchProductCategoryFilter(category, filter?.price_min,filter?.price_max);
               res.status(200).send(products);  
             } else if(filter.price_min !== null && filter.price_max == null){
               const products = await routesContext.db.getSearchProductCategoryFilterMin(category, filter.price_min);
@@ -41,14 +42,17 @@ export const handler = (router: Router, routesContext: any) => {
               res.status(200).send(products);
             }
           } else {
+            console.log('----------------------------------------------------------------------')
+            console.log("there's not filter");
+            console.log('----------------------------------------------------------------------')
             const products = await routesContext.db.getSearchProductCategory(category);
             res.status(200).send(products);
           }
           break;
         case "keyword":
           if(filter !== null){
-            if(filter.price_max !== null && filter.price_min !== null){
-              const products = await routesContext.db.getSearchProductKeywordFilter(keyword, filter.price_min,filter.price_max);
+            if(filter?.price_max !== null && filter?.price_min !== null){
+              const products = await routesContext.db.getSearchProductKeywordFilter(keyword, filter?.price_min,filter?.price_max);
             res.status(200).send(products);
             } else if(filter.price_min !== null && filter.price_max === null){
               const products = await routesContext.db.getSearchProductKeywordFilterMin(category, filter.price_min);
