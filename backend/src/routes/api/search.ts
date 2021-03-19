@@ -27,54 +27,50 @@ export const handler = (router: Router, routesContext: any) => {
       return res.status(400).send('Wrong type of data or missing fields');
     }
     try {
+      let products: any;
       switch (type_search) {
         case 'category':
+          // eslint-disable-next-line no-case-declarations
           if (filter && filter !== null) {
-            if (filter && filter?.price_max !== null && filter?.price_min !== null) {
-              const products = await routesContext
+            if (filter && filter?.price_max !== undefined && filter?.price_min !== undefined) {
+              products = await routesContext
                 .db.getSearchProductCategoryFilter(
                   categoryId,
                   filter?.price_min,
                   filter?.price_max,
                 );
-              res.status(200).send(products);
-            } else if (filter.price_min !== null && filter.price_max == null) {
-              const products = await routesContext
+            } else if (filter.price_min !== undefined && filter.price_max === undefined) {
+              products = await routesContext
                 .db.getSearchProductCategoryFilterMin(categoryId, filter.price_min);
-              res.status(200).send(products);
-            } else if (filter && filter.price_max !== null && filter.price_min == null) {
-              const products = await routesContext
+            } else if (filter && filter.price_max !== undefined && filter.price_min === undefined) {
+              products = await routesContext
                 .db.getSearchProductCategoryFilterMax(categoryId, filter.price_max);
-              res.status(200).send(products);
             }
           } else {
-            const products = await routesContext.db.getSearchProductCategory(categoryId);
-            res.status(200).send(products);
+            products = await routesContext.db.getSearchProductCategory(categoryId);
           }
           break;
         case 'keyword':
-          if (filter && filter !== null) {
-            if (filter?.price_max !== null && filter?.price_min !== null) {
-              const products = await routesContext
+          // eslint-disable-next-line no-case-declarations
+          if (filter && filter !== undefined) {
+            if (filter?.price_max !== undefined && filter?.price_min !== undefined) {
+              products = await routesContext
                 .db.getSearchProductKeywordFilter(keyword, filter?.price_min, filter?.price_max);
-              res.status(200).send(products);
-            } else if (filter.price_min !== null && filter.price_max === null) {
-              const products = await routesContext
-                .db.getSearchProductKeywordFilterMin(categoryId, filter.price_min);
-              res.status(200).send(products);
-            } else if (filter.price_max !== null && filter.price_min === null) {
-              const products = await routesContext
-                .db.getSearchProductKeywordFilterMax(categoryId, filter.price_max);
-              res.status(200).send(products);
+            } else if (filter.price_min !== undefined && filter.price_max === undefined) {
+              products = await routesContext
+                .db.getSearchProductKeywordFilterMin(keyword, filter.price_min);
+            } else if (filter.price_max !== undefined && filter.price_min === undefined) {
+              products = await routesContext
+                .db.getSearchProductKeywordFilterMax(keyword, filter.price_max);
             }
           } else {
-            const products = await routesContext.db.getSearchProductKeyword(keyword);
-            res.status(200).send(products);
+            products = await routesContext.db.getSearchProductKeyword(keyword);
           }
           break;
         default:
-          res.status(400).send('No access');
+          return res.status(400).send('No access');
       }
+      return res.status(200).send(products);
     } catch (e) {
       res.status(500).send('Something went wrong');
     }
