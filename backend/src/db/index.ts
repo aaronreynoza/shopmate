@@ -744,6 +744,7 @@ class Database {
     accountNumberStore:string,
     typeOfPurchase:number,
     email:string,
+    branchOfficeId:number
   ) {
     try {
       const estado:number = 1;
@@ -760,6 +761,7 @@ class Database {
           numero_cuenta: accountNumberStore,
           tipo_entrega: deliveryType,
           fk_id_usuario: id,
+          fk_id_sucursal:branchOfficeId
         });
     } catch (e) {
       throw Error(e);
@@ -809,6 +811,112 @@ class Database {
       throw Error(e);
     }
   }
+
+  async approvelRequest(idRequest:string,status:number){
+    try{
+      return await this.queryBuilder('encabezado_solicitud')
+      .where('id_encabez',idRequest)
+      .update('estado',status)
+    } catch(e){
+      throw Error(e)
+    }
+  }
+
+  async getShoppingRequestData(){
+    try{
+      return await this.queryBuilder('encabezado_solicitud')
+      .select()
+    } catch(e){
+      throw Error(e)
+    }
+  }
+
+  async getShoppingRequestStatus(idRequest:string){
+    try{
+      const requestStatus = await this.queryBuilder('encabezado_solicitud')
+      .select('estado')
+      .where('id_encabez',idRequest)
+      return requestStatus[0].estado;
+    } catch(e){
+      throw Error(e)
+    }
+  }
+
+  async getPaymentDetailData(idRequest:string){
+    try{
+      const payment = await this.queryBuilder('detalle_pago')
+      .select()
+      .where('fk_id_encabez',idRequest)
+      return payment;
+    } catch(e){
+      throw Error(e)
+    }
+  }
+
+  async getShoppingDetailData(idRequest:string){
+    try{
+      const shopingDetal = await this.queryBuilder('detalle_solicitud')
+      .join('producto', 'producto.id_producto', '=', 'detalle_solicitud.fk_id_producto')
+      .where('fk_id_encabez',idRequest)
+      .select(
+        'id_producto',
+        'cantidad',
+        'precio_venta',
+        'total_pagar',
+        'especificaciones',
+        'nombre_prod',
+        'imagen'
+        )
+      return shopingDetal;
+    } catch(e){
+      throw Error(e)
+    }
+  }
+
+  async getIdUserFromIdRequest(idRequest:string){
+    try{
+      const idUser = await this.queryBuilder('encabezado_solicitud')
+      .select('fk_id_usuario','fk_id_sucursal')
+      .where('id_encabez',idRequest);
+      return idUser
+    } catch (e) {
+      throw Error(e)
+    }
+  }
+
+  async getEmailFromIdUser(idUser:string){
+    try{
+      const email = await this.queryBuilder('usuario')
+      .select('email_usu')
+      .where('id_usuario',idUser);
+      return email;
+    } catch(e) {
+      throw Error(e)
+    }
+  }
+
+  async getRequestHeaderForUser(id:string){
+    try{
+    const header = await this.queryBuilder('encabezado_solicitud')
+    .select()
+    .where('fk_id_usuario',id)
+    return header
+    } catch (e){
+      throw Error(e);
+    }
+  }
+
+  async getIdUserForEmail(email:string){
+    try{
+    const id = await this.queryBuilder('usuario')
+    .select('id_usuario')
+    .where('email_usu',email)
+    return id
+    } catch (e) {
+      throw Error(e);
+    }
+  }
+
 }
 
 export default Database;
