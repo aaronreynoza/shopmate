@@ -20,7 +20,7 @@ CREATE TABLE `usuario` (
 	`email_usu` VARCHAR(45) NOT NULL COMMENT 'email del cliente',
 	`clave_usu` VARCHAR(100) NOT NULL COMMENT 'Clave de usuario o acceso',
 	`estado` INTEGER NOT NULL COMMENT 'Estado de usuario activo/desactivado/bloqueado',
-	`validacion` BIT NOT NULL COMMENT 'estado de verificacion',
+	`validacion` INTEGER NOT NULL COMMENT 'estado de verificacion',
 	`phone` VARCHAR(25) NOT NULL COMMENT 'Telefono del usuario',
 	`fk_id_tipo` INTEGER NOT NULL COMMENT 'Identificador del tipo Usuario',
 	KEY(`fk_id_tipo`),
