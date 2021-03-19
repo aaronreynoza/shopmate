@@ -15,13 +15,13 @@ USE db_tienda;
 CREATE TABLE `usuario` (
 	`id_usuario` INTEGER AUTO_INCREMENT NOT NULL COMMENT 'Identificador del cliente',
 	`nombres_usuario` VARCHAR(100) NOT NULL COMMENT 'Nombre o Nombres del cliente',
-	`primer_apellido_usu` VARCHAR(25) NOT NULL COMMENT 'Primer apellido usuario',
-	`segundo_apellido_usu` VARCHAR(25) NOT NULL COMMENT 'Segundo apellido usuario',
-	`email_usu` VARCHAR(45) NOT NULL COMMENT 'email del cliente',
+	`primer_apellido_usu` VARCHAR(100) NOT NULL COMMENT 'Primer apellido usuario',
+	`segundo_apellido_usu` VARCHAR(100) NOT NULL COMMENT 'Segundo apellido usuario',
+	`email_usu` VARCHAR(100) NOT NULL COMMENT 'email del cliente',
 	`clave_usu` VARCHAR(100) NOT NULL COMMENT 'Clave de usuario o acceso',
 	`estado` INTEGER NOT NULL COMMENT 'Estado de usuario activo/desactivado/bloqueado',
 	`validacion` INTEGER NOT NULL COMMENT 'estado de verificacion',
-	`phone` VARCHAR(25) NOT NULL COMMENT 'Telefono del usuario',
+	`phone` VARCHAR(20) NOT NULL COMMENT 'Telefono del usuario',
 	`fk_id_tipo` INTEGER NOT NULL COMMENT 'Identificador del tipo Usuario',
 	KEY(`fk_id_tipo`),
 	PRIMARY KEY(`id_usuario`)
@@ -48,23 +48,23 @@ CREATE TABLE `inventario` (
 CREATE TABLE `proveedor` (
 	`id_proveedor` INTEGER AUTO_INCREMENT NOT NULL COMMENT 'Identificador del proveedor',
 	`nombre_prov` VARCHAR(100) NOT NULL COMMENT 'Nombre del proveedor',
-	`telefono_prov` VARCHAR(15) NOT NULL COMMENT 'Telefono de contacto del proveedor',
+	`telefono_prov` VARCHAR(25) NOT NULL COMMENT 'Telefono de contacto del proveedor',
 	`email_prov` VARCHAR(150) NOT NULL COMMENT 'Email del proveedor.',
 	PRIMARY KEY(`id_proveedor`)
 ) ENGINE=INNODB;
 CREATE TABLE `sucursal` (
 	`id_sucursal` INTEGER AUTO_INCREMENT NOT NULL COMMENT 'Identificador de la sucursal',
-	`nombre_sucursal` VARCHAR(50) NOT NULL COMMENT 'Nombre de la sucursal',
+	`nombre_sucursal` VARCHAR(100) NOT NULL COMMENT 'Nombre de la sucursal',
 	`estado` BIT NOT NULL COMMENT 'Estado del almacen Activo/Desactivado',
 	`fecha_creacion` DATE NOT NULL COMMENT 'Fecha creacion de sucursal',
 	PRIMARY KEY(`id_sucursal`)
 ) ENGINE=INNODB;
 CREATE TABLE `direccion_almacen` (
 	`id_dir_almacen` INTEGER AUTO_INCREMENT NOT NULL COMMENT 'Identificador del almacen',
-	`pais` VARCHAR(25) NOT NULL COMMENT 'Pais de procedencia del almacen',
-	`departamento` VARCHAR(25) NOT NULL COMMENT 'Departamento de procedenciad del almacen',
-	`municipio` VARCHAR(25) NOT NULL COMMENT 'Municipio de procedencia del almacen',
-	`ciudad` VARCHAR(25) NOT NULL COMMENT 'Ciudad de procendecia del almacen',
+	`pais` VARCHAR(50) NOT NULL COMMENT 'Pais de procedencia del almacen',
+	`departamento` VARCHAR(50) NOT NULL COMMENT 'Departamento de procedenciad del almacen',
+	`municipio` VARCHAR(50) NOT NULL COMMENT 'Municipio de procedencia del almacen',
+	`ciudad` VARCHAR(50) NOT NULL COMMENT 'Ciudad de procendecia del almacen',
 	`direccion` VARCHAR(100) NOT NULL COMMENT 'Direccion del almacen',
 	`fk_id_sucursal` INTEGER NOT NULL COMMENT 'Identificador de la sucursal',
 	KEY(`fk_id_sucursal`),
@@ -96,8 +96,8 @@ CREATE TABLE `detalle_solicitud` (
 ) ENGINE=INNODB;
 CREATE TABLE `direccion_entrega` (
 	`id_direccion` INTEGER AUTO_INCREMENT NOT NULL COMMENT 'Identificador de ubicacion',
-	`departamento` VARCHAR(20) NOT NULL COMMENT 'Departamento de la entrega',
-	`municipio` VARCHAR(20) NOT NULL COMMENT 'Municipio de entreda',
+	`departamento` VARCHAR(100) NOT NULL COMMENT 'Departamento de la entrega',
+	`municipio` VARCHAR(100) NOT NULL COMMENT 'Municipio de entreda',
 	`direccion` VARCHAR(100) NOT NULL,
 	`fk_id_usuario` INTEGER NOT NULL COMMENT 'Identificador del cliente',
 	KEY(`fk_id_usuario`),
@@ -125,9 +125,9 @@ CREATE TABLE `descuentos` (
 	KEY(`fk_id_producto`)
 ) ENGINE=INNODB;
 CREATE TABLE `detalle_pago` (
-	`cuenta_usuario` VARCHAR(20) NOT NULL COMMENT 'Cuenta del usuario de la tranferecia',
+	`cuenta_usuario` VARCHAR(50) NOT NULL COMMENT 'Cuenta del usuario de la tranferecia',
 	`titular` VARCHAR(150) NOT NULL COMMENT 'Nombre del titular de la cuenta',
-	`numero_deposito` VARCHAR(25) NOT NULL COMMENT 'Numero del deposito de la cuenta',
+	`numero_deposito` VARCHAR(50) NOT NULL COMMENT 'Numero del deposito de la cuenta',
 	`monto` DOUBLE NOT NULL COMMENT 'Monto del deposito',
 	`concept` VARCHAR(100) NOT NULL COMMENT 'Concepto de compra',
 	`foto_comp` VARCHAR(75) NOT NULL COMMENT 'Fotografia del comprobante',
@@ -136,12 +136,12 @@ CREATE TABLE `detalle_pago` (
 ) ENGINE=INNODB;
 CREATE TABLE `dato_facturacion_contribuyente` (
 	`id_cliente_fact` INTEGER AUTO_INCREMENT NOT NULL COMMENT 'Identificador cliente facturacion',
-	`nombre` VARCHAR(25) NOT NULL COMMENT 'Nombre Contribuyente',
+	`nombre` VARCHAR(75) NOT NULL COMMENT 'Nombre Contribuyente',
 	`direccion` VARCHAR(150) NOT NULL COMMENT 'Direccion contribuyente',
-	`departamento` VARCHAR(20) NOT NULL COMMENT 'Departamento contribuyente',
-	`nit_contribuyente` VARCHAR(20) NOT NULL COMMENT 'Ni del contribuyente',
-	`nrc` VARCHAR(20) NOT NULL COMMENT 'Numero de registro de declaracion de Iva',
-	`giro` VARCHAR(35) NOT NULL COMMENT 'Giro de el contribuyente',
+	`departamento` VARCHAR(75) NOT NULL COMMENT 'Departamento contribuyente',
+	`nit_contribuyente` VARCHAR(75) NOT NULL COMMENT 'Ni del contribuyente',
+	`nrc` VARCHAR(75) NOT NULL COMMENT 'Numero de registro de declaracion de Iva',
+	`giro` VARCHAR(150) NOT NULL COMMENT 'Giro de el contribuyente',
 	`fk_id_usuario` INTEGER NOT NULL COMMENT 'Identificador del cliente',
 	KEY(`fk_id_usuario`),
 	PRIMARY KEY(`id_cliente_fact`)
