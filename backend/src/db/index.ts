@@ -809,6 +809,81 @@ class Database {
       throw Error(e);
     }
   }
+
+  async approvelRequest(idRequest:string,status:number){
+    try{
+      return await this.queryBuilder('encabezado_solicitud')
+      .where('id_encabez',idRequest)
+      .update('estado',status)
+    } catch(e){
+      throw Error(e)
+    }
+  }
+
+  async getShoppingRequestData(){
+    try{
+      return await this.queryBuilder('encabezado_solicitud')
+      .select()
+    } catch(e){
+      throw Error(e)
+    }
+  }
+
+  async getShoppingRequestStatus(idRequest:string){
+    try{
+      const requestStatus = await this.queryBuilder('encabezado_solicitud')
+      .select('estado')
+      .where('id_encabez',idRequest)
+      return requestStatus[0].estado;
+    } catch(e){
+      throw Error(e)
+    }
+  }
+
+  async getPaymentDetailData(idRequest:string){
+    try{
+      const payment = await this.queryBuilder('detalle_pago')
+      .select()
+      .where('fk_id_encabez',idRequest)
+      return payment;
+    } catch(e){
+      throw Error(e)
+    }
+  }
+
+  async getShoppingDetailData(idRequest:string){
+    try{
+      const shopingDetal = await this.queryBuilder('detalle_solicitud')
+      .where('fk_id_encabez',idRequest)
+      .select()
+      return shopingDetal;
+    } catch(e){
+      throw Error(e)
+    }
+  }
+
+  async getIdUserFromIdRequest(idRequest:string){
+    try{
+      const idUser = await this.queryBuilder('encabezado_solicitud')
+      .select('fk_id_usuario')
+      .where('id_encabez',idRequest);
+      return idUser
+    } catch (e) {
+      throw Error(e)
+    }
+  }
+
+  async getEmailFromIdUser(idUser:string){
+    try{
+      const email = await this.queryBuilder('usuario')
+      .select('email_usu')
+      .where('id_usuario',idUser);
+      return email;
+    } catch(e) {
+      throw Error(e)
+    }
+  }
+
 }
 
 export default Database;

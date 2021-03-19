@@ -30,7 +30,7 @@ CREATE TABLE `producto` (
 	`id_producto` INTEGER AUTO_INCREMENT NOT NULL COMMENT 'Identificador de producto',
 	`nombre_prod` VARCHAR(25) NOT NULL COMMENT 'Nombre del producto',
 	`precio_venta` DOUBLE NOT NULL COMMENT 'Precio del producto',
-	`especificaciones` VARCHAR(150) NOT NULL COMMENT 'Especificaciones del producto',
+	`especificaciones` JSON NOT NULL COMMENT 'Especificaciones del producto',
 	`imagen` VARCHAR(250) NOT NULL COMMENT 'Link de la imagen',
 	`fk_id_proveedor` INTEGER NOT NULL COMMENT 'Identificador del proveedor',
 	KEY(`fk_id_proveedor`),
