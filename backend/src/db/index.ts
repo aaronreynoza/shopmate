@@ -744,6 +744,7 @@ class Database {
     accountNumberStore:string,
     typeOfPurchase:number,
     email:string,
+    branchOfficeId:number
   ) {
     try {
       const estado:number = 1;
@@ -760,6 +761,7 @@ class Database {
           numero_cuenta: accountNumberStore,
           tipo_entrega: deliveryType,
           fk_id_usuario: id,
+          fk_id_sucursal:branchOfficeId
         });
     } catch (e) {
       throw Error(e);
@@ -881,6 +883,23 @@ class Database {
       return email;
     } catch(e) {
       throw Error(e)
+    }
+  }
+
+  async getRequestHeaderForUser(id:string){
+    const header = await this.queryBuilder('encabezado_solicitud')
+    .select()
+    .whe
+  }
+
+  async getIdUserForEmail(email:string){
+    try{
+    const id = await this.queryBuilder('usuario')
+    .select('id_usuario')
+    .where('email_usu',email)
+    return id
+    } catch (e) {
+      throw Error(e);
     }
   }
 

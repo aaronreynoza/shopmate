@@ -45,7 +45,7 @@ export const handler = (router: Router, routesContext: any) => {
         });
       }
       //update data
-      await routesContext.db.approvelRequest(idRequest,status);
+      //await routesContext.db.approvelRequest(idRequest,status);
       // email data is verified
       transporter.verify().then(() => {
         console.log('ready');
@@ -59,15 +59,21 @@ export const handler = (router: Router, routesContext: any) => {
       }else if(status === 3){
         estado = "Rechazado"
       }
-
-      //
+      var quantityInventori = [];
+      //get the number of products in the database
+      const convertRequest = await routesContext.db.getShoppingDetailData(idRequest);
+      console.log(convertRequest);
+      for(let i in convertRequest){
+        var dat = await routesContext.db.verifyProductQuantity(convertRequest[i].idProduct,convertRequest[i]);
+        
+      }
       // data email
       const dataEmail:string = contentHTML(idRequest,estado);
       // the mail is sent
       const info = await transporter.sendMail({
         from: `"shopmasterrace 🎮 🖥️ 🛒"`, // sender address
         to: email[0].email_usu, // list of receivers
-        subject: 'Respuesta de solicitu de compra', // Subject line
+        subject: 'Respuesta de solicitud de compra', // Subject line
         html: dataEmail,
         });
         return res.status(200).json({

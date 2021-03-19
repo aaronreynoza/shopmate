@@ -156,7 +156,7 @@ export const handler = (router: Router, routesContext: any) => {
         arrayUpadate.push(obj);
       }
       //Insert Request Header
-      await routesContext.db.insertRequestHeader(numeroSolicitud,dateTime,typeOfPurchase,bankOfTheStore,accountNumberStore,deliveryType,email);
+      await routesContext.db.insertRequestHeader(numeroSolicitud,dateTime,typeOfPurchase,bankOfTheStore,accountNumberStore,deliveryType,email,branchOfficeId);
       //InserRequest Detail
       convertRequest.forEach(async function(element:any){
         await routesContext.db.insertPurchaseDetail(element.idProduct,element.productQuantity,element.productPrice,numeroSolicitud);

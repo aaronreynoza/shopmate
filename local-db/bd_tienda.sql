@@ -7,7 +7,7 @@
 #  Administrador de Base de Datos: MySQL/MariaDB
 #  Diagrama: db_tienda
 #  Autor: jegzstate
-#  Fecha y hora: 17/03/2021 20:18:32
+#  Fecha y hora: 18/03/2021 21:57:54
 DROP DATABASE IF EXISTS db_tienda;
 CREATE DATABASE db_tienda;
 USE db_tienda;
@@ -20,7 +20,7 @@ CREATE TABLE `usuario` (
 	`email_usu` VARCHAR(45) NOT NULL COMMENT 'email del cliente',
 	`clave_usu` VARCHAR(100) NOT NULL COMMENT 'Clave de usuario o acceso',
 	`estado` INTEGER NOT NULL COMMENT 'Estado de usuario activo/desactivado/bloqueado',
-	`validacion` INTEGER NOT NULL COMMENT 'estado de verificacion',
+	`validacion` BIT NOT NULL COMMENT 'estado de verificacion',
 	`phone` VARCHAR(25) NOT NULL COMMENT 'Telefono del usuario',
 	`fk_id_tipo` INTEGER NOT NULL COMMENT 'Identificador del tipo Usuario',
 	KEY(`fk_id_tipo`),
@@ -80,6 +80,8 @@ CREATE TABLE `encabezado_solicitud` (
 	`tipo_entrega` INTEGER NOT NULL COMMENT 'Tipo de entrega solicitud',
 	`fk_id_usuario` INTEGER NOT NULL COMMENT 'Identificador del cliente',
 	KEY(`fk_id_usuario`),
+	`fk_id_sucursal` INTEGER NOT NULL COMMENT 'Identificador de la sucursal',
+	KEY(`fk_id_sucursal`),
 	PRIMARY KEY(`id_encabez`)
 ) ENGINE=INNODB;
 CREATE TABLE `detalle_solicitud` (
@@ -159,6 +161,7 @@ ALTER TABLE `inventario` ADD CONSTRAINT `inventario_producto_fk_id_producto` FOR
 ALTER TABLE `inventario` ADD CONSTRAINT `inventario_sucursal_fk_id_sucursal` FOREIGN KEY (`fk_id_sucursal`) REFERENCES `sucursal`(`id_sucursal`) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE `direccion_almacen` ADD CONSTRAINT `direccion_almacen_sucursal_fk_id_sucursal` FOREIGN KEY (`fk_id_sucursal`) REFERENCES `sucursal`(`id_sucursal`) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE `encabezado_solicitud` ADD CONSTRAINT `encabezado_solicitud_usuario_fk_id_usuario` FOREIGN KEY (`fk_id_usuario`) REFERENCES `usuario`(`id_usuario`) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE `encabezado_solicitud` ADD CONSTRAINT `encabezado_solicitud_sucursal_fk_id_sucursal` FOREIGN KEY (`fk_id_sucursal`) REFERENCES `sucursal`(`id_sucursal`) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE `detalle_solicitud` ADD CONSTRAINT `detalle_solicitud_encabezado_solicitud_fk_id_encabez` FOREIGN KEY (`fk_id_encabez`) REFERENCES `encabezado_solicitud`(`id_encabez`) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE `detalle_solicitud` ADD CONSTRAINT `detalle_solicitud_producto_fk_id_producto` FOREIGN KEY (`fk_id_producto`) REFERENCES `producto`(`id_producto`) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE `direccion_entrega` ADD CONSTRAINT `direccion_entrega_usuario_fk_id_usuario` FOREIGN KEY (`fk_id_usuario`) REFERENCES `usuario`(`id_usuario`) ON DELETE NO ACTION ON UPDATE CASCADE;
