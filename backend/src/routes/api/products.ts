@@ -118,7 +118,7 @@ export const handler = (router: Router, routesContext: any) => {
     try {
       const product = await routesContext.db.getProduct(productName);
       return product && product.length > 0 && product[0].length > 0
-        ? res.status(200).send(product[0][0])
+        ? res.status(200).send(product[0])
         : res.status(400).send('Product not found');
     } catch (e) {
       log.error(e);
