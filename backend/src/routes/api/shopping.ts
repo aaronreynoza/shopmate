@@ -156,14 +156,14 @@ export const handler = (router: Router, routesContext: any) => {
         arrayUpadate.push(obj);
       }
       //Insert Request Header
-      await routesContext.db.insertRequestHeader(numeroSolicitud,dateTime,typeOfPurchase,bankOfTheStore,accountNumberStore,deliveryType,email);
+      await routesContext.db.insertRequestHeader(numeroSolicitud,dateTime,typeOfPurchase,bankOfTheStore,accountNumberStore,deliveryType,email,branchOfficeId);
       //InserRequest Detail
       convertRequest.forEach(async function(element:any){
         await routesContext.db.insertPurchaseDetail(element.idProduct,element.productQuantity,element.productPrice,numeroSolicitud);
         return element;
       });
       //Insert payment detail
-      await routesContext.db.insertPaymentDetail(bankAccountHolder,customerAccount,depositNumber,amount,concept,blobName,numeroSolicitud)
+      await routesContext.db.insertPaymentDetail(customerAccount,bankAccountHolder,depositNumber,amount,concept,blobName,numeroSolicitud)
       //insert changes to inventory
       arrayUpadate.forEach(async function(element:any){
         await routesContext.db.shoppingUpdateProduct(element.id, element.quantity);

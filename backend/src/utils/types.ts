@@ -58,4 +58,30 @@ interface IrequestDetail{
   productQuatity:number,
   productPrice:number
 }
-export { ConfigType, DatabaseType, ConnectionType , Filter, ItokenData,IResponse,IrequestDetail};
+interface IdataRequest{
+  idRequest:string,
+  imageComp:string,
+  dateTime:string,
+  branchOfficeId:number,
+  typeOfPurchase:number,
+  deliveryType:number,
+  bankOfTheStore:string,
+  accountNumberStore:string,
+  customerAccount:string,
+  bankAccountHolder:string,
+  depositNumber:string,
+  amount:number,
+  concept:string,
+  requestDetail:any,
+  state:number
+}
+interface IdataProducto{
+  idProd:number,
+  total:number,
+  unitPrice:number,
+  name:string,
+  specification:any,
+  image:string,
+  amountProduct:string
+}
+export { ConfigType, DatabaseType, ConnectionType , Filter, ItokenData,IResponse,IrequestDetail,IdataRequest,IdataProducto};
