@@ -1,145 +1,244 @@
 <header>
-    <!-- TOP HEADER -->
-    <div id="top-header">
-        <div class="container">
-            <ul class="header-links pull-left">
-                <li><a href="#"><i class="fa fa-phone"></i> +503 7651 4152</a></li>
-                <li><a href="mailto:shopmasterrace@gmail.com"><i class="fa fa-envelope-o"></i>shopmasterrace@gmail.com</a></li>
-                <!-- <li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li> -->
+  <!-- TOP HEADER -->
+  <div id="top-header">
+    <div class="container">
+      <ul class="header-links pull-left">
+        <li>
+          <!-- <a href="#"><i class="fa fa-phone"></i> +503 7651 4152</a> -->
+        </li>
+        <li>
+          <a href="mailto:shopmasterrace@gmail.com"
+            ><i class="fa fa-envelope-o"></i>shopmasterrace@gmail.com</a
+          >
+        </li>
+        <!-- <li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li> -->
+      </ul>
+      <ul class="header-links pull-right">
+        <li>
+          <a href="#"><i class="fa fa-dollar"></i> USD</a>
+        </li>
+        <ng-container *ngIf="currentUser">
+          <div class="dropdown" style="display: inline-block;">
+            <button
+              style="
+                background: #1e1f29;
+                color: white;
+                border: none;
+                font-size: 12px;
+                padding: 0;
+              "
+              class="dropdown-toggle"
+              type="button"
+              id="dropdownMenu1"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="true"
+            >
+              <i
+                class="fa fa-user-o"
+                style="color: #d10024; margin: 0 5px 0 0"
+              ></i
+              >Hola,
+              {{ currentUser.names }}
+              <span
+                class="caret pull-right rowDown"
+                style="margin: 7px 0 0 5px"
+              ></span>
+            </button>
+            <ul class="dropdown-menu ulDrop" aria-labelledby="dropdownMenu1">
+              <!-- <li style="width: 100%; cursor: pointer;">
+                <a (click)="navigateToPath('profile')"
+                  ><i class="fa fa-user-o"></i>Mi perfil</a
+                >
+              </li> -->
+              <li style="width: 100%; cursor: pointer;">
+                <a (click)="navigateToPath('store/orders')"
+                  ><i class="fa fa-list-alt"></i>Mis ordenes</a
+                >
+              </li>
+              <li style="width: 100%; cursor: pointer;">
+                <a (click)="logOut()"
+                  ><i class="fa fa-close"></i>cerrar sesion</a
+                >
+              </li>
             </ul>
-            <ul class="header-links pull-right">
-                <li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
-                <ng-container *ngIf="currentUser">
-                    <li><a (click)="navigateToPath('profile')"><i class="fa fa-user-o"></i>Hola, {{currentUser.name}}</a></li>
-                    <li><a (click)="logOut()"><i class="fa fa-close"></i>cerrar sesion</a></li>
-                </ng-container>
-                <ng-container *ngIf="!currentUser">
-                    <li><a (click)="navigateToPath('store/login')" style="cursor: pointer;"><i class="fa fa-user-o"></i> Iniciar Sesion</a></li>
-                </ng-container>
-            </ul>
-        </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!currentUser">
+          <li>
+            <a (click)="navigateToPath('store/login')" style="cursor: pointer"
+              ><i class="fa fa-user-o"></i> Iniciar Sesion</a
+            >
+          </li>
+        </ng-container>
+      </ul>
     </div>
-    <!-- /TOP HEADER -->
+  </div>
+  <!-- /TOP HEADER -->
 
-    <!-- MAIN HEADER -->
-    <div id="header">
-        <!-- container -->
-        <div class="container">
-            <!-- row -->
-            <div class="row">
-                <!-- LOGO -->
-                <div class="col-md-3">
-                    <div class="header-logo">
-                        <a (click)="navigateToPath('store')" class="logo">
-                            <!-- <img src="assets/img/logo.png" alt=""> -->
-                            <p style="cursor: pointer; color: white; font-size: 25px; padding-top: 20px;">
-                                SHOPMASTERRACE
-                            </p>
-                        </a>
-                    </div>
+  <!-- MAIN HEADER -->
+  <div id="header">
+    <!-- container -->
+    <div class="container">
+      <!-- row -->
+      <div class="row">
+        <!-- LOGO -->
+        <div class="col-md-3">
+          <div class="header-logo">
+            <a (click)="navigateToPath('store')" class="logo">
+              <!-- <img src="assets/img/logo.png" alt=""> -->
+              <p
+                style="
+                  cursor: pointer;
+                  color: white;
+                  font-size: 25px;
+                  padding-top: 20px;
+                "
+              >
+                SHOPMASTERRACE
+              </p>
+            </a>
+          </div>
+        </div>
+        <!-- /LOGO -->
+
+        <!-- SEARCH BAR -->
+        <div class="col-md-7">
+          <div class="header-search">
+            <form
+              [formGroup]="searchForm"
+              (ngSubmit)="onPostRequest(searchForm.value)"
+            >
+              <select
+                formControlName="category"
+                class="input-select selectSearchBar"
+                style="width: 168px"
+              >
+                <option value="-1">Todo</option>
+                <ng-container *ngFor="let item of categories">
+                  <option [value]="item.category_id">{{ item.name }}</option>
+                </ng-container>
+              </select>
+              <input
+                formControlName="keyword"
+                class="input txtSearchBar"
+                placeholder="Laptop"
+              />
+              <button type="submit" class="search-btn btnSearchBar">
+                Buscar
+              </button>
+            </form>
+          </div>
+        </div>
+        <!-- /SEARCH BAR -->
+
+        <!-- ACCOUNT -->
+        <div class="col-md-2 clearfix" style="padding: 0">
+          <div class="header-ctn">
+            <!-- Wishlist -->
+            <div style="max-width: 70px; cursor: pointer">
+              <a (click)="navigateToPath('store/wishlist')">
+                <i class="fa fa-heart-o"></i>
+                <span>Wishlist</span>
+                <div class="qty" *ngIf="wishList.length > 0">
+                  {{ wishList.length }}
                 </div>
-                <!-- /LOGO -->
-
-                <!-- SEARCH BAR -->
-                <div class="col-md-7">
-                    <div class="header-search">
-                        <form [formGroup]="searchForm" (ngSubmit)="onPostRequest(searchForm.value)">
-                            <select formControlName="category" class="input-select selectSearchBar"
-                            style="width: 168px;">
-                                <option value="-1">Todo</option>
-                                <ng-container *ngFor="let item of categories">
-                                    <option [value]="item.category_id">{{item.name}}</option>
-                                </ng-container>
-                            </select>
-                            <input formControlName="keyword" class="input txtSearchBar" placeholder="Laptop">
-                            <button type="submit" class="search-btn btnSearchBar">Buscar</button>
-                        </form>
-                    </div>
-                </div>
-                <!-- /SEARCH BAR -->
-
-                <!-- ACCOUNT -->
-                <div class="col-md-2 clearfix" style="padding: 0;">
-                    <div class="header-ctn">
-                        <!-- Wishlist -->
-                        <div style="max-width: 70px; cursor: pointer;">
-                            <a (click)="navigateToPath('store/wishlist')">
-                                <i class="fa fa-heart-o"></i>
-                                <span>Wishlist</span>
-                                <div class="qty" *ngIf="wishList.length > 0">{{wishList.length}}</div>
-                            </a>
-                        </div>
-                        <!-- /Wishlist -->
-
-                        <!-- Cart -->
-                        <div class="dropdown" style="max-width: 70px; cursor: pointer;">
-                            <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                                <i class="fa fa-shopping-cart"></i>
-                                <span>Carrito</span>
-                                <div class="qty" *ngIf="cartList.length > 0">{{cartList.length}}</div>
-                            </a>
-                            <div class="cart-dropdown">
-                                <div class="cart-list">
-                                    <ng-container *ngFor="let item of cartList">
-
-                                        <div class="product-widget">
-                                            <div class="product-img">
-                                            <img src="https://azurefiletestexpress.blob.core.windows.net/imagen-producto/{{item.product.product_image}}" alt="">
-                                        </div>
-                                        <div class="product-body">
-                                            <h3 class="product-name"><a href="#">{{item.product.name}}</a></h3>
-                                            <h4 class="product-price"><span class="qty">{{item.quantity}}x</span> {{item.product.price | currency}}</h4>
-                                        </div>
-                                        <button class="delete" (click)="deleteItemCart(item)"><i class="fa fa-close"></i></button>
-                                    </div>
-                                </ng-container>
-
-                                
-                                </div>
-                                <div class="cart-summary">
-                                    <small>{{cartList.length}} Item(s) seleccionados</small>
-                                    <h5>SUBTOTAL:  {{subtotal(cartList) | currency}}</h5>
-                                </div>
-                                <div class="cart-btns">
-                                    <a routerLink="view-cart">Ver Carrito</a>
-                                    <a routerLink="checkout">Pagar  <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /Cart -->
-
-                        <!-- Menu Toogle -->
-                        <div class="menu-toggle">
-                            <a href="#">
-                                <i class="fa fa-bars"></i>
-                                <span>Menu</span>
-                            </a>
-                        </div>
-                        <!-- /Menu Toogle -->
-                    </div>
-                </div>
-                <!-- /ACCOUNT -->
-
-                <div class="col-md-12">
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle btnCategories" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                          Categorias
-                          <span class="caret pull-right rowDown"></span>
-                        </button>
-                        <ul class="dropdown-menu ulDrop" aria-labelledby="dropdownMenu1">
-                            <ng-container *ngFor="let item of categories">
-                                <li><a (click)="searchByCategory(item)">{{item.name}}</a></li>
-                            </ng-container>
-                        </ul>
-                      </div>  
-                    
-                    
-                </div>
-                
+              </a>
             </div>
-            <!-- row -->
+            <!-- /Wishlist -->
+
+            <!-- Cart -->
+            <div class="dropdown" style="max-width: 70px; cursor: pointer">
+              <a
+                class="dropdown-toggle"
+                data-toggle="dropdown"
+                aria-expanded="true"
+              >
+                <i class="fa fa-shopping-cart"></i>
+                <span>Carrito</span>
+                <div class="qty" *ngIf="cartList.length > 0">
+                  {{ cartList.length }}
+                </div>
+              </a>
+              <div class="cart-dropdown">
+                <div class="cart-list">
+                  <ng-container *ngFor="let item of cartList">
+                    <div class="product-widget">
+                      <div class="product-img">
+                        <img
+                          src="https://azurefiletestexpress.blob.core.windows.net/imagen-producto/{{
+                            item.product.product_image
+                          }}"
+                          alt=""
+                        />
+                      </div>
+                      <div class="product-body">
+                        <h3 class="product-name">
+                          <a href="#">{{ item.product.name }}</a>
+                        </h3>
+                        <h4 class="product-price">
+                          <span class="qty">{{ item.quantity }}x</span>
+                          {{ item.product.price | currency }}
+                        </h4>
+                      </div>
+                      <button class="delete" (click)="deleteItemCart(item)">
+                        <i class="fa fa-close"></i>
+                      </button>
+                    </div>
+                  </ng-container>
+                </div>
+                <div class="cart-summary">
+                  <small>{{ cartList.length }} Item(s) seleccionados</small>
+                  <h5>SUBTOTAL: {{ subtotal(cartList) | currency }}</h5>
+                </div>
+                <div class="cart-btns">
+                  <a routerLink="view-cart">Ver Carrito</a>
+                  <a routerLink="checkout"
+                    >Pagar <i class="fa fa-arrow-circle-right"></i
+                  ></a>
+                </div>
+              </div>
+            </div>
+            <!-- /Cart -->
+
+            <!-- Menu Toogle -->
+            <div class="menu-toggle">
+              <a href="#">
+                <i class="fa fa-bars"></i>
+                <span>Menu</span>
+              </a>
+            </div>
+            <!-- /Menu Toogle -->
+          </div>
         </div>
-        <!-- container -->
+        <!-- /ACCOUNT -->
+
+        <div class="col-md-12">
+          <div class="dropdown">
+            <button
+              class="btn btn-default dropdown-toggle btnCategories"
+              type="button"
+              id="dropdownMenu1"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="true"
+            >
+              Categorias
+              <span class="caret pull-right rowDown"></span>
+            </button>
+            <ul class="dropdown-menu ulDrop" aria-labelledby="dropdownMenu1">
+              <ng-container *ngFor="let item of categories">
+                <li>
+                  <a (click)="searchByCategory(item)">{{ item.name }}</a>
+                </li>
+              </ng-container>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- row -->
     </div>
-    <!-- /MAIN HEADER -->
+    <!-- container -->
+  </div>
+  <!-- /MAIN HEADER -->
 </header>

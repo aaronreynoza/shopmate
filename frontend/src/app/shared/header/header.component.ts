@@ -98,11 +98,13 @@ export class HeaderComponent implements OnInit {
     this.utilService.deleteItemCart(item);
   }
   onPostRequest(values) {
-    delete values.category;
-    values.type_search = 'keyword';
-    values.filter = null;
-    values.category = 0;
-    this.searchService.setSearch(values);
+    const searchKeyword = {
+      categoryId: 0,
+      active: 1,
+      keyword: values.keyword,
+      type_search: 'keyword',
+    };
+    this.searchService.setSearch(searchKeyword);
     this.router.navigate([`store/search`], {
       queryParams: { query: values.keyword, category: values.category },
     });

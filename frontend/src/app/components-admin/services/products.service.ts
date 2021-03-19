@@ -14,12 +14,25 @@ export class ProductsService {
       map((res: any) =>
         res.map((item) => {
           item.id = item.id_producto;
-          item.name = item.nombre_prod;
+          item.productName = item.nombre_prod;
           item.price = item.precio_venta;
           item.image = item.imagen;
+          item.category = item.fk_id_categoria;
+          item.provider = item.fk_id_proveedor;
+          item.specifications = item.especificaciones;
           return item;
         })
       )
     );
+  }
+  getCategories() {
+    return this.http.get(`${environment.API_URL}/categories`);
+  }
+  getProviders() {
+    return this.http.get(`${environment.API_URL}/providers`);
+  }
+
+  createProduct(formData) {
+    return this.http.post(`${environment.API_URL}/products`, formData);
   }
 }

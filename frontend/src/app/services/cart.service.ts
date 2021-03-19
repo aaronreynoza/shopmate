@@ -10,6 +10,6 @@ export class CartService {
   constructor(private http: HttpClient) { }
 
   checkout(data){
-    return this.http.post(`${environment.API_URL}/checkout`, data)
+    return this.http.post(`${environment.API_URL}/shopping`, data)
   }
 }

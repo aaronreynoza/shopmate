@@ -9,7 +9,11 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="">Nombre</label
-            ><input type="text" class="form-control" formControlName="name" />
+            ><input
+              type="text"
+              class="form-control"
+              formControlName="userName"
+            />
           </div>
         </div>
         <div class="col-sm-6">
@@ -39,7 +43,7 @@
               type="radio"
               name=""
               id="sucursal"
-              forcControlName="delivery_type"
+              forcControlName="deliveryType"
             />
             <label for="sucursal" style="margin-left: 5px; font-size: 12px"
               >Retirar en sucursal</label
@@ -52,10 +56,10 @@
             <input
               checked
               type="radio"
-              value="San Salvador"
+              value="1"
               name=""
               id="sucursal"
-              formControlName="location_delivery"
+              formControlName="branchOfficeId"
             />
             <label for="sucursal" style="margin-left: 5px; font-size: 12px"
               >San Salvador</label
@@ -77,7 +81,7 @@
               value="1"
               name=""
               id="sucursal"
-              formControlName="payment_type"
+              formControlName="typeOfPurchase"
             />
             <label for="sucursal" style="margin-left: 5px; font-size: 12px"
               >Tranferencia</label
@@ -115,9 +119,8 @@
               checked
               type="radio"
               value="016401000572839"
-              name="cuentaBancaria"
               id="1"
-              formControlName="cuentaBancaria"
+              formControlName="accountNumberStore"
             />
             <label for="1" style="margin: 0 15px 0 5px; font-size: 12px"
               >Banco Cuscatlan (016401000572839)</label
@@ -136,7 +139,20 @@
               value=""
               class="form-control"
               id="account_owner"
-              formControlName="account_owner"
+              formControlName="bankAccountHolder"
+            />
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="account_owner"
+              >Numero de la cuenta <span style="color: red">*</span> </label
+            ><input
+              type="text"
+              value=""
+              class="form-control"
+              id="account_owner"
+              formControlName="customerAccount"
             />
           </div>
         </div>
@@ -149,26 +165,28 @@
               value=""
               class="form-control"
               id="description"
-              formControlName="description"
+              formControlName="concept"
             />
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
             <label for="reference_number">
-              Numero de referencia <span style="color: red">*</span></label
+              Numero de deposito <span style="color: red">*</span></label
             ><input
               type="text"
               value=""
               class="form-control"
               id="reference_number"
-              formControlName="reference_number"
+              formControlName="depositNumber"
             />
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="amount"> Monto <span style="color: red">*</span></label
+            <label for="amount">
+              Monto <span style="color: red">*</span>
+              <strong> {{ subtotal(products) | currency }}</strong> </label
             ><input
               type="number"
               value=""
@@ -192,22 +210,24 @@
             />
             <input type="hidden" formControlName="image" />
           </div>
-          <div
+        </div>
+        <div
+          class="col-sm-12 image-container"
+          style="
+            max-height: 300px;
+            min-height: 100px;
+            text-align: center;
+            margin: 0 0 10px 0;
+            width: 100%;
+            border: 1px solid #ccc;
+          "
+        >
+          <img
             *ngIf="imageSrc"
-            class="col-sm-6 image-container"
-            style="
-              text-align: center;
-              margin: 0 0 10px 0;
-              width: 100%;
-              border: 1px solid #ccc;
-            "
-          >
-            <img
-              [src]="imageSrc"
-              style="max-height: 300px"
-              alt="comprobante-pago"
-            />
-          </div>
+            [src]="imageSrc"
+            style="max-height: 300px; width: 100%"
+            alt="comprobante-pago"
+          />
         </div>
       </div>
 
@@ -225,7 +245,7 @@
           </label>
         </div>
       </div>
-      <div class="col-sm-12" style="margin-bottom: 0px;">
+      <div class="col-sm-12" style="margin-bottom: 0px">
         <div class="col-sm-12 contenedorData">
           <h4>Resumen de la orden</h4>
           <hr />
@@ -234,13 +254,15 @@
           <div class="col-sm-12 contenedorData">
             <div class="col-sm-2">
               <img
-                src="https://azurefiletestexpress.blob.core.windows.net/imagen-producto/{{ product.product.product_image }}"
+                src="https://azurefiletestexpress.blob.core.windows.net/imagen-producto/{{
+                  product.product.product_image
+                }}"
                 width="100"
                 alt=""
               />
             </div>
             <div class="col-sm-8">
-              <strong class="seeProduct"   (click)="seeMore(product)" >
+              <strong class="seeProduct" (click)="seeMore(product)">
                 {{ product.product.name }}
               </strong>
               <p>Cant: {{ product.quantity }} x</p>
@@ -253,26 +275,33 @@
                 {{ product.total | currency }}
               </strong>
               <p>
-                <a (click)="deleteItemCart(product)" style="text-decoration: underline; cursor: pointer;">Eliminar</a>
+                <a
+                  (click)="deleteItemCart(product)"
+                  style="text-decoration: underline; cursor: pointer"
+                  >Eliminar</a
+                >
               </p>
             </div>
             <hr />
           </div>
         </ng-container>
-        
       </div>
     </div>
     <div class="col-sm-12 contenedorData" *ngIf="products.length">
-      <div style="padding: 15px; text-align: right;">
+      <div style="padding: 15px; text-align: right">
         <p>Subtotal ( {{ products.length }} Productos)</p>
-        <p>Total a pagar: <strong> {{subtotal(products) | currency}} </strong> </p>
+        <p>
+          Total a pagar: <strong> {{ subtotal(products) | currency }} </strong>
+        </p>
       </div>
     </div>
     <div
       class="col-sm-12"
       style="padding: 15px; text-align: center; margin: 0 auto"
     >
-      <button style="width: 200px;" type="submit" class="btn btnPrimary-inverse">Reservar</button>
+      <button style="width: 200px" type="submit" class="btn btnPrimary-inverse">
+        Reservar
+      </button>
     </div>
   </form>
 </div>

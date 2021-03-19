@@ -5,7 +5,7 @@
       <div class="col-sm-12" style="margin-top: 30px;">
         <h4>Categorias</h4>
         <div class="" *ngFor="let item of categories">
-          <a (click)="searchByCategory(item)" style="cursor: pointer;">{{item.name}}</a>
+          <a (click)="searchByCategory(item)" style="cursor: pointer;"><i class="{{item.icon}}"></i> {{item.name}}</a>
         </div>
       </div>
       <div class="col-sm-12">

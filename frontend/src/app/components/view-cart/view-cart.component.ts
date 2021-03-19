@@ -13,6 +13,7 @@ export class ViewCartComponent implements OnInit {
   constructor(private utilService: UtilService, private router: Router) {}
 
   ngOnInit(): void {
+    window.scroll(0, 0);
     this.products = this.utilService.getCart();
   }
   subtotal(cartList) {

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { BillsComponent } from './bills/bills.component';
 import { CategoriasComponent } from './categorias/categorias.component';
 import { PageComponent } from './page.component';
@@ -27,13 +28,13 @@ const routes: Routes = [
         path: 'productos',
         component: ProductsComponent,
       },
-    //   {
-    //     path: 'bil',
-    //     component: BillsComponent,
-    //   },
+      {
+        path: 'login',
+        component: AdminLoginComponent,
+      },
       {
         path: '',
-        redirectTo: 'facturas',
+        redirectTo: 'login',
         pathMatch: 'full',
       },
     ],

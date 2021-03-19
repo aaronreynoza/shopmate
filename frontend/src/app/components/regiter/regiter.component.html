@@ -7,57 +7,99 @@
           width: 500px;
           height: 200px;
           margin: 0 auto;
+          margin-top: 40px;
+          margin-bottom: 40px;
           background: rgba(21, 22, 29, 0.9);
-          border-radius: 15px;
+          border-radius: 5px;
           height: auto;
           padding: 25px;
           color: #ccc;
         "
       >
+      <h3 style="text-align: center; padding: 25px 0 25px 0; color: white;">SHOPMASTERRACE</h3>
         <form
           [formGroup]="registerForm"
-          (ngSubmit)="onSubmit(registerForm.value)"
+          (ngSubmit)="onSubmit(registerForm)"
+          autocomplete="off"
         >
+        
           <div class="form-group">
-            <label for="">Nombre Completo</label>
-            <input class="form-control" type="text" formControlName="name" />
+            <label for=""
+              >Nombres <span style="color: red">*</span></label
+            >
+            <input class="form-control" type="text" formControlName="names" />
           </div>
           <div class="form-group">
-            <label for="">Email</label>
+            <label for=""
+              >Primer apellido <span style="color: red">*</span></label
+            >
+            <input
+              class="form-control"
+              type="text"
+              formControlName="lastName"
+            />
+          </div>
+          <div class="form-group">
+            <label for="">Segundo apellido (opcional)</label>
+            <input
+              class="form-control"
+              type="text"
+              formControlName="secondLastName"
+            />
+          </div>
+          <div class="form-group">
+            <label for="">Email <span style="color: red">*</span></label>
             <input class="form-control" type="email" formControlName="email" />
           </div>
           <div class="form-group">
-            <label for="">Password</label>
+            <label for="">Password <span style="color: red">*</span></label>
             <input
               class="form-control"
               type="password"
               formControlName="password"
             />
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for="">Direccion</label>
             <input class="form-control" type="text" formControlName="address" />
-          </div>
+          </div> -->
           <div class="form-group">
-            <label for="">Telefono</label>
+            <label for="">Telefono <span style="color: red">*</span></label>
             <input class="form-control" type="text" formControlName="phone" />
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for="">Fecha de nacimiento</label>
             <input
               class="form-control"
               type="date"
               formControlName="date_of_birth"
             />
-          </div>
+          </div> -->
 
           <button
             class="btn btn-success center-block"
-            style="color: #ccc; background-color: #d10024; border: none"
+            style="
+              border-radius: 0;
+              width: 200px;
+              color: #ccc;
+              background-color: #d10024;
+              border: none;
+              margin-bottom: 20px;
+            "
           >
             Entrar
           </button>
         </form>
+        <span style="text-align: center; padding: 10px;">
+          Ya tienes cuenta?
+          <a
+            (click)="navigatePath('store/login')"
+            class="text-danger"
+            style="cursor: pointer"
+          >
+            Inicia sesion aqui
+          </a>
+        </span>
       </div>
     </div>
   </div>

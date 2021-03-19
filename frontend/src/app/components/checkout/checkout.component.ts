@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 })
 export class CheckoutComponent implements OnInit {
   currentUser;
+  formData: FormData = new FormData();
   form: FormGroup;
   imageSrc;
   products = [];
@@ -23,43 +24,59 @@ export class CheckoutComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    window.scroll(0, 0);
     this.initForm();
     this.currentUser = this.utilService.getCurrentUser();
     this.form.patchValue(this.currentUser);
+    this.form.patchValue({ userName: this.currentUser.name });
+
     this.products = this.utilService.getCart();
   }
   initForm() {
     this.form = this.fb.group({
-      name: ['', Validators.required],
+      userName: ['', Validators.required],
       email: ['', [Validators.email, Validators.required]],
       phone: ['', Validators.required],
-      delivery_type: ['1', Validators.required],
-      location_delivery: ['San Salvador', Validators.required],
-      payment_type: ['1', Validators.required],
-      cuentaBancaria: ['016401000572839'],
-      account_owner: ['', Validators.required],
-      description: ['', Validators.required],
-      reference_number: ['', Validators.required],
+      dateTime: ['', Validators.required],
+      branchOfficeId: ['1', Validators.required],
+      typeOfPurchase: ['1', Validators.required],
+      deliveryType: ['1', Validators.required],
+      bankOfTheStore: ['Banco Cuscatlan', Validators.required],
+      accountNumberStore: ['016401000572839', Validators.required],
+      customerAccount: ['', Validators.required],
+      bankAccountHolder: ['', Validators.required],
+      concept: ['', Validators.required],
+      depositNumber: ['', Validators.required],
       amount: ['', Validators.required],
       image: ['', Validators.required],
+      requestDetail: ['', Validators.required],
       terms_agree: [false, Validators.requiredTrue],
     });
   }
 
   onSubmit(form: FormGroup) {
-    console.log(form.value);
-    this.cartService.checkout(form.value).subscribe(
-      (data) => {
-        console.log(data);
-      },
-      (err) => console.error(err)
-    );
+    const controls = Object.keys(form.controls);
+    const date = new Date();
+    const requestDetail = [];
+    for (let j = 0; j < this.products.length; j++) {
+      const product = this.products[j];
+
+      requestDetail.push({
+        idProduct: product.product.id,
+        productQuantity: product.quantity,
+        productPrice: product.product.price,
+      });
+    }
+
+    form.patchValue({
+      requestDetail: JSON.stringify(requestDetail),
+      dateTime: `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`,
+    });
+    // this.formData.append('requestDetail', JSON.stringify(requestDetail));
+
+    console.log(requestDetail, this.products);
+
     if (form.invalid) {
-      const controls = Object.keys(form.controls);
-      for (let i = 0; i < controls.length; i++) {
-        const control = controls[i];
-        console.log(control, form.controls[control].status);
-      }
       Swal.fire({
         icon: 'error',
         title: 'Campos incompletos',
@@ -67,6 +84,31 @@ export class CheckoutComponent implements OnInit {
       });
       return console.log('please fill all fields');
     }
+
+    for (let i = 0; i < controls.length; i++) {
+      const control = controls[i];
+      if (control !== 'terms_agree') {
+        this.formData.append(control, form.controls[control].value);
+      }
+    }
+    this.cartService.checkout(this.formData).subscribe(
+      (data) => {
+        if(data){
+          Swal.fire({
+            icon: 'success',
+            title: 'Solicitud enviada',
+            text: 'Su solicitud sera revisada para su aprobacion',
+          }).then(result=>{
+            if(result){
+              this.utilService.deleteAllCart()
+              this.router.navigate(['store/orders'])
+            }
+          });
+        }
+        console.log(data);
+      },
+      (err) => console.error(err)
+    );
     console.log(form.value);
   }
 
@@ -79,14 +121,7 @@ export class CheckoutComponent implements OnInit {
 
       reader.onload = () => {
         this.imageSrc = reader.result as string;
-        const formData = new FormData();
-        formData.append('image', this.imageSrc);
-        console.log(formData);
-        this.form.patchValue({ image: formData });
-
-        // this.myForm.patchValue({
-        //   fileSource: reader.result
-        // });
+        this.form.patchValue({ image: file });
       };
     }
   }
@@ -100,15 +135,15 @@ export class CheckoutComponent implements OnInit {
   deleteItemCart(item) {
     this.utilService.deleteItemCart(item);
     this.products = this.utilService.getCart();
-    if(!this.products.length){
-      this.router.navigate(['store/view-cart'])
+    if (!this.products.length) {
+      this.router.navigate(['store/view-cart']);
     }
   }
   navigateToPath(path) {
     this.router.navigate([path]);
   }
   seeMore(product: any) {
-    console.log(product)
+    console.log(product);
     this.router.navigateByUrl(`store/product/${product.product.id}`);
   }
 }

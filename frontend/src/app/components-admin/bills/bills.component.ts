@@ -60,6 +60,7 @@ export class BillsComponent implements OnInit {
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    window.scroll(0, 0);
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 2,

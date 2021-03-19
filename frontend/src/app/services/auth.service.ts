@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 
 
@@ -11,12 +12,12 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
 
-  login(formData){
-    return this.http.post(``, formData);
+  login(data){
+    return this.http.post(`${environment.API_URL}/auth`, data);
   }
 
-  register(formData){
-return this.http.post(``, formData)
+  register(data){
+    return this.http.post(`${environment.API_URL}/registerClient`, data);
   }
 
 

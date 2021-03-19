@@ -4,7 +4,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { user } from 'src/app/models/user.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { UtilService } from 'src/app/services/util.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -15,12 +17,14 @@ export class LoginComponent implements OnInit {
   constructor(
     private form: FormBuilder,
     private utilService: UtilService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   loginForm: FormGroup;
 
   ngOnInit(): void {
+    window.scroll(0, 0);
     this.loginForm = this.form.group({
       email: ['', Validators.required],
       password: ['', Validators.required],
@@ -28,24 +32,30 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  onSubmit(formValue: user) {
-    if (this.loginForm.invalid) {
+  onSubmit(form: FormGroup) {
+    if (form.invalid) {
       return;
     }
-    const users = this.utilService.getUsers()
-      ? this.utilService.getUsers()
-      : [{ phone: "71306407",name:'Cristian',email: 'albertsevilla1996@gmail.com', password: 'Asdf1234', recordar: true }];
-    const existUser = users.find(
-      (item: user) =>
-        item.email == formValue.email && item.password == formValue.password
+    this.authService.login(form.value).subscribe(
+      (data: any) => {
+        if (data) {
+          data.data.user.names = data.data.user.name;
+          this.utilService.setCurrentUser(data.data.user);
+          this.utilService.setStatus(true);
+          this.utilService.isLoggedIn(true);
+          this.router.navigate(['store']);
+        }
+      },
+      (err) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error en inicio de sesion',
+          text: err.error.messages,
+        });
+      }
     );
-    if (!existUser) {
-      console.log('user no existe')
-      return alert('Credenciales Incorrectas');
-    }
-    this.utilService.setCurrentUser(existUser);
-    this.utilService.setStatus(true);
-    this.utilService.isLoggedIn(true);
-    this.router.navigateByUrl('');
+  }
+  navigatePath(path) {
+    this.router.navigate([path]);
   }
 }
