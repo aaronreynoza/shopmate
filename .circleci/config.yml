@@ -37,12 +37,12 @@ workflows:
           filter:
             branches:
               ignore:
-                /test*/
+                - /test*/
       - lint:
           filter:
             branches:
               ignore:
-                /test*/
+                - /test*/
       - build:
           requires:
             - lint
