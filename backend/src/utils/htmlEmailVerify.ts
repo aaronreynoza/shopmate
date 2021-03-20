@@ -1,5 +1,4 @@
-const contentHTML = (link:string, lastName:string,user:string,) => {
-  return `
+const contentHTML = (link:string, lastName:string, user:string) => `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -51,6 +50,5 @@ const contentHTML = (link:string, lastName:string,user:string,) => {
       </table>
     </body>
     </html>
-  `
-}
+  `;
 export default contentHTML;

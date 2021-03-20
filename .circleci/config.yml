@@ -1,0 +1,24 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - setup_remote_docker
+      - checkout
+      # - run:
+      #     name: Run Tests
+      #     command: |
+      #       . helloworld/bin/activate
+      #       python test_hello_world.py
+      - run:
+          name: Build Docker image
+          command: |
+            echo "building aaronreynoza/$CIRCLE_PROJECT_REPONAME:$CIRCLE_TAG"
+            docker build -t aaronreynoza/shopmate:0.1.0 .
+      # - run:
+      #     name: Publish Docker image
+      #     command: |
+      #       docker build -t aaronreynoza/$IMAGE_NAME:$TAG .
+      #       echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
+      #       docker push aaronreynoza/$IMAGE_NAME:$TAG

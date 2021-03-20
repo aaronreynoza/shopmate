@@ -7,9 +7,10 @@ import contentHTML from '../../utils/htmlEmailVerify';
 const nodemailer = require('nodemailer');
 
 const log = Logger.getInstance();
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 // eslint-disable-next-line import/prefer-default-export
 export const handler = (router: Router, routesContext: any) => {
+  // eslint-disable-next-line consistent-return
   router.post('/registerClient', async (req, res) => {
     const {
       names,
@@ -41,8 +42,8 @@ export const handler = (router: Router, routesContext: any) => {
       });
     }
     log.info('inserting new client with fields: ', req.body);
-    try{
-      //it is validated if the email is already active
+    try {
+      // it is validated if the email is already active
       const emailVal:boolean = await routesContext.db.emailValidator(email);
       if (emailVal!) {
         return res.status(400).json({
