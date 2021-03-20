@@ -1,81 +1,24 @@
-# CircleCI v2.1 Config
-version: 2.1
-
-##
-# Executors
-#
-# CircleCI Executors
-##
-executors:
-  default-docker:
-    working_directory: /home/circleci/project
-    docker:
-      - image: node:12.16.1-alpine
-
-  default-machine:
-    machine:
-      image: ubuntu-1604:201903-01
-
-##
-# Jobs
-#
-# A map of CircleCI jobs
-##
+version: 2
 jobs:
   build:
-    executor: default-machine
+    docker:
+      - image: node:12.16.1-alpine
     steps:
       - checkout
+      # - run:
+      #     name: Run Tests
+      #     command: |
+      #       . helloworld/bin/activate
+      #       python test_hello_world.py
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
-          name: Build Docker $CIRCLE_TAG image
+          name: Build Docker image
           command: |
-            echo "Building Docker image: $CIRCLE_TAG"
-            docker build -t aaronreynoza/shopmate:$CIRCLE_TAG .
-      - run:
-          name: Save docker image to workspace
-          command: docker save -o /tmp/docker-image.tar aaronreynoza/shopmate:$CIRCLE_TAG
-      - persist_to_workspace:
-          root: /tmp
-          paths:
-            - ./docker-image.tar
-  publish:
-    executor: default-machine
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /tmp
-      - run:
-          name: Load the pre-built docker image from workspace
-          command: docker load -i /tmp/docker-image.tar
-      - run:
-          name: Login to Docker Hub
-          command: docker login -u $DOCKER_USER -p $DOCKER_PASS
-      - run:
-          name: Re-tag pre built image
-          command: |
-            docker tag aaronreynoza/shopmate:$CIRCLE_TAG aaronreynoza/shopmate:$RELEASE_TAG
-      - run:
-          name: Publish Docker image $CIRCLE_TAG & Latest tag to Docker Hub
-          command: |
-            echo "Publishing aaronreynoza/shopmate:$CIRCLE_TAG"
-            docker push aaronreynoza/shopmate:$CIRCLE_TAG
-
-##
-# Workflows
-#
-# CircleCI Workflow config
-##
-workflows:
-  version: 2
-  build_and_test:
-    jobs:
-      - build:
-          context: org-global
-      - publish:
-          context: org-global
-          filters:
-            tags:
-              only: /v[0-9]+(\.[0-9]+)*(\-snapshot)?(\-hotfix(\.[0-9]+))?/
-            branches:
-              ignore:
-                - /.*/
+            docker build -t aaronreynoza/$IMAGE_NAME:$TAG .
+      # - run:
+      #     name: Publish Docker image
+      #     command: |
+      #       docker build -t aaronreynoza/$IMAGE_NAME:$TAG .
+      #       echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
+      #       docker push aaronreynoza/$IMAGE_NAME:$TAG
