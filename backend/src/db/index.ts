@@ -2,6 +2,7 @@ import Knex from 'knex';
 import { ConnectionType } from '../utils/types';
 import * as Logger from '../utils/logger';
 import { renamedProduct, renameCategory, renameInventory } from '../utils/dataChanges';
+import e from 'express';
 
 /**
  * Abstracts operations against the database
@@ -914,6 +915,16 @@ class Database {
     return id
     } catch (e) {
       throw Error(e);
+    }
+  }
+
+  async getBranchoOfficeName(bO:number){
+    try{
+      const name = await this.queryBuilder('sucursal')
+        .where('id_sucursal', bO).select();
+        return name
+    } catch (e) {
+      throw Error(e)
     }
   }
 

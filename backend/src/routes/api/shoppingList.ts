@@ -12,7 +12,7 @@ export const handler = (router: Router, routesContext: any) => {
       const RequesUserHeader = await routesContext.db.getShoppingRequestData();
       var data = [];
       for(let i in RequesUserHeader){
-        const OfficeName = await routesContext.db.getOffice(RequesUserHeader[i].fk_id_sucursal);
+        const OfficeName = await routesContext.db.getBranchoOfficeName(RequesUserHeader[i].fk_id_sucursal);
         let paymentDetail:any = await routesContext.db.getPaymentDetailData(RequesUserHeader[i].id_encabez);
         let detailShop:any = await routesContext.db.getShoppingDetailData(RequesUserHeader[i].id_encabez);
         var stado = "";
