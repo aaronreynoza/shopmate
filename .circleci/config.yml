@@ -1,4 +1,9 @@
 version: 2
+
+defaults: &defaults
+  docker:
+    - image: circleci/node:10.14.2
+
 jobs:
   build:
     docker:
@@ -6,16 +11,42 @@ jobs:
     steps:
       - setup_remote_docker
       - checkout
-      # - run:
-      #     name: Run Tests
-      #     command: |
-      #       . helloworld/bin/activate
-      #       python test_hello_world.py
       - run:
           name: Build Docker image
           command: |
             echo "building aaronreynoza/$CIRCLE_PROJECT_REPONAME:$CIRCLE_TAG"
             docker build -t aaronreynoza/shopmate:0.1.0 .
+  test:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: cd backend && npm ci
+      - run: npm run test
+  lint:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: cd backend && npm ci
+      - run: npm run lint
+
+workflows:
+  version: 2
+  core:
+    jobs:
+      - test:
+          filter:
+            branches:
+              ignore:
+                /test*/
+      - lint:
+          filter:
+            branches:
+              ignore:
+                /test*/
+      - build:
+          requires:
+            - lint
+            - test
       # - run:
       #     name: Publish Docker image
       #     command: |
