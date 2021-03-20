@@ -62,8 +62,8 @@ jobs:
       - run:
           name: Build Docker image
           command: |
-            echo "building aaronreynoza/$CIRCLE_PROJECT_REPONAME:$CIRCLE_TAG"
-            docker build -t aaronreynoza/shopmate:$CIRCLE_TAG .
+            echo "building aaronreynoza/$CIRCLE_PROJECT_REPONAME:test"
+            docker build -t aaronreynoza/shopmate:test .
   publish-image:
     docker:
       - image: docker:17.05.0-ce-git
