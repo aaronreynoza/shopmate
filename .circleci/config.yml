@@ -46,7 +46,7 @@ workflows:
   core:
     jobs:
       - test
-      - lint:
+      - lint
       - build:
           requires:
             - lint
