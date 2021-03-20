@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import config from '../config';
 
-function verifyToken(req:Request, res:Response, next:NextFunction) {
+function verifyTokenAdmin(req:Request, res:Response, next:NextFunction) {
   const bearerHeader = req.headers.authorization;
   if (typeof bearerHeader !== 'undefined') {
     const bearerToken = bearerHeader.split(' ')[1];
@@ -18,16 +18,24 @@ function verifyToken(req:Request, res:Response, next:NextFunction) {
       }
       return authData;
     });
-    console.log(payload);
+    console.log(payload.user1[0].fk_id_tipo);
+    if (payload.user1[0].fk_id_tipo !== 1) {
+      return res.status(400).json(
+        {
+          statos: 400,
+          data: [],
+          message: 'Invalid User for this endpoint',
+        },
+      );
+    }
     next();
-  } else {
-    res.status(500).json(
-      {
-        statos: 500,
-        data: [],
-        message: 'Invalid Token',
-      },
-    );
   }
+  return res.status(500).json(
+    {
+      statos: 500,
+      data: [],
+      message: 'Invalid Token',
+    },
+  );
 }
-export default verifyToken;
+export default verifyTokenAdmin;
