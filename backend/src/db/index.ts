@@ -624,7 +624,7 @@ class Database {
           phone,
           email_usu: email,
           clave_usu: password,
-          validacion: false,
+          validacion: 1,
           estado: 1,
           fk_id_tipo: 4,
         },
