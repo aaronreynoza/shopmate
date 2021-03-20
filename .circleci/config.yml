@@ -20,36 +20,34 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - run: cd backend && npm ci
-      - run: npm run test
+      - run:
+          name: Install libraries
+          command: | 
+            cd backend && npm ci
+      - run:
+          name: "Run tests"
+          command: |
+            npm run test
   lint:
     <<: *defaults
     steps:
       - checkout
-      - run: cd backend && npm ci
-      - run: npm run lint
+      - run:
+          name: Install libraries
+          command: | 
+            cd backend && npm ci
+      - run:
+          name: "Run lint"
+          command: |
+            npm run lint
 
 workflows:
   version: 2
   core:
     jobs:
-      - test:
-          filter:
-            branches:
-              ignore:
-                - /test*/
+      - test
       - lint:
-          filter:
-            branches:
-              ignore:
-                - /test*/
       - build:
           requires:
             - lint
             - test
-      # - run:
-      #     name: Publish Docker image
-      #     command: |
-      #       docker build -t aaronreynoza/$IMAGE_NAME:$TAG .
-      #       echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-      #       docker push aaronreynoza/$IMAGE_NAME:$TAG
