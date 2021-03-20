@@ -76,50 +76,46 @@ jobs:
             echo "building $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME:$CIRCLE_TAG"
             docker build -t $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME:$CIRCLE_TAG .
       - run:
-          name: Re-tag built image
-          command: |
-            docker tag $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME:$CIRCLE_TAG $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME:$RELEASE_TAG
-      - run:
           name: Publish Docker image
           command: |
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-            docker push $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME:$RELEASE_TAG
+            docker push $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME:$CIRCLE_TAG
 workflows:
   version: 2
   core:
     jobs:
-      - test:
-          filters:
-            tags:
-              only: /.*/
-      - lint:
-          filters:
-            tags:
-              only: /.*/
-      - build-backend:
-          filters:
-            tags:
-              only: /.*/
-          requires:
-            - test
-            - lint
-      - build-frontend:
-          filters:
-            tags:
-              only: /.*/
-          requires:
-            - test
-            - lint
-      - build-image:
-          filters:
-            tags:
-              only: /.*/
-          requires:
-            - build-backend
-            - build-frontend
+      # - test:
+      #     filters:
+      #       tags:
+      #         only: /.*/
+      # - lint:
+      #     filters:
+      #       tags:
+      #         only: /.*/
+      # - build-backend:
+      #     filters:
+      #       tags:
+      #         only: /.*/
+      #     requires:
+      #       - test
+      #       - lint
+      # - build-frontend:
+      #     filters:
+      #       tags:
+      #         only: /.*/
+      #     requires:
+      #       - test
+      #       - lint
+      # - build-image:
+      #     filters:
+      #       tags:
+      #         only: /.*/
+      #     requires:
+      #       - build-backend
+      #       - build-frontend
       - publish-image:
-          requires:
-            - build-image
+          # requires:
+          #   - build-image
           filters:
             tags:
               only: /v[0-9]+(\.[0-9]+)*(\-snapshot)?(\-hotfix(\.[0-9]+))?/
