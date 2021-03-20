@@ -20,7 +20,7 @@ function verifyToken(req:Request, res:Response, next:NextFunction){
       });
       console.log(payload);
       next();
-  }else{
+  } else {
     res.status(500).json(
       {
         "statos":500,
