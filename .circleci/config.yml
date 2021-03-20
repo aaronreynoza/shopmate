@@ -84,17 +84,32 @@ workflows:
   version: 2
   core:
     jobs:
-      - test
-      - lint
+      - test:
+          filters:
+            tags:
+              only: /.*/
+      - lint:
+          filters:
+            tags:
+              only: /.*/
       - build-backend:
+          filters:
+            tags:
+              only: /.*/
           requires:
             - test
             - lint
       - build-frontend:
+          filters:
+            tags:
+              only: /.*/
           requires:
             - test
             - lint
       - build-image:
+          filters:
+            tags:
+              only: /.*/
           requires:
             - build-backend
             - build-frontend
