@@ -27,7 +27,7 @@ jobs:
       - run:
           name: "Run tests"
           command: |
-            npm run test
+            cd backend && npm run test
   lint:
     <<: *defaults
     steps:
@@ -39,7 +39,7 @@ jobs:
       - run:
           name: "Run lint"
           command: |
-            npm run lint
+            cd backend && npm run lint
 
 workflows:
   version: 2
