@@ -57,4 +57,18 @@ export const handler = (router: Router, routesContext: any) => {
       return res.status(500).send('Something went wrong');
     }
   });
+
+  router.put('/category/categoryId', async (req, res) => {
+    const { categoryId } = req.params;
+    if (typeof categoryId !== 'string') {
+      return res.status(400).send('Wrong type of data');
+    }
+    try {
+      const category = await routesContext.db.updateCategory(categoryId);
+      return res.status(200).send(category);
+    } catch (e) {
+      log.error(e);
+      return res.status(500).send('Something went wrong');
+    }
+  });
 };
