@@ -65,6 +65,7 @@ interface IdataRequest{
   branchOfficeId:number,
   typeOfPurchase:number,
   deliveryType:number,
+  deliveryTypeName:string,
   bankOfTheStore:string,
   accountNumberStore:string,
   customerAccount:string,
@@ -73,7 +74,10 @@ interface IdataRequest{
   amount:number,
   concept:string,
   requestDetail:any,
-  state:number
+  state:number,
+  statusName:string,
+  branchOffice:string,
+
 }
 interface IdataProducto{
   idProd:number,

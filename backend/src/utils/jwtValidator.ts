@@ -1,4 +1,3 @@
-import { Router } from 'express';
 function verifyToken (req:any, res:any, next:any){
   const bearerHeader =  req.headers['authorization'];
   if(typeof bearerHeader !== 'undefined'){
