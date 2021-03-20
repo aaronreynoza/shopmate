@@ -1,4 +1,4 @@
-<div class="container-fluid" style="max-width: 1400px; margin-bottom: 40px;">
+<div class="container-fluid" style="max-width: 1400px; margin-bottom: 40px">
   <div class="row">
     <h3 style="margin-top: 30px">Mis ordenes</h3>
     <div class="col-sm-12">
@@ -25,7 +25,7 @@
             <th>Producto</th>
             <th>Concepto</th>
             <th>Precio</th>
-            <th>Numero de la cuenta</th>
+            <th>Envio</th>
             <th>Fecha</th>
             <th>Estado</th>
             <th>Opciones</th>
@@ -34,18 +34,238 @@
         <tbody>
           <tr *ngFor="let item of myOrders">
             <td>{{ item.idRequest }}</td>
-            <td>{{getNamesProducts(item.requestDetail)}}</td>
+            <td>{{ getNamesProducts(item.requestDetail) }}</td>
             <td>{{ item.concept }}</td>
             <td>{{ item.amount | currency }}</td>
             <td>
-             {{item.accountNumberStore}}
+              {{ item.deliveryTypeName }}
             </td>
             <td>{{ formatDate(item.dateTime) }}</td>
-            <td>{{ item.state }}</td>
-            <td style="text-align: center; cursor: pointer;"><i style="color: #d10024; font-size: 30px;" class="fa fa-eye"></i></td>
+            <td>
+              <span *ngIf="item.state == 1" class="bgWarning">
+                {{ item.statusName }}
+              </span>
+              <span *ngIf="item.state == 2" class="bgSuccess">
+                {{ item.statusName }}
+              </span>
+              <span *ngIf="item.state == 3" class="bgDanger">
+                {{ item.statusName }}
+              </span>
+            </td>
+            <td style="text-align: center; cursor: pointer">
+              <i
+                (click)="showEditModal('editBill', item)"
+                style="color: #d10024; font-size: 30px"
+                class="fa fa-eye"
+              ></i>
+            </td>
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+</div>
+
+
+
+<div id="editBill" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close text-right" (click)="closeModal('editBill')"
+      >&times;</span
+    >
+    <div class="row">
+      <div class="col-sm-12">
+        <h2 style="text-align: center">Modificar estado de solicitud</h2>
+        <div class="divisorCard">
+          <form [formGroup]="form" (ngSubmit)="onPost()">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="">Id Solicitud</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  disabled
+                  formControlName="idRequest"
+                />
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="">No de cuenta tienda</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  disabled
+                  formControlName="customerAccount"
+                />
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="">Fecha</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  disabled
+                  formControlName="dateTime"
+                />
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="">Concepto</label>
+                <textarea
+                  type="text"
+                  class="form-control"
+                  disabled
+                  formControlName="concept"
+                ></textarea>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="">Monto</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  disabled
+                  formControlName="amount"
+                />
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="">Sucursal</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  disabled
+                  formControlName="branchOffice"
+                />
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="">Tipo de entrega</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  disabled
+                  formControlName="deliveryTypeName"
+                />
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="">Cliente</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  disabled
+                  formControlName="bankAccountHolder"
+                />
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="">Cuenta de banco del cliente</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  disabled
+                  formControlName="customerAccount"
+                />
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="">No. de deposito</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  disabled
+                  formControlName="depositNumber"
+                />
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="">Estado de Solicitud</label>
+              <input type="text" class="form-control"
+              disabled
+              formControlName="statusName"
+              >
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="">Imagen del comprobante</label>
+                <img
+                  (click)="openImage(form.value.imageComp)"
+                  style="
+                    cursor: pointer;
+                    width: 100%;
+                    height: 300px;
+                    object-fit: contain;
+                  "
+                  src="https://azurefiletestexpress.blob.core.windows.net/comprobantes/{{
+                    form.value.imageComp
+                  }}"
+                  alt=""
+                />
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="">Productos</label>
+                <table class="table table-striped">
+                  <th>Nombre</th>
+                  <th>Precio</th>
+                  <th>Cantidad</th>
+                  <th>Imagen</th>
+                  <ng-container *ngFor="let item of form.value.requestDetail">
+                    <tr>
+                      <td>{{ item.name }}</td>
+                      <td>{{ item.unitPrice }}</td>
+                      <td>{{ item.amountProduct }}</td>
+                      <td>
+                        <img
+                          src="https://azurefiletestexpress.blob.core.windows.net/imagen-producto/{{
+                            item.image
+                          }}"
+                          alt="producto"
+                          style="object-fit: contain"
+                          width="100"
+                          height="100"
+                        />
+                      </td>
+                    </tr>
+                  </ng-container>
+                </table>
+              </div>
+            </div>
+
+            <div class="col-sm-12" style="text-align: center">
+              <!-- <button
+                style="font-size: 15px; margin-right: 5px"
+                type="submit"
+                class="btn btn-primary"
+              >
+                Guardar
+              </button> -->
+              <button
+                style="font-size: 15px; margin-right: 5px"
+                type="button"
+                (click)="closeModal('editBill')"
+                class="btn btn-secondary"
+              >
+                Cerrar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </div>

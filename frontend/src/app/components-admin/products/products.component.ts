@@ -84,7 +84,6 @@ export class ProductsComponent implements OnInit {
   getProducts() {
     this.productService.getProducts().subscribe(
       (data: any) => {
-        console.log(data);
         this.products = data;
       },
       (error) => console.error(error)
@@ -112,12 +111,10 @@ export class ProductsComponent implements OnInit {
     };
   }
   editItem(editForm: FormGroup) {
-    console.log(editForm.value);
   }
   createItem(createForm: FormGroup) {
     const controls = Object.keys(createForm.controls);
     if (createForm.invalid) {
-      console.log(createForm.value)
       Swal.fire({
         icon: 'error',
         text: 'Completa todos los campos',

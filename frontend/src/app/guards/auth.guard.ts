@@ -24,7 +24,6 @@ export class AuthGuard implements CanActivate {
   ) {
     this.isLogged = this.utilService.getStatus().isLoggedIn;
     this.currentUser = this.utilService.getCurrentUser();
-    console.log(this.isLogged)
   if(this.isLogged && this.currentUser){
     return true;
   } else {

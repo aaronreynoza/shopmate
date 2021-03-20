@@ -2520,7 +2520,7 @@ button {
 }
 .btnDanger:hover{
   color: white;
-  background: red;
+  background: #d10024;
 }
 .bgWarning{
   padding: 5px;

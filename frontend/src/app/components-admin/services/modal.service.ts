@@ -6,7 +6,6 @@ import { Injectable } from '@angular/core';
 export class ModalService {
   constructor() {}
   showModal(id: string) {
-    console.log(id);
     var modal = document.getElementById(id);
     modal.style.display = 'block';
   }

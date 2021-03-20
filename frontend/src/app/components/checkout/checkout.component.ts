@@ -70,11 +70,8 @@ export class CheckoutComponent implements OnInit {
 
     form.patchValue({
       requestDetail: JSON.stringify(requestDetail),
-      dateTime: `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`,
+      dateTime: `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`,
     });
-    // this.formData.append('requestDetail', JSON.stringify(requestDetail));
-
-    console.log(requestDetail, this.products);
 
     if (form.invalid) {
       Swal.fire({
@@ -93,23 +90,21 @@ export class CheckoutComponent implements OnInit {
     }
     this.cartService.checkout(this.formData).subscribe(
       (data) => {
-        if(data){
+        if (data) {
           Swal.fire({
             icon: 'success',
             title: 'Solicitud enviada',
             text: 'Su solicitud sera revisada para su aprobacion',
-          }).then(result=>{
-            if(result){
-              this.utilService.deleteAllCart()
-              this.router.navigate(['store/orders'])
+          }).then((result) => {
+            if (result) {
+              this.utilService.deleteAllCart();
+              this.router.navigate(['store/orders']);
             }
           });
         }
-        console.log(data);
       },
       (err) => console.error(err)
     );
-    console.log(form.value);
   }
 
   changeImage(event) {
@@ -143,7 +138,6 @@ export class CheckoutComponent implements OnInit {
     this.router.navigate([path]);
   }
   seeMore(product: any) {
-    console.log(product);
     this.router.navigateByUrl(`store/product/${product.product.id}`);
   }
 }

@@ -36,10 +36,8 @@ export class ProductComponent implements OnInit {
   getProduct() {
     this.productService.getProduct(this.product_id).subscribe(async(data) => {
       this.product = await data[0];
-      console.log(data)
       // this.product.especificaciones = JSON.parse(this.product.especificaciones);
       const namesKeySpecs = Object.keys(this.product.especificaciones);
-      // this.imagesProduct = this.product.images.split(',');
       for (let i = 0; i < namesKeySpecs.length; i++) {
         const nameKeySpec = namesKeySpecs[i];
         const spec = {
@@ -66,7 +64,6 @@ export class ProductComponent implements OnInit {
     });
   }
   handleCarouselEvents(event) {
-    console.log(event);
   }
   selectedItemWish(item) {
     if(item){

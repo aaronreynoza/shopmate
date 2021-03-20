@@ -34,7 +34,6 @@ export class HeaderComponent implements OnInit {
     this.subscribersRefresh();
     this.getCategories();
     this.searchService.searchSubscriber.subscribe((data) => {
-      console.log('se envia keyword a search service');
       if (data) {
         this.searchForm.controls.keyword.setValue(data.keyword);
       }
@@ -110,7 +109,6 @@ export class HeaderComponent implements OnInit {
     });
   }
   searchByCategory(item) {
-    console.log(item);
     item.category = item.category_id;
     item.filter = null;
     item.keyword = '';
