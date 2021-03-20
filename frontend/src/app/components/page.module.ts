@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-
-import { PageComponent } from './page.component';
+import { DataTablesModule } from 'angular-datatables';
+import { SharedModule } from '../shared/shared.module';
 import { IvyCarouselModule } from 'angular-responsive-carousel';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../shared/shared.module';
+
+import { PageComponent } from './page.component';
 import { ClientRoutes } from './page.routes';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { SearchComponent } from './search/search.component';
@@ -48,6 +49,7 @@ import { AboutComponent } from './about/about.component';
     ReactiveFormsModule,
     IvyCarouselModule,
     FormsModule,
+    DataTablesModule
   ],
   bootstrap: [
     HeaderComponent,

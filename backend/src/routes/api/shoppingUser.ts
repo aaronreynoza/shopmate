@@ -10,11 +10,12 @@ export const handler = (router: Router, routesContext: any) => {
   router.get('/requestUser/:userEmail', async (req, res) => {
     const { userEmail } = req.params;
     try{
+      
       const idUser = await routesContext.db.getIdUserForEmail(userEmail);
       const RequesUserHeader = await routesContext.db.getRequestHeaderForUser(idUser[0].id_usuario);
       var data = [];
       for(let i in RequesUserHeader){
-        const OfficeName = await routesContext.db.getOffice(RequesUserHeader[i].fk_id_sucursal);
+        const OfficeName = await routesContext.db.getBranchoOfficeName(RequesUserHeader[i].fk_id_sucursal);
         let paymentDetail:any = await routesContext.db.getPaymentDetailData(RequesUserHeader[i].id_encabez);
         let detailShop:any = await routesContext.db.getShoppingDetailData(RequesUserHeader[i].id_encabez);
         let dataP:any =[];
@@ -38,6 +39,7 @@ export const handler = (router: Router, routesContext: any) => {
             }
             dataP.push(obj)
         });
+        console.log(RequesUserHeader[i].fk_id_sucursal)
         console.log(detailShop)
         let options:IdataRequest = {
           idRequest : RequesUserHeader[i].id_encabez,

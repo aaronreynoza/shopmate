@@ -1,8 +1,51 @@
-<div class="container">
-    <div class="row">
-        <h3 style="margin-top: 30px;">Mis ordenes</h3>
-        <div class="col-sm-12">
-            Lista de productos
-        </div>
+<div class="container-fluid" style="max-width: 1400px; margin-bottom: 40px;">
+  <div class="row">
+    <h3 style="margin-top: 30px">Mis ordenes</h3>
+    <div class="col-sm-12">
+      <button
+        class="btn btnDanger-inverse"
+        style="background: #d10024; margin-bottom: 30px; width: 200px"
+        type="button"
+        (click)="refreshOrders()"
+      >
+        Actualizar lista
+      </button>
     </div>
+    <div class="col-sm-12">
+      <table
+        datatable
+        [dtOptions]="dtOptions"
+        [dtTrigger]="dtTrigger"
+        style="margin-top: 30px"
+        class="table table-striped table-hover"
+      >
+        <thead style="background: #15161d; color: #fff">
+          <tr>
+            <th>Id de Solicitud</th>
+            <th>Producto</th>
+            <th>Concepto</th>
+            <th>Precio</th>
+            <th>Numero de la cuenta</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Opciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of myOrders">
+            <td>{{ item.idRequest }}</td>
+            <td>{{getNamesProducts(item.requestDetail)}}</td>
+            <td>{{ item.concept }}</td>
+            <td>{{ item.amount | currency }}</td>
+            <td>
+             {{item.accountNumberStore}}
+            </td>
+            <td>{{ formatDate(item.dateTime) }}</td>
+            <td>{{ item.state }}</td>
+            <td style="text-align: center; cursor: pointer;"><i style="color: #d10024; font-size: 30px;" class="fa fa-eye"></i></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
