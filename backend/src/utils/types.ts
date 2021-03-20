@@ -88,4 +88,14 @@ interface IdataProducto{
   image:string,
   amountProduct:string
 }
-export { ConfigType, DatabaseType, ConnectionType , Filter, ItokenData,IResponse,IrequestDetail,IdataRequest,IdataProducto};
+export {
+  ConfigType,
+  DatabaseType,
+  ConnectionType,
+  Filter,
+  ItokenData,
+  IResponse,
+  IrequestDetail,
+  IdataRequest,
+  IdataProducto,
+};

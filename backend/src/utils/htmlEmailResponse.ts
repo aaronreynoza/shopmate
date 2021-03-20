@@ -1,5 +1,4 @@
-const contentHTML = (estado:string, numero:string) => {
-    return `
+const contentHTML = (estado:string, numero:string) => `
       <!DOCTYPE html>
       <html lang="en">
       <head>
@@ -32,6 +31,5 @@ const contentHTML = (estado:string, numero:string) => {
         </table>
       </body>
       </html>
-    `
-  }
-  export default contentHTML;
+    `;
+export default contentHTML;
