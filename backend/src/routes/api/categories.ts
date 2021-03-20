@@ -58,14 +58,31 @@ export const handler = (router: Router, routesContext: any) => {
     }
   });
 
-  router.put('/category/categoryId', async (req, res) => {
-    const { categoryId } = req.params;
-    if (typeof categoryId !== 'string') {
-      return res.status(400).send('Wrong type of data');
+  router.put('/categories', async (req, res) => {
+    const {
+      name,
+      description,
+      icon,
+      active,
+      categoryId,
+    }: {
+      name: string,
+      description: string
+      icon: string,
+      active: number,
+      categoryId: number
+    } = req.body;
+    if (
+      (typeof description !== 'string')
+      || (typeof name !== 'string')
+      || (typeof icon !== 'string')
+    ) {
+      return res.status(400).send('Wrong type of data or missing fields');
     }
+    log.info(`Updating category ${categoryId} with fields: `, req.body);
     try {
-      const category = await routesContext.db.updateCategory(categoryId);
-      return res.status(200).send(category);
+      await routesContext.db.updateCategory(categoryId, name, description, icon, active);
+      return res.status(200).send('Category updated succesfully');
     } catch (e) {
       log.error(e);
       return res.status(500).send('Something went wrong');

@@ -94,6 +94,27 @@ class Database {
     }
   }
 
+  async updateCategory(
+    categoryId: string,
+    name: string,
+    description: string,
+    icon: string,
+    active: number,
+  ) {
+    try {
+      return this.queryBuilder('categoria')
+        .where('id_categoria', categoryId).update({
+          nombre_categoria: name,
+          descripcion_cat: description,
+          icon,
+          estado: active,
+        });
+    } catch (err) {
+      this.log.error({ message: `Error while getting Categories: ${err}` });
+      throw Error(err);
+    }
+  }
+
   async insertUserType(name: string, description: string) {
     try {
       return this.queryBuilder('tipo_usuario').insert([
@@ -148,6 +169,22 @@ class Database {
     }
   }
 
+  async updateInventory(quantity: string, idProduct: string, idOffice: string) {
+    try {
+      return this.queryBuilder('inventario').where('fk_id_producto', idProduct)
+        .insert([
+          {
+            fk_id_producto: idProduct,
+            cantidad: quantity,
+            fk_id_sucursal: idOffice,
+          },
+        ]);
+    } catch (err) {
+      this.log.error({ message: `Error while inserting Category: ${err}` });
+      throw Error(err);
+    }
+  }
+
   async getInventories() {
     try {
       const inventories = await this.queryBuilder('inventario').select();
@@ -181,6 +218,23 @@ class Database {
       ]);
     } catch (err) {
       this.log.error({ message: `Error while inserting Provider: ${err}` });
+      throw Error(err);
+    }
+  }
+
+  async updateProvider(providerId: string, name: string, phone: string, email: string) {
+    try {
+      return this.queryBuilder('proveedor')
+        .where('id_proveedor', providerId)
+        .insert([
+          {
+            Nombre_Prov: name,
+            Telefono_Prov: phone,
+            Email_Prov: email,
+          },
+        ]);
+    } catch (err) {
+      this.log.error({ message: `Error while updating Provider: ${err}` });
       throw Error(err);
     }
   }
@@ -270,6 +324,39 @@ class Database {
           fk_Id_proveedor: idproviderName,
         },
       ]);
+    } catch (err) {
+      throw Error(err);
+    }
+  }
+
+  async updateProduct(
+    productId: string,
+    name: string,
+    price: number,
+    description: string,
+    imagen: string|undefined,
+    idcategory: number,
+    idproviderName: number,
+  ) {
+    try {
+      return imagen
+        ? this.queryBuilder('producto').where('id_producto', productId)
+          .update({
+            nombre_prod: name,
+            precio_venta: price,
+            especificaciones: description,
+            imagen,
+            fk_id_categoria: idcategory,
+            fk_Id_proveedor: idproviderName,
+          })
+        : this.queryBuilder('producto').where('id_producto', productId)
+          .update({
+            nombre_prod: name,
+            precio_venta: price,
+            especificaciones: description,
+            fk_id_categoria: idcategory,
+            fk_Id_proveedor: idproviderName,
+          });
     } catch (err) {
       throw Error(err);
     }

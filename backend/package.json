@@ -26,7 +26,8 @@
     "nodejs",
     "typescript",
     "store",
-    "kubernetes"
+    "azure",
+    "webapps"
   ],
   "author": "Aaron Reynoza",
   "license": "ISC",

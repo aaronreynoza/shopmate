@@ -131,4 +131,98 @@ export const handler = (router: Router, routesContext: any) => {
       return res.status(500).send('Something went wrong');
     }
   });
+
+  router.put('/products', uploadStrategy, async (req, res) => {
+    const {
+      productName,
+      price,
+      specifications,
+      category,
+      provider,
+      quantity,
+      newImage,
+      productId,
+    }: {
+      productName: string,
+      price: string,
+      specifications: string,
+      category: string,
+      provider: string,
+      quantity: string,
+      newImage: string,
+      productId: string,
+    } = req.body;
+    const priceVar:number = parseFloat(price);
+    const idCat:number = parseInt(category, 10);
+    const IdProv:number = parseInt(provider, 10);
+    const productQuantity:number = parseInt(quantity, 10);
+    const isNewImage = (newImage === 'true');
+    if (
+      (typeof productName !== 'string')
+      || (typeof priceVar !== 'number')
+      || (typeof specifications !== 'string')
+      || (typeof idCat !== 'number')
+      || (typeof IdProv !== 'number')
+      || (typeof quantity !== 'string')
+      || (typeof productId !== 'string')
+    ) {
+      const respObject:IResponse = {
+        status: 401,
+        data: [],
+        message: 'Bad request. Please fix your params',
+      };
+      return res.status(400).json(respObject);
+    }
+    try {
+      if ((isNewImage && req.file.originalname === undefined) || (isNewImage && req.file.originalname === null) || (isNewImage && req.file.originalname === '')) {
+        const respObject:IResponse = {
+          status: 400,
+          data: [],
+          message: 'Please, send a image',
+        };
+        return res.status(400).json(respObject);
+      }
+      const newImageURL = isNewImage ? getBlobName(req.file.originalname, productName) : undefined;
+      log.info('Updating product with fields: ', req.body);
+      await routesContext.db.updateProduct(
+        productId,
+        productName,
+        priceVar,
+        specifications,
+        newImageURL,
+        category,
+        provider,
+      );
+      await routesContext.db.updateInventory(productQuantity, productId, 1);
+      if (isNewImage) {
+        const stream = getStream(req.file.buffer);
+        const streamLength = req.file.buffer.length;
+        await blobService.createBlockBlobFromStream(
+          containerName,
+          newImageURL,
+          stream,
+          streamLength,
+          (e:any) => {
+            if (e) {
+              throw e;
+            }
+          },
+        );
+      }
+      const respObject:IResponse = {
+        status: 200,
+        data: req.body,
+        message: 'Product updated correctly',
+      };
+      return res.status(200).json(respObject);
+    } catch (e) {
+      log.error(e);
+      const respObject:IResponse = {
+        status: 500,
+        data: [],
+        message: 'Something went wrong',
+      };
+      return res.status(500).json(respObject);
+    }
+  });
 };
