@@ -14,7 +14,7 @@ jobs:
           name: Build Docker image
           command: |
             echo "building aaronreynoza/$CIRCLE_PROJECT_REPONAME:$CIRCLE_TAG"
-            docker build -t aaronreynoza/$CIRCLE_PROJECT_REPONAME:$CIRCLE_TAG .
+            docker build -t aaronreynoza/shopmate:0.1.0 .
       # - run:
       #     name: Publish Docker image
       #     command: |
