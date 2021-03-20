@@ -21,4 +21,9 @@ export class AuthService {
   }
 
 
+  myOrders(email: string){
+    return this.http.get(`${environment.API_URL}/requestUser/${email}`);
+  }
+
+
 }
