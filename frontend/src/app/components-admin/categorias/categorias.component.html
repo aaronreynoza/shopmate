@@ -1,0 +1,362 @@
+<div
+  class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header"
+>
+  <div class="app-header header-shadow">
+    <div class="app-header__logo">
+      <div class="logo-src"></div>
+      <div class="header__pane ml-auto">
+        <div>
+          <button
+            type="button"
+            class="hamburger close-sidebar-btn hamburger--elastic"
+            data-class="closed-sidebar"
+          >
+            <span class="hamburger-box">
+              <span class="hamburger-inner"></span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="app-header__mobile-menu">
+      <div>
+        <button
+          type="button"
+          class="hamburger hamburger--elastic mobile-toggle-nav"
+        >
+          <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+          </span>
+        </button>
+      </div>
+    </div>
+    <div class="app-header__menu">
+      <span>
+        <button
+          type="button"
+          class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav"
+        >
+          <span class="btn-icon-wrapper">
+            <i class="fa fa-ellipsis-v fa-w-6"></i>
+          </span>
+        </button>
+      </span>
+    </div>
+    <div class="app-header__content">
+      <div class="app-header-left hidden">
+        <div class="search-wrapper">
+          <div class="input-holder">
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Type to search"
+            />
+            <button class="search-icon"><span></span></button>
+          </div>
+          <button class="close"></button>
+        </div>
+        <ul class="header-menu nav">
+          <li class="nav-item">
+            <a href="javascript:void(0);" class="nav-link">
+              <i class="nav-link-icon fa fa-database"> </i>
+              Statistics
+            </a>
+          </li>
+          <li class="btn-group nav-item">
+            <a href="javascript:void(0);" class="nav-link">
+              <i class="nav-link-icon fa fa-edit"></i>
+              Projects
+            </a>
+          </li>
+          <li class="dropdown nav-item">
+            <a href="javascript:void(0);" class="nav-link">
+              <i class="nav-link-icon fa fa-cog"></i>
+              Settings
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="app-header-right">
+        <p>Bienvenido Admin</p>
+        <div class="header-btn-lg pr-0 hidden">
+          <div class="widget-content p-0">
+            <div class="widget-content-wrapper">
+              <div class="widget-content-left">
+                <div class="btn-group">
+                  <a
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    class="p-0 btn"
+                  >
+                    <!-- <img
+                      width="42"
+                      class="rounded-circle"
+                      src="assets/images/avatars/1.jpg"
+                      alt=""
+                    /> -->
+                    <i class="fa fa-angle-down ml-2 opacity-8"></i>
+                  </a>
+                  <div
+                    tabindex="-1"
+                    role="menu"
+                    aria-hidden="true"
+                    class="dropdown-menu dropdown-menu-right"
+                  >
+                    <button type="button" tabindex="0" class="dropdown-item">
+                      User Account
+                    </button>
+                    <button type="button" tabindex="0" class="dropdown-item">
+                      Settings
+                    </button>
+                    <h6 tabindex="-1" class="dropdown-header">Header</h6>
+                    <button type="button" tabindex="0" class="dropdown-item">
+                      Actions
+                    </button>
+                    <div tabindex="-1" class="dropdown-divider"></div>
+                    <button type="button" tabindex="0" class="dropdown-item">
+                      Dividers
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="widget-content-left ml-3 header-user-info">
+                <div class="widget-heading">Alina Mclourd</div>
+                <div class="widget-subheading">VP People Manager</div>
+              </div>
+              <div class="widget-content-right header-user-info ml-3">
+                <button
+                  type="button"
+                  class="btn-shadow p-1 btn btn-primary btn-sm show-toastr-example"
+                >
+                  <i class="fa text-white fa-calendar pr-1 pl-1"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="app-main">
+    <div class="app-sidebar sidebar-shadow">
+      <div class="app-header__logo">
+        <div class="logo-src">ShopMasterRace</div>
+        <span></span>
+        <div class="header__pane ml-auto">
+          <div>
+            <button
+              type="button"
+              class="hamburger close-sidebar-btn hamburger--elastic"
+              data-class="closed-sidebar"
+            >
+              <span class="hamburger-box">
+                <span class="hamburger-inner"></span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="app-header__mobile-menu">
+        <div>
+          <button
+            type="button"
+            class="hamburger hamburger--elastic mobile-toggle-nav"
+          >
+            <span class="hamburger-box">
+              <span class="hamburger-inner"></span>
+            </span>
+          </button>
+        </div>
+      </div>
+      <div class="app-header__menu">
+        <span>
+          <button
+            type="button"
+            class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav"
+          >
+            <span class="btn-icon-wrapper">
+              <i class="fa fa-ellipsis-v fa-w-6"></i>
+            </span>
+          </button>
+        </span>
+      </div>
+      <div class="scrollbar-sidebar">
+        <div class="app-sidebar__inner">
+          <ul class="vertical-nav-menu">
+            <li class="app-sidebar__heading">Administracion del sitio</li>
+            <li>
+              <a
+                routerLink="/admin/facturas"
+                routerLinkActive="active-link"
+                class=""
+                ><i class="fas fa-file-invoice"></i> Facturas</a
+              >
+            </li>
+            <li>
+              <a
+                routerLink="/admin/categorias"
+                routerLinkActive="active-link"
+                class=""
+                ><i class="fas fa-cogs"></i> Categorias</a
+              >
+            </li>
+            <li>
+              <a routerLink="/admin/productos" routerLinkActive="active-link"
+                ><i class="fas fa-cogs"></i> Productos</a
+              >
+            </li>
+            <li>
+              <a routerLink="/admin/usuarios" routerLinkActive="active-link"
+                ><i class="fas fa-users"></i> Usuarios</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="app-main__outer">
+      <div class="app-main__inner">
+        <!-- Body content -->
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="divisorCard">
+              <h1>Administracion de categorias</h1>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <button
+              style="font-size: 15px; margin-left: 5px"
+              class="btn btn-success"
+              (click)="getCategories()"
+            >
+              Crear categoria
+            </button>
+            <button
+              style="font-size: 15px; margin-left: 5px"
+              class="btn btn-danger"
+              (click)="getCategories()"
+            >
+              Actualizar Lista
+            </button>
+            <div class="divisorCard">
+              <table
+                datatable
+                [dtOptions]="dtOptions"
+                [dtTrigger]="dtTrigger"
+                style="margin-top: 30px"
+                class="table table-striped table-hover"
+              >
+                <thead style="background: #15161d; color: #fff">
+                  <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Estado</th>
+                    <th>Icono</th>
+                    <th>Opciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of categories">
+                    <td>{{ item.categoryId }}</td>
+                    <td>{{ item.name }}</td>
+
+                    <td>
+                      <span *ngIf="item.active == 1" class="bgSuccess">
+                        Activo
+                      </span>
+                      <span *ngIf="item.active == 0" class="bgDanger">
+                        Inactivo
+                      </span>
+                    </td>
+                    <td>
+                      <i class="{{ item.icon }}"></i>
+                    </td>
+                    <td style="text-align: center; cursor: pointer">
+                      <i
+                        (click)="showEditModal('editCategory', item)"
+                        style="color: #d10024; font-size: 30px"
+                        class="fa fa-eye"
+                      ></i>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- Body content -->
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" src="./assets/scripts/main.js"></script>
+<!-- modal -->
+<!-- The Modal -->
+
+<div id="editCategory" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close text-right" (click)="closeModal('editCategory')"
+      >&times;</span
+    >
+    <div class="row">
+      <div class="col-sm-12">
+        <h2 style="text-align: center">Modificar categoria</h2>
+        <div class="divisorCard">
+          <form [formGroup]="form" (ngSubmit)="onPost(form)">
+            <input type="hidden" formControlName="categoryId" />
+
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="">Nombre</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="name"
+                />
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="">Estado</label>
+                <select class="form-control" formControlName="active">
+                  <option value="1">Activo</option>
+                  <option value="0">Inactivo</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="">Icono</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="icon"
+                />
+              </div>
+            </div>
+
+            <div class="col-sm-12" style="text-align: center">
+              <button
+                style="font-size: 15px; margin-right: 5px"
+                type="submit"
+                class="btn btn-primary"
+              >
+                Guardar
+              </button>
+              <button
+                style="font-size: 15px; margin-right: 5px"
+                type="button"
+                (click)="closeModal('editCategory')"
+                class="btn btn-secondary"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
