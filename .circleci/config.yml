@@ -1,24 +1,107 @@
 version: 2
+
+defaults: &defaults
+  docker:
+    - image: circleci/node:10.14.2
+
 jobs:
-  build:
+  test:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Install libraries
+          command: | 
+            cd backend && npm ci
+      - run:
+          name: "Run tests"
+          command: |
+            cd backend && npm run test
+  lint:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Install libraries
+          command: | 
+            cd backend && npm ci
+      - run:
+          name: "Run lint"
+          command: |
+            cd backend && npm run lint
+  build-backend:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Install libraries
+          command: | 
+            cd backend && npm ci
+      - run:
+          name: "Compile backend"
+          command: |
+            cd backend && npm run build
+  build-frontend:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Install libraries
+          command: | 
+            cd frontend && npm ci
+      - run:
+          name: "Compile frontend"
+          command: |
+            cd frontend && npm run build
+  build-image:
     docker:
       - image: docker:17.05.0-ce-git
     steps:
       - setup_remote_docker
       - checkout
-      # - run:
-      #     name: Run Tests
-      #     command: |
-      #       . helloworld/bin/activate
-      #       python test_hello_world.py
       - run:
           name: Build Docker image
           command: |
             echo "building aaronreynoza/$CIRCLE_PROJECT_REPONAME:$CIRCLE_TAG"
             docker build -t aaronreynoza/shopmate:0.1.0 .
-      # - run:
-      #     name: Publish Docker image
-      #     command: |
-      #       docker build -t aaronreynoza/$IMAGE_NAME:$TAG .
-      #       echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-      #       docker push aaronreynoza/$IMAGE_NAME:$TAG
+  publish-image:
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - setup_remote_docker
+      - checkout
+      - run:
+          name: Build Docker image
+          command: |
+            echo "building $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME:$CIRCLE_TAG"
+            docker build -t $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME:$CIRCLE_TAG .
+      - run:
+          name: Publish Docker image
+          command: |
+            echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
+            docker push $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME:$RELEASE_TAG
+workflows:
+  version: 2
+  core:
+    jobs:
+      - test
+      - lint
+      - build-backend:
+          requires:
+            - test
+            - lint
+      - build-frontend:
+          requires:
+            - test
+            - lint
+      - build-image:
+          requires:
+            - build-backend
+            - build-frontend
+      - publish-image:
+          filters:
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*(\-snapshot)?(\-hotfix(\.[0-9]+))?/
+            branches:
+              only:
+                - master
