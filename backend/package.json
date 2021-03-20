@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "server": "nodemon src/index | bunyan -o short",
-    "build": "tsc",
+    "build": "tsc --extendedDiagnostics",
     "start": "node build/index.js | bunyan -o short",
     "test": "jest --forceExit --detectOpenHandles --verbose",
     "lint": "eslint . --ext .ts",
