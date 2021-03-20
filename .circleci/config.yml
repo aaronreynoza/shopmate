@@ -5,7 +5,7 @@ defaults: &defaults
     - image: circleci/node:10.14.2
 
 jobs:
-  build:
+  build-image:
     docker:
       - image: docker:17.05.0-ce-git
     steps:
@@ -40,6 +40,30 @@ jobs:
           name: "Run lint"
           command: |
             cd backend && npm run lint
+  build-backend:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Install libraries
+          command: | 
+            cd backend && npm ci
+      - run:
+          name: "Compile backend"
+          command: |
+            cd backend && npm run build
+  build-frontend:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Install libraries
+          command: | 
+            cd frontend && npm ci
+      - run:
+          name: "Compile frontend"
+          command: |
+            cd frontend && npm run build
 
 workflows:
   version: 2
@@ -47,7 +71,15 @@ workflows:
     jobs:
       - test
       - lint
-      - build:
+      - build-backend:
           requires:
-            - lint
             - test
+            - lint
+      - build-frontend:
+          requires:
+            - test
+            - lint
+      - build-image:
+          requires:
+            - build-backend
+            - build-frontend
