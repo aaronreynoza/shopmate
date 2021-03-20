@@ -21,7 +21,7 @@ export const handler = (router: Router, routesContext: any) => {
       (typeof description !== 'string')
       || (typeof name !== 'string')
       || (typeof icon !== 'string')
-    ) { 
+    ) {
       return res.status(400).send('Wrong type of data or missing fields');
     }
     log.info('inserting new category with fields: ', req.body);

@@ -7,7 +7,7 @@ import contentHTML from '../../utils/htmlEmailVerify';
 const nodemailer = require('nodemailer');
 
 const log = Logger.getInstance();
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 // eslint-disable-next-line import/prefer-default-export
 export const handler = (router: Router, routesContext: any) => {
   router.post('/user', async (req, res) => {

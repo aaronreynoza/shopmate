@@ -1,11 +1,12 @@
 import { Router } from 'express';
 import * as Logger from '../../utils/logger';
-import transporter from '../../utils/transporter'
-import config from '../../config'
+import transporter from '../../utils/transporter';
+import config from '../../config';
+
 const log = Logger.getInstance();
 
 // eslint-disable-next-line import/prefer-default-export
-export const handler = (router: Router, routesContext: any) => {
+export const handler = (router: Router) => {
   router.post('/contact', async (req, res) => {
     const {
       name,
@@ -24,9 +25,8 @@ export const handler = (router: Router, routesContext: any) => {
       return res.status(400).json({
         status: 500,
         data: req.body,
-        message: "Wrong type of data or missing fields"
+        message: 'Wrong type of data or missing fields',
       });
-      
     }
     log.info('sen email with fields: ', req.body);
     try {
@@ -34,18 +34,18 @@ export const handler = (router: Router, routesContext: any) => {
       transporter.verify().then(() => {
         console.log('ready');
       });
-      const dataFrom:string = name + "shopmasterrace 🎮 🖥️ 🛒";
+      const dataFrom:string = `${name}shopmasterrace 🎮 🖥️ 🛒`;
       const info = await transporter.sendMail({
         from: dataFrom, // sender address
         to: config.emailApp, // list of receivers
-        subject: `contacto 🤖`, // Subject line
+        subject: 'contacto 🤖', // Subject line
         text: message,
-        });
-        return res.status(200).json({
-          status: 200,
-          data: req.body,
-          message: `Contact information sent ${info.messageId}`,
-          });
+      });
+      return res.status(200).json({
+        status: 200,
+        data: req.body,
+        message: `Contact information sent ${info.messageId}`,
+      });
     } catch (e) {
       log.error(e);
       return res.status(500).json(
@@ -53,7 +53,7 @@ export const handler = (router: Router, routesContext: any) => {
           status: 500,
           data: req.body,
           message: e,
-        }
+        },
       );
     }
   });

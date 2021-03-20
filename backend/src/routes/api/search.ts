@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Router } from 'express';
-import * as Logger from '../../utils/logger';
 import { Filter } from '../../utils/types';
+// import * as Logger from '../../utils/logger';
 
-const log = Logger.getInstance();
+// const log = Logger.getInstance();
 
 // eslint-disable-next-line import/prefer-default-export
 export const handler = (router: Router, routesContext: any) => {
