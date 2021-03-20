@@ -66,7 +66,7 @@ jobs:
             docker build -t aaronreynoza/shopmate:0.1.0 .
   publish-image:
     docker:
-      - image: docker:17.05.0-ce-git
+      - image: docker:20.10.5-git
     steps:
       - setup_remote_docker
       - checkout
