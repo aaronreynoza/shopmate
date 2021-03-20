@@ -66,7 +66,7 @@ jobs:
             docker build -t aaronreynoza/shopmate:0.1.0 .
   publish-image:
     docker:
-      - image: docker:20.10.5-git
+      - image: docker:17.05.0-ce-git
     steps:
       - setup_remote_docker
       - checkout
@@ -75,6 +75,10 @@ jobs:
           command: |
             echo "building $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME:$CIRCLE_TAG"
             docker build -t $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME:$CIRCLE_TAG .
+      - run:
+          name: Re-tag built image
+          command: |
+            docker tag $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME:$CIRCLE_TAG $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME:$RELEASE_TAG
       - run:
           name: Publish Docker image
           command: |
