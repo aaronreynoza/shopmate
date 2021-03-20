@@ -84,20 +84,20 @@ workflows:
   version: 2
   core:
     jobs:
-      # - test
-      # - lint
-      # - build-backend:
-      #     requires:
-      #       - test
-      #       - lint
-      # - build-frontend:
-      #     requires:
-      #       - test
-      #       - lint
-      - build-image
-          # requires:
-          #   - build-backend
-          #   - build-frontend
+      - test
+      - lint
+      - build-backend:
+          requires:
+            - test
+            - lint
+      - build-frontend:
+          requires:
+            - test
+            - lint
+      - build-image:
+          requires:
+            - build-backend
+            - build-frontend
       - publish-image:
           filters:
             tags:
