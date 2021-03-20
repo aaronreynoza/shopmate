@@ -13,7 +13,6 @@ export class SearchServiceService {
 
   constructor(private http: HttpClient) {}
   setSearch(data) {
-    console.log('setSearch de busqueda', data);
     this.searchSource.next(data);
   }
   getSearch() {}

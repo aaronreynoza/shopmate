@@ -222,7 +222,6 @@ export class ProductService {
           item.name = item.nombre_prod;
           item.price = item.precio_venta;
           item.product_image = item.imagen;
-          console.log(item);
           return item;
         })
       )

@@ -66,7 +66,6 @@ export class HomeComponent implements OnInit {
         
       }
       this.products = commonResult
-      console.log(commonResult);
     });
   }
   seeMore(product: any) {

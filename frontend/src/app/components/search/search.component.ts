@@ -55,7 +55,6 @@ export class SearchComponent implements OnInit {
     $input_price_min.val(itemSearch.price_min);
     $input_price_max.val(itemSearch.price_max);
     if (this.queryParams.params.query) {
-      console.log('busqueda de los query params');
       this.searchProduct({
         keyword: this.queryParams.params.query,
         type_search: 'keyword',
@@ -69,7 +68,6 @@ export class SearchComponent implements OnInit {
       //   filter: itemSearch || null,
       // });
     } else {
-      console.log('busqueda de los por categoria');
       this.searchProduct({
         keyword: '',
         type_search: 'category',
@@ -86,10 +84,8 @@ export class SearchComponent implements OnInit {
   }
   searchProduct(data) {
     if (data) {
-      console.log('hay data', data);
       this.searchService.getProducts(data).subscribe(
         (res: any) => {
-          console.log('serchss', res);
           this.products = res;
         },
         (err) => console.log(err)
@@ -161,11 +157,11 @@ export class SearchComponent implements OnInit {
     const price_min =
       parseInt(
         (<HTMLInputElement>document.getElementById('price_min')).value
-      ) || 0;
+      ) || undefined;
     const price_max =
       parseInt(
         (<HTMLInputElement>document.getElementById('price_max')).value
-      ) || 0;
+      ) || undefined;
     console.log(price_max, price_min);
     this.route.queryParamMap.subscribe((params: any) => {
       // delete params.category;

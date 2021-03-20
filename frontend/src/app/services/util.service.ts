@@ -148,7 +148,6 @@ export class UtilService {
     return JSON.parse(localStorage.getItem('status')) || { isLoggedIn: false } ;
   }
   setUsers(formValue: user) {
-    console.log(formValue);
     this.users.push(formValue);
     return localStorage.setItem('users', JSON.stringify(this.users));
   }

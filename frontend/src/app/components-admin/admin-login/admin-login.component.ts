@@ -13,5 +13,8 @@ export class AdminLoginComponent implements OnInit {
   ngOnInit(): void {
     window.scroll(0, 0);
   }
+  navigatePath(path){
+    
+  }
 
 }

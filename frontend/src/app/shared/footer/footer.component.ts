@@ -27,7 +27,6 @@ categories = []
     );
   }
   searchByCategory(item) {
-    console.log(item);
     item.category= item.category_id;
     item.filter= null;
     item.keyword= '';

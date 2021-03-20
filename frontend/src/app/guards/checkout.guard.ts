@@ -18,12 +18,9 @@ export class CheckoutGuard implements CanActivate {
   constructor(private utilService: UtilService, private router: Router) {}
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     this.cart = this.utilService.getCart();
-    console.log(this.cart);
     if (this.cart.length) {
-      console.log('hay carrito');
       return true;
     } else {
-      console.log('no hay carrito');
       Swal.fire({
         icon: 'warning',
         text: 'Primero agrega productos al carrito',

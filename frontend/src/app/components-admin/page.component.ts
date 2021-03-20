@@ -11,7 +11,6 @@ export class PageComponent implements OnInit {
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    console.log(this.route)
     // init_pluggin();
   }
 

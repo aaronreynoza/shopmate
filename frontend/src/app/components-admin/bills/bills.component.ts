@@ -1,86 +1,166 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
+import Swal from 'sweetalert2';
+import { BillsService } from '../services/bills.service';
 
 @Component({
   selector: 'app-bills',
   templateUrl: './bills.component.html',
-  styleUrls: ['../page.component.css']
+  styleUrls: ['../page.component.css'],
 })
 export class BillsComponent implements OnInit {
-  dtOptions: any = {};
-  dtTrigger: Subject<any> = new Subject<any>();
-  bills = [
-    {
-      orderID: '1',
-      name: 'order 1',
-      details: 'details 1',
-      status: '1',
-      image:
-        'https://images.unsplash.com/photo-1593642634315-48f5414c3ad9?ixid=MXwxMjA3fDF8MHxzZWFyY2h8MXx8bGFwdG9wfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-    },
-    {
-      orderID: '2',
-      name: 'order 2',
-      details: 'details 2',
-      status: '2',
-      image:
-        'https://images.unsplash.com/photo-1593642634315-48f5414c3ad9?ixid=MXwxMjA3fDF8MHxzZWFyY2h8MXx8bGFwdG9wfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-    },
-    {
-      orderID: '3',
-      name: 'order 3',
-      details: 'details 3',
-      status: '3',
-      image:
-        'https://images.unsplash.com/photo-1593642634315-48f5414c3ad9?ixid=MXwxMjA3fDF8MHxzZWFyY2h8MXx8bGFwdG9wfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-    },
-    {
-      orderID: '4',
-      name: 'order 4',
-      details: 'details 4',
-      status: '3',
-      image:
-        'https://images.unsplash.com/photo-1593642634315-48f5414c3ad9?ixid=MXwxMjA3fDF8MHxzZWFyY2h8MXx8bGFwdG9wfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-    },
-    {
-      orderID: '5',
-      name: 'order 5',
-      details: 'details 5',
-      status: '3',
-      image:
-        'https://images.unsplash.com/photo-1593642634315-48f5414c3ad9?ixid=MXwxMjA3fDF8MHxzZWFyY2h8MXx8bGFwdG9wfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-    },
-  ];
+  @ViewChild(DataTableDirective, { static: false })
+  dtElement: DataTableDirective;
+  dtTrigger = new Subject();
+  dtOptions: DataTables.Settings = {};
+  bills = [];
+  form: FormGroup;
   statusOrder = [
     { id: 1, name: 'Aprobado' },
     { id: 2, name: 'Rechazado' },
     { id: 3, name: 'Pendiente' },
   ];
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private fb: FormBuilder,
+    private billService: BillsService
+  ) {}
 
   ngOnInit(): void {
     window.scroll(0, 0);
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 2,
-      jQueryUI: true,
     };
-    console.log(this.route);
+    this.initForm();
+    this.getBills();
   }
+  initForm() {
+    this.form = this.fb.group({
+      accountNumberStore: [''],
+      amount: [''],
+      bankAccountHolder: [''],
+      bankOfTheStore: [''],
+      branchOffice: [''],
+      branchOfficeId: [''],
+      concept: [''],
+      customerAccount: [''],
+      dateTime: [''],
+      deliveryType: [''],
+      deliveryTypeName: [''],
+      depositNumber: [''],
+      idRequest: ['', Validators.required],
+      imageComp: [''],
+      requestDetail: [''],
+      state: ['', Validators.required],
+      statusName: [''],
+      typeOfPurchase: [''],
+    });
+  }
+  ngAfterViewInit(): void {
+    this.dtTrigger.next();
+  }
+
   ngOnDestroy(): void {
+    // Do not forget to unsubscribe the event
     this.dtTrigger.unsubscribe();
   }
-  onSaving(event) {
-    console.log(event);
+  rerender(): void {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      // Destroy the table first
+      dtInstance.destroy();
+      // Call the dtTrigger to rerender again
+      this.dtTrigger.next();
+    });
+  }
+  onPost(form: FormGroup) {
+    if (form.invalid) {
+      return;
+    }
+    const data = {
+      idRequest: form.value.idRequest,
+      status: parseInt(form.value.state),
+    };
+    this.billService.changeStatusRequest(data).subscribe(
+      (data) => {
+        if (data) {
+          Swal.fire({
+            icon: 'success',
+            text: 'Estado modificado',
+          }).then(result => {
+            if(result){
+              this.closeModal('editBill')
+              this.getBills()
+            }
+          });
+        }
+      },
+      (err) => {
+        Swal.fire({
+            icon: 'error',
+            text: err.error.messages,
+          });
+        console.error(err);
+      }
+    );
+  }
+  getBills() {
+    this.billService.getBills().subscribe(
+      (data: any) => {
+        if (data) {
+          this.bills = data.data;
+          this.rerender();
+        }
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
   convertToStatus(statusId) {
     for (let i = 0; i < this.statusOrder.length; i++) {
       const status = this.statusOrder[i];
-      if(status.id == statusId){
-        return status.name
+      if (status.id == statusId) {
+        return status.name;
       }
-      
     }
+  }
+
+  showEditModal(id: string, item) {
+    // this.imageSrc = '';
+    item.dateTime = this.formatDate(item.dateTime);
+    this.form.patchValue(item);
+    var modal = document.getElementById(id);
+    modal.style.display = 'block';
+  }
+  closeModal(id: string) {
+    var modal = document.getElementById(id);
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName('close')[0];
+    modal.style.display = 'none';
+    window.onclick = function (event) {
+      if (event.target == modal) {
+      }
+    };
+  }
+  openImage(image) {
+    window.open(
+      'https://azurefiletestexpress.blob.core.windows.net/comprobantes/' + image
+    );
+  }
+  getNamesProducts(details) {
+    let productNames = '';
+    for (let i = 0; i < details.length; i++) {
+      const product = details[i];
+      productNames += product.name + ', ';
+    }
+    return productNames;
+  }
+  formatDate(date) {
+    const d = new Date(date);
+    // return `${d.getDay()}-${d.getMonth()}-${d.getFullYear()}`;
+    return d.toLocaleDateString('es-Es');
   }
 }
