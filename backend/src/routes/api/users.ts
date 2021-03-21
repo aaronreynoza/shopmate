@@ -104,4 +104,61 @@ export const handler = (router: Router, routesContext: any) => {
       message: 'Usuario registrado correctamente',
     });
   });
+
+  router.put('/user', async (req, res) => {
+    const {
+      names,
+      lastName,
+      secondLastName,
+      phone,
+      email,
+      password,
+      userType,
+    }: {
+      names: string,
+      lastName: string,
+      secondLastName:string,
+      phone:string,
+      email:string,
+      password:string,
+      userType: string
+    } = req.body;
+    if (
+      (typeof names !== 'string')
+      || (typeof lastName !== 'string')
+      || (typeof secondLastName !== 'string')
+      || (typeof phone !== 'string')
+      || (typeof email !== 'string')
+      || (typeof password !== 'string')
+    ) {
+      return res.status(400).json({
+        status: 500,
+        data: [],
+        messages: 'Wrong type of data or missing fields',
+      });
+    }
+    try {
+      await routesContext.db.updateUser(
+        names,
+        lastName,
+        secondLastName,
+        phone,
+        email,
+        password,
+        userType,
+      );
+    } catch (e) {
+      log.error(e);
+      res.status(500).json({
+        status: 500,
+        data: [],
+        messages: 'Something went wrong',
+      });
+    }
+    return res.status(200).json({
+      status: 200,
+      data: req.body,
+      message: 'Usuario registrado correctamente',
+    });
+  });
 };
