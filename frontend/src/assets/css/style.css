@@ -735,6 +735,9 @@ textarea.input {
     padding: 15px;
     color: #fff;
   }
+  .cart-dropdown {
+    left: -150px;
+  }
 }
 
 /*=========================================================

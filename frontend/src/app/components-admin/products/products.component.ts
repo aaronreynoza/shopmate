@@ -14,7 +14,7 @@ declare var $;
   styleUrls: ['../page.component.css'],
 })
 export class ProductsComponent implements OnInit {
-  @ViewChild(DataTableDirective, {static: false})
+  @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
   dtTrigger = new Subject();
   dtOptions: DataTables.Settings = {};
@@ -24,7 +24,9 @@ export class ProductsComponent implements OnInit {
   categories = [];
   providers = [];
   imageSrc;
+  imageFile;
   specifications: any = {};
+  specificationsEditForm: any = {};
   specificationsArray: any = [];
   constructor(
     private productService: ProductsService,
@@ -68,6 +70,8 @@ export class ProductsComponent implements OnInit {
       imagenUpload: [''],
       fk_id_categoria: ['', Validators.required],
       fk_id_proveedor: ['', Validators.required],
+      especificaiones: [''],
+      cantidad: [],
     });
   }
   initCreateForm() {
@@ -85,12 +89,23 @@ export class ProductsComponent implements OnInit {
     this.productService.getProducts().subscribe(
       (data: any) => {
         this.products = data;
+        this.rerender();
       },
       (error) => console.error(error)
     );
   }
   showEditModal(id: string, item) {
     this.imageSrc = '';
+    this.specificationsArray = [];
+    this.specificationsEditForm = item.especificaciones;
+    for (let i = 0; i < Object.keys(item.especificaciones).length; i++) {
+      const spec = Object.keys(item.especificaciones)[i];
+      console.log(spec);
+      this.specificationsArray.push({
+        name: spec,
+        value: item.especificaciones[spec],
+      });
+    }
     this.editForm.patchValue(item);
     var modal = document.getElementById(id);
     modal.style.display = 'block';
@@ -111,6 +126,33 @@ export class ProductsComponent implements OnInit {
     };
   }
   editItem(editForm: FormGroup) {
+    // this.productService.modifyCategory
+    if (editForm.invalid) {
+      return alert('completa el formulario');
+    }
+    this.formData = new FormData();
+    this.formData.append('image', this.imageFile);
+    this.formData.append('productName', editForm.value.nombre_prod);
+    this.formData.append('price', editForm.value.precio_venta);
+    this.formData.append('specifications', JSON.stringify(this.specificationsEditForm));
+    this.formData.append('category', editForm.value.fk_id_categoria);
+    this.formData.append('provider', editForm.value.fk_id_proveedor);
+    this.formData.append('quantity', editForm.value.cantidad);
+    this.formData.append('mewImage', this.imageFile ? 'true' : 'false');
+    this.formData.append('productId', editForm.value.id_producto);
+    // console.log(this.specificationsEditForm);
+    // return;
+    this.productService.modifyProduct(this.formData).subscribe((data: any) => {
+      Swal.fire({
+        icon: 'success',
+        text: 'Registro actualizado',
+      }).then((result) => {
+        if (result) {
+          this.closeModal('editProduct');
+          this.getProducts();
+        }
+      });
+    });
   }
   createItem(createForm: FormGroup) {
     const controls = Object.keys(createForm.controls);
@@ -172,6 +214,7 @@ export class ProductsComponent implements OnInit {
 
       reader.onloadend = () => {
         this.imageSrc = reader.result as string;
+        this.imageFile = file;
         // this.formData.append('image', file);
         this.createForm.patchValue({ image: file });
       };
@@ -199,6 +242,35 @@ export class ProductsComponent implements OnInit {
       specifications: JSON.stringify(this.specifications),
     });
   }
+  addSpecificationEditForm() {
+    const $fieldName = $('#fieldNameEditForm');
+    const $fieldValue = $('#fieldValueEditForm');
+    if ($fieldName.val() == '') {
+      return;
+    }
+    if (!this.specificationsEditForm.hasOwnProperty(`${$fieldName.val()}`)) {
+      this.specificationsEditForm[`${$fieldName.val()}`] = $fieldValue.val();
+    }
+    const fields = Object.keys(this.specificationsEditForm);
+    // this.specificationsArray = [];
+    for (let i = 0; i < fields.length; i++) {
+      const field = fields[i];
+      const existSpec = this.specificationsArray.find(
+        (item) => item.name == field
+      );
+      if (!existSpec) {
+        this.specificationsArray.push({
+          name: field,
+          value: this.specificationsEditForm[field],
+        });
+      }
+    }
+    $fieldName.val('');
+    $fieldValue.val('');
+    const specs = this.editForm.patchValue({
+      especificaciones: JSON.stringify(this.specificationsEditForm),
+    });
+  }
   deleteSpec(item) {
     delete this.specifications[item.name];
     this.specificationsArray = this.specificationsArray.filter((spec) => {
@@ -207,7 +279,15 @@ export class ProductsComponent implements OnInit {
       }
     });
   }
-  updateList(){
+  deleteSpecEditForm(item) {
+    delete this.specificationsEditForm[item.name];
+    this.specificationsArray = this.specificationsArray.filter((spec) => {
+      if (spec.name !== item.name) {
+        return spec;
+      }
+    });
+  }
+  updateList() {
     this.getProducts();
     this.rerender();
   }
