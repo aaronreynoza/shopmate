@@ -35,4 +35,13 @@ export class ProductsService {
   createProduct(formData) {
     return this.http.post(`${environment.API_URL}/products`, formData);
   }
+  modifyProduct(formData) {
+    return this.http.put(`${environment.API_URL}/products`, formData);
+  }
+  createCategory(formData) {
+    return this.http.post(`${environment.API_URL}/categories`, formData);
+  }
+  modifyCategory(formData) {
+    return this.http.put(`${environment.API_URL}/categories`, formData);
+  }
 }

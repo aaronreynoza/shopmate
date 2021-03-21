@@ -20104,9 +20104,18 @@ a.fc-more:hover {
     .app-sidebar {
         flex: 0 0 280px !important;
         width: 280px !important;
-        transform: translateX(-280px);
+        display: none;
+        /* transform: translateX(-280px); */
         position: fixed;
     }
+    .app-header__mobile-menu:hover .app-sidebar {
+        flex: 0 0 280px !important;
+        width: 280px !important;
+        display: block;
+        /* transform: translateX(-280px); */
+        position: fixed;
+    }
+
     .app-sidebar .app-header__logo {
         display: none;
     }

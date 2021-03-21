@@ -206,7 +206,7 @@
                 ><i class="fas fa-cogs"></i> Productos</a
               >
             </li>
-            <li>
+            <li class="hidden">
               <a routerLink="/admin/usuarios" routerLinkActive="active-link"
                 ><i class="fas fa-users"></i> Usuarios</a
               >
@@ -247,7 +247,7 @@
                 style="margin-top: 30px"
                 class="table table-striped table-hover"
               >
-                <thead>
+              <thead style="background: #15161d; color: #fff">
                   <tr>
                     <th>ID</th>
                     <th>Producto</th>
@@ -418,7 +418,7 @@
               <div class="col-sm-2">
                 <div class="form-group">
                   <label for="">opc.</label>
-                  <br>
+                  <br />
                   <button
                     style="font-size: 12px"
                     type="button"
@@ -429,7 +429,6 @@
                   </button>
                 </div>
               </div>
-              
             </div>
             <div class="col-sm-12">
               <div class="form-group" style="text-align: center">
@@ -467,8 +466,6 @@
                 <input type="hidden" formControlName="image" name="" />
               </div>
             </div>
-            
-            
 
             <div class="col-sm-12">
               <table
@@ -549,6 +546,15 @@
                 formControlName="precio_venta"
               />
             </div>
+            <div class="form-group">
+              <label for="">Cantidad</label>
+              <input
+                [value]="editForm.value.price"
+                type="number"
+                class="form-control"
+                formControlName="cantidad"
+              />
+            </div>
             <div class="form-group" style="text-align: center">
               <p style="color: red">
                 Haz click en la imagen para cambiarla por otra
@@ -591,7 +597,7 @@
                 id=""
               >
                 <ng-container *ngFor="let item of categories">
-                  <option value="{{ item.category_id }}">
+                  <option value="{{ item.categoryId }}">
                     {{ item.name }}
                   </option>
                 </ng-container>
@@ -612,6 +618,81 @@
                 </ng-container>
               </select>
             </div>
+
+            <div class="col-sm-12">
+              <div class="for-group">
+                <label for=""
+                  >Especificaciones <span style="color: red">*</span></label
+                >
+              </div>
+              <div class="col-sm-5">
+                <div class="form-group">
+                  <label for="">Caracteristica</label>
+                  <input
+                    id="fieldNameEditForm"
+                    class="form-control"
+                    type="text"
+                    placeholder="Ram"
+                  />
+                </div>
+              </div>
+              <div class="col-sm-5">
+                <div class="form-group">
+                  <label for="">Valor</label>
+                  <input
+                    id="fieldValueEditForm"
+                    class="form-control"
+                    type="text"
+                    placeholder="4gb"
+                  />
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <label for="">opc.</label>
+                  <br />
+                  <button
+                    style="font-size: 12px"
+                    type="button"
+                    class="btn btn-success"
+                    (click)="addSpecificationEditForm()"
+                  >
+                    Crear
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <table style="width: 100%" class="table table-stripe table-hover">
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>Opc.</th>
+                <ng-container *ngFor="let item of specificationsArray">
+                  <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.value }}</td>
+                    <td
+                      style="
+                        text-align: center;
+                        background: #ebebeb;
+                        width: 50px;
+                      "
+                    >
+                      <i
+                        (click)="deleteSpecEditForm(item)"
+                        style="
+                          background: #ebebeb;
+                          color: #d10024;
+                          cursor: pointer;
+                        "
+                        class="fas fa-times"
+                      ></i>
+                    </td>
+                  </tr>
+                </ng-container>
+              </table>
+            </div>
+
             <div class="col-sm-12" style="text-align: center">
               <button
                 style="font-size: 15px; margin-right: 5px"
