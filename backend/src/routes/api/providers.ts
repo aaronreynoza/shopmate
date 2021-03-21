@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as Logger from '../../utils/logger';
+import { IResponse } from '../../utils/types';
 
 const log = Logger.getInstance();
 
@@ -79,7 +80,12 @@ export const handler = (router: Router, routesContext: any) => {
     log.info('updating Provider with fields: ', req.body);
     try {
       await routesContext.db.updateProvider(providerId, providerName, phone, email);
-      return res.status(200).send('Provider updated succesfully');
+      const respObject:IResponse = {
+        status: 200,
+        data: req.body,
+        message: 'Category updated correctly',
+      };
+      return res.status(200).json(respObject);
     } catch (e) {
       log.error(e);
       return res.status(500).send('Something went wrong');
