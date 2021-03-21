@@ -48,7 +48,7 @@ const renameCategory = (category: any) => {
     name: nombre_categoria,
     icon,
     active: estado,
-    description: descripcion_categoria,
+    descriptions: descripcion_categoria,
   };
 };
 
