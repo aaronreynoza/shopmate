@@ -1,5 +1,5 @@
 import Knex, { CreateTableBuilder } from 'knex';
-
+// test
 export const handlePrimaryUuid = (
   knex: Knex,
   table: CreateTableBuilder,
