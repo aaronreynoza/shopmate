@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as Logger from '../../utils/logger';
+import { IResponse } from '../../utils/types';
 
 const log = Logger.getInstance();
 
@@ -25,7 +26,7 @@ export const handler = (router: Router, routesContext: any) => {
     log.info('inserting new Provider with fields: ', req.body);
     try {
       await routesContext.db.insertProvider(providerName, phone, email);
-      return res.status(200).send('Category inserted succesfully');
+      return res.status(200).send('Provider inserted succesfully');
     } catch (e) {
       log.error(e);
       return res.status(500).send('Something went wrong');
@@ -50,6 +51,41 @@ export const handler = (router: Router, routesContext: any) => {
     try {
       const provider = await routesContext.db.getProvider(providerName);
       return res.status(200).send(provider);
+    } catch (e) {
+      log.error(e);
+      return res.status(500).send('Something went wrong');
+    }
+  });
+
+  router.put('/providers', async (req, res) => {
+    const {
+      providerId,
+      providerName,
+      phone,
+      email,
+    }: {
+      providerName: string,
+      providerId: number,
+      phone: string
+      email: string,
+    } = req.body;
+    if (
+      (typeof providerName !== 'string')
+      || (typeof providerId !== 'number')
+      || (typeof phone !== 'string')
+      || (typeof email !== 'string')
+    ) {
+      return res.status(400).send('Wrong type of data or missing fields');
+    }
+    log.info('updating Provider with fields: ', req.body);
+    try {
+      await routesContext.db.updateProvider(providerId, providerName, phone, email);
+      const respObject:IResponse = {
+        status: 200,
+        data: req.body,
+        message: 'Category updated correctly',
+      };
+      return res.status(200).json(respObject);
     } catch (e) {
       log.error(e);
       return res.status(500).send('Something went wrong');

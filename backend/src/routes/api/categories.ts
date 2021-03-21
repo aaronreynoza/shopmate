@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as Logger from '../../utils/logger';
+import { IResponse } from '../../utils/types';
 
 const log = Logger.getInstance();
 
@@ -52,6 +53,42 @@ export const handler = (router: Router, routesContext: any) => {
     try {
       const category = await routesContext.db.getCategory(categoryId);
       return res.status(200).send(category);
+    } catch (e) {
+      log.error(e);
+      return res.status(500).send('Something went wrong');
+    }
+  });
+
+  router.put('/categories', async (req, res) => {
+    const {
+      name,
+      description,
+      icon,
+      active,
+      categoryId,
+    }: {
+      name: string,
+      description: string
+      icon: string,
+      active: number,
+      categoryId: number
+    } = req.body;
+    if (
+      (typeof description !== 'string')
+      || (typeof name !== 'string')
+      || (typeof icon !== 'string')
+    ) {
+      return res.status(400).send('Wrong type of data or missing fields');
+    }
+    log.info(`Updating category ${categoryId} with fields: `, req.body);
+    try {
+      await routesContext.db.updateCategory(categoryId, name, description, icon, active);
+      const respObject:IResponse = {
+        status: 200,
+        data: req.body,
+        message: 'Product updated correctly',
+      };
+      return res.status(200).json(respObject);
     } catch (e) {
       log.error(e);
       return res.status(500).send('Something went wrong');
