@@ -99,6 +99,10 @@ export class UtilService {
     this.setCartList([]);
     this.cartListSource.next([]); 
   }
+  deleteAllWishlist(){
+    this.setWishList([]);
+    this.wishListSource.next([]); 
+  }
   deleteItemWishlist(itemDeleted) {
     const wishlistFromLocalStorage = this.getWishList();
     const newWishlist = wishlistFromLocalStorage.filter(

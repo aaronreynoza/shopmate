@@ -28,7 +28,7 @@ export class CheckoutComponent implements OnInit {
     this.initForm();
     this.currentUser = this.utilService.getCurrentUser();
     this.form.patchValue(this.currentUser);
-    this.form.patchValue({ userName: this.currentUser.name });
+    this.form.patchValue({ userName: this.currentUser.names });
 
     this.products = this.utilService.getCart();
   }

@@ -64,6 +64,8 @@ export class HeaderComponent implements OnInit {
   }
   logOut() {
     this.utilService.isLoggedIn(false);
+    this.utilService.deleteAllCart()
+    this.utilService.deleteAllWishlist()
     this.utilService.removeCurrentUser();
     this.router.navigateByUrl('/');
   }
